@@ -24,8 +24,10 @@ import javax.swing.JSeparator;
 import java.awt.TextField;
 import java.awt.TextArea;
 import javax.swing.JMenuItem;
+import java.awt.Checkbox;
+import java.awt.Color;
 
-public class Frame1 {
+public class Prototype1 {
 
 	private JFrame frmMetadataTool;
 
@@ -36,7 +38,7 @@ public class Frame1 {
 		EventQueue.invokeLater( new Runnable() {
 			public void run() {
 				try {
-					Frame1 window = new Frame1();
+					Prototype1 window = new Prototype1();
 					window.frmMetadataTool.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -48,7 +50,7 @@ public class Frame1 {
 	/**
 	 * Create the application.
 	 */
-	public Frame1() {
+	public Prototype1() {
 		initialize();
 	}
 
@@ -58,50 +60,49 @@ public class Frame1 {
 	private void initialize() {
 		frmMetadataTool = new JFrame();
 		frmMetadataTool.setTitle("Metadata Tool");
-		frmMetadataTool.setBounds(100, 100, 623, 575);
+		frmMetadataTool.setBounds(100, 100, 855, 575);
 		frmMetadataTool.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmMetadataTool.getContentPane().setLayout(null);
 		
 		JProgressBar progressBar = new JProgressBar();
+		progressBar.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		progressBar.setStringPainted(true);
+		progressBar.setForeground(Color.GREEN);
 		progressBar.setOrientation(SwingConstants.VERTICAL);
-		progressBar.setBounds(10, 11, 17, 402);
+		progressBar.setBounds(10, 54, 17, 429);
 		frmMetadataTool.getContentPane().add(progressBar);
 		
-		JLabel lblProject = new JLabel("Project");
+		JLabel lblProject = new JLabel("Citation Information");
 		lblProject.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblProject.setBounds(281, 11, 128, 14);
+		lblProject.setBounds(382, 8, 167, 20);
 		frmMetadataTool.getContentPane().add(lblProject);
 		
-		JCheckBox chckbxNewCheckBox = new JCheckBox("Verified Name");
-		chckbxNewCheckBox.setBounds(571, 40, 23, 23);
-		frmMetadataTool.getContentPane().add(chckbxNewCheckBox);
-		
-		JCheckBox chckbxNewCheckBox_1 = new JCheckBox("Verified Number");
-		chckbxNewCheckBox_1.setBounds(571, 68, 23, 23);
+		JCheckBox chckbxNewCheckBox_1 = new JCheckBox("origin check box");
+		chckbxNewCheckBox_1.setBounds(788, 54, 23, 23);
 		frmMetadataTool.getContentPane().add(chckbxNewCheckBox_1);
 		
-		JCheckBox chckbxVerifiedManager = new JCheckBox("Verified PM");
-		chckbxVerifiedManager.setBounds(571, 102, 23, 23);
+		JCheckBox chckbxVerifiedManager = new JCheckBox("pubdate check box");
+		chckbxVerifiedManager.setBounds(788, 131, 23, 23);
 		frmMetadataTool.getContentPane().add(chckbxVerifiedManager);
 		
-		JCheckBox chckbxVerifiedNarrative = new JCheckBox("Verified Narrative");
-		chckbxVerifiedNarrative.setBounds(571, 136, 23, 23);
+		JCheckBox chckbxVerifiedNarrative = new JCheckBox("title check box");
+		chckbxVerifiedNarrative.setBounds(788, 244, 23, 23);
 		frmMetadataTool.getContentPane().add(chckbxVerifiedNarrative);
 		
 		JLabel lblVerified = new JLabel("Verified");
-		lblVerified.setBounds(559, 15, 46, 14);
+		lblVerified.setBounds(768, 13, 46, 14);
 		frmMetadataTool.getContentPane().add(lblVerified);
 		
-		JButton btnContinue = new JButton("Continue");
-		btnContinue.setBounds(474, 487, 89, 23);
+		JButton btnContinue = new JButton("Next");
+		btnContinue.setBounds(669, 487, 89, 23);
 		frmMetadataTool.getContentPane().add(btnContinue);
 		
 		JButton btnSave = new JButton("Save");
-		btnSave.setBounds(356, 487, 89, 23);
+		btnSave.setBounds(539, 487, 89, 23);
 		frmMetadataTool.getContentPane().add(btnSave);
 		
 		JLabel label = new JLabel(">>");
-		label.setBounds(573, 491, 32, 14);
+		label.setBounds(779, 491, 32, 14);
 		frmMetadataTool.getContentPane().add(label);
 		
 		JButton btnBack = new JButton("Back");
@@ -120,69 +121,91 @@ public class Frame1 {
 		separator_1.setBounds(142, 390, 1, 2);
 		frmMetadataTool.getContentPane().add(separator_1);
 		
-		JLabel lblWho = new JLabel("Project");
-		lblWho.setBounds(161, 44, 46, 14);
-		frmMetadataTool.getContentPane().add(lblWho);
-		
-		JLabel lblWhat = new JLabel("Number");
-		lblWhat.setBounds(161, 72, 46, 14);
+		JLabel lblWhat = new JLabel("Originator - the name of an organization or individual that developed the data set.");
+		lblWhat.setBounds(191, 58, 395, 14);
 		frmMetadataTool.getContentPane().add(lblWhat);
 		
-		JLabel lblWhere = new JLabel("Manager");
-		lblWhere.setBounds(161, 106, 46, 14);
+		JLabel lblWhere = new JLabel("Publication Date - the date when the data set is published or otherwise made available for relea");
+		lblWhere.setBounds(191, 146, 458, 14);
 		frmMetadataTool.getContentPane().add(lblWhere);
 		
-		JLabel lblWhen = new JLabel("Narrative");
-		lblWhen.setBounds(161, 140, 46, 14);
+		JLabel lblWhen = new JLabel("Title - the name by which the data set is known.");
+		lblWhen.setBounds(191, 248, 230, 14);
 		frmMetadataTool.getContentPane().add(lblWhen);
 		
-		TextField nameField = new TextField();
-		nameField.setBounds(216, 40, 349, 22);
-		frmMetadataTool.getContentPane().add(nameField);
-		
 		TextField numberField = new TextField();
-		numberField.setBounds(214, 68, 351, 22);
+		numberField.setBounds(188, 78, 617, 47);
 		frmMetadataTool.getContentPane().add(numberField);
 		
 		TextField managerField = new TextField();
-		managerField.setBounds(213, 102, 352, 22);
+		managerField.setBounds(185, 166, 620, 60);
 		frmMetadataTool.getContentPane().add(managerField);
 		
-		TextArea narrativeArea = new TextArea();
-		narrativeArea.setBounds(214, 136, 351, 345);
-		frmMetadataTool.getContentPane().add(narrativeArea);
-		
-		Button button = new Button("Project");
-		button.setBounds(33, 22, 70, 22);
+		Button button = new Button("Identification");
+		button.setBounds(33, 55, 135, 22);
 		frmMetadataTool.getContentPane().add(button);
 		
-		Button button_1 = new Button("Contact Info");
-		button_1.setBounds(33, 69, 70, 22);
+		Button button_1 = new Button("Data Quality");
+		button_1.setBounds(33, 101, 135, 22);
 		frmMetadataTool.getContentPane().add(button_1);
 		
-		Button button_2 = new Button("Data Types");
-		button_2.setBounds(33, 117, 70, 22);
+		Button button_2 = new Button("Spatial Data Organization");
+		button_2.setBounds(33, 146, 135, 22);
 		frmMetadataTool.getContentPane().add(button_2);
 		
-		Button button_3 = new Button("Product Specifications");
-		button_3.setBounds(33, 166, 122, 22);
+		Button button_3 = new Button("Spatial Reference");
+		button_3.setBounds(33, 190, 135, 22);
 		frmMetadataTool.getContentPane().add(button_3);
 		
-		Button button_4 = new Button("Projection");
-		button_4.setBounds(33, 218, 70, 22);
+		Button button_4 = new Button("Entity and Attribute");
+		button_4.setBounds(33, 231, 135, 22);
 		frmMetadataTool.getContentPane().add(button_4);
 		
-		Button button_5 = new Button("Quality");
-		button_5.setBounds(33, 272, 70, 22);
+		Button button_5 = new Button("Metadata Reference");
+		button_5.setBounds(33, 321, 135, 22);
 		frmMetadataTool.getContentPane().add(button_5);
 		
-		Button button_6 = new Button("Processing");
-		button_6.setBounds(33, 325, 70, 22);
+		Button button_6 = new Button("Distribution");
+		button_6.setBounds(33, 278, 135, 22);
 		frmMetadataTool.getContentPane().add(button_6);
 		
-		Button button_7 = new Button("Ancillary");
-		button_7.setBounds(33, 375, 70, 22);
+		Button button_7 = new Button("Citation");
+		button_7.setBounds(33, 366, 135, 22);
 		frmMetadataTool.getContentPane().add(button_7);
+		
+		Button button_8 = new Button("Time Period");
+		button_8.setBounds(33, 414, 135, 22);
+		frmMetadataTool.getContentPane().add(button_8);
+		
+		Button button_9 = new Button("Contact");
+		button_9.setBounds(33, 461, 135, 22);
+		frmMetadataTool.getContentPane().add(button_9);
+		
+		JLabel lblNewLabel = new JLabel("Geospatial Data Presentation Form.");
+		lblNewLabel.setBounds(194, 360, 171, 14);
+		frmMetadataTool.getContentPane().add(lblNewLabel);
+		
+		TextField textField = new TextField();
+		textField.setBounds(184, 268, 620, 60);
+		frmMetadataTool.getContentPane().add(textField);
+		
+		TextField textField_1 = new TextField();
+		textField_1.setBounds(184, 386, 620, 59);
+		frmMetadataTool.getContentPane().add(textField_1);
+		
+		JCheckBox chckbxNewCheckBox_2 = new JCheckBox("geoform check box");
+		chckbxNewCheckBox_2.setBounds(787, 356, 23, 23);
+		frmMetadataTool.getContentPane().add(chckbxNewCheckBox_2);
+		
+		JLabel lblTableOfContents = new JLabel("Table of Contents");
+		lblTableOfContents.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTableOfContents.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lblTableOfContents.setBounds(44, 13, 111, 14);
+		frmMetadataTool.getContentPane().add(lblTableOfContents);
+		
+		JButton btnExport = new JButton("Export");
+		btnExport.setBounds(379, 487, 89, 23);
+		frmMetadataTool.getContentPane().add(btnExport);
 		
 		JMenuBar menuBar = new JMenuBar();
 		frmMetadataTool.setJMenuBar(menuBar);
