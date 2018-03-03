@@ -19,7 +19,7 @@ import javax.swing.JToolBar;
 import javax.swing.JInternalFrame;
 import java.awt.Component;
 import javax.swing.Box;
-import com.jgoodies.forms.factories.DefaultComponentFactory;
+//import com.jgoodies.forms.factories.DefaultComponentFactory;
 import javax.swing.JSeparator;
 import java.awt.TextField;
 import java.awt.TextArea;
@@ -33,7 +33,7 @@ public class Frame1 {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
+		EventQueue.invokeLater( new Runnable() {
 			public void run() {
 				try {
 					Frame1 window = new Frame1();
@@ -42,7 +42,7 @@ public class Frame1 {
 					e.printStackTrace();
 				}
 			}
-		});
+		}); // end EventQueue invokeLater method
 	}
 
 	/**
