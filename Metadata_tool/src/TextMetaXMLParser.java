@@ -47,55 +47,85 @@ public class TextMetaXMLParser {
 						
 		numDocTags = 0;
 		nNode = nList.item(0);
-		parentNode(nNode);
+		//whatToPrint(nNode);
+		treeTraverse(nNode);
 		System.out.println("End of tree");
 				
 	}
 	
-	public static void parentNode(Node pNode)
-	{
-	    NodeList tList = pNode.getChildNodes();
-		Node tNode = pNode;
+	public static void treeTraverse(Node pNode)
+	{		
+		NodeList sList = pNode.getChildNodes();
+		Node cNode = null;										// set instantiate child
+		Node aNode = null;
+		Node rNode = null;
+		Node tNode = null;
+		String isValid = pNode.getNodeName();
+		String areNode = "";
+		String teeNode = "";
+		String ceeNode = "";
+		String ayeNode = "";
+		int index = 0;
+		int sibling = 0;
 		
-		//base case parent has no children
-				
-		if (!pNode.hasChildNodes()) 
-		{				
-			//System.out.println("Child has no children");
-			whatToPrint(pNode);
-			return;
-		}	
-		
-		// else parent has children
-		else 									
+		rNode = pNode;
+		areNode = rNode.getNodeName();
+		while (rNode.getNodeName() != "metadata")				// branch spacing
 		{
-			whatToPrint(pNode);
-			//System.out.println("Parent has at least one child");			
-			System.out.print("\t");
-			tNode = pNode.getFirstChild();
-			// Print all children
-			whatToPrint(tNode);
-			parentNode(tNode);
-			if (tNode.getNextSibling() != null)
-			{
-				for (int children = 0; children < tList.getLength(); children++)	
-				{					
-					tNode = tList.item(children);
-					//System.out.println("Child has a sibling");	
-					parentNode(tNode);				
-				}
-			}
+			System.out.print("*");
+			tNode = rNode.getParentNode();
+			teeNode = tNode.getNodeName();
+			rNode = tNode;
+			areNode = rNode.getNodeName();
+		}
+		System.out.println(pNode.getNodeName());				// print this node				
+			
+		// RECURSIVE CASE: Does node have a child?
+		if (pNode.hasChildNodes()) 									
+		{																			
+			cNode = pNode.getFirstChild();						// get oldest child					
+			ceeNode = isValid= cNode.getNodeName();			
+			index++;
+			
+			while ( (isValid == "#text") || (isValid == "#comment") || (isValid == null) && index < sList.getLength())
+			{				
+				// get next node				
+				cNode = sList.item(index);
+				ceeNode = isValid= cNode.getNodeName();					// load next node name into isValid string
+				index++;
+
+			}	// loop while an invalid child
+								
+			treeTraverse(cNode);								// check if child has children	
+			
 		}
 		
+		//does child have siblings
+		if (pNode.getNextSibling() != null)
+		{													
+			sibling++;		
+			aNode = pNode.getNextSibling();				
+			ayeNode = isValid = aNode.getNodeName();
+			while ( ((isValid == "#text") || (isValid == "#comment") || (isValid == null)) && aNode != null)
+			{				
+				tNode = aNode.getNextSibling();					// get next sibling	
+				aNode = tNode;
+				if (aNode != null)
+					ayeNode = isValid= aNode.getNodeName();				
+				sibling++; 
+			}													// loop while and invalid child
+			if (aNode != null)
+				treeTraverse(aNode);							// check if sibling has children
+			return;
+		}
+		
+		//BASE CASE: parent has no children, return
+		if (!pNode.hasChildNodes()) 						
+		{											
+			return;
+		}
 		
 		return;
-	}
-	
-	public static void whatToPrint(Node printNode)
-	{
-		String isValid = printNode.getNodeName();
-		if ( !(isValid== "#text") && !(isValid== "#comment") && !(isValid == null) )
-			System.out.println(printNode.getNodeName());
-	}
+	}	
 
 }
