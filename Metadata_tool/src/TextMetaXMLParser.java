@@ -1,9 +1,9 @@
 /**
  * 
- * @author SJohnston
- * @version 1.0.0
- * @date March 9, 2018
- * Command line test code for interfacing with the MetaXMLParser
+ * @author SJohnston & LHermann
+ * @version 1.0.1
+ * @date March 12, 2018
+ * Command line test code for interfacing with the MetaXMLParser and learning how to navigate a DOM tree object.
  */
 
 import java.io.File;
@@ -17,6 +17,15 @@ import org.w3c.dom.Node;
 
 public class TextMetaXMLParser {
 
+	static int numElementNode = 0;
+	
+	
+	/**
+	 * The purpose of this method is to text the MetaXML Parser class and to develop and test 
+	 * the treeTraversal method so that it can be customized for incorporating its abilities
+	 * into the Metadata tool GUI. 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		// Instance variables
 		File file;
@@ -25,16 +34,7 @@ public class TextMetaXMLParser {
 		int numDocTags = 0;
 		NodeList nList = null;
 		Node nNode = null;
-		DocumentBuilderFactory dBF = DocumentBuilderFactory.newInstance();
-		try
-		{
-			DocumentBuilder dB = dBF.newDocumentBuilder();
-		}
-		catch (Exception e)
-		{
-			System.err.println("Unable to configure parser");
-		}
-		
+				
 		Document doc = null;
 		
 		System.out.print("Enter file name and path: ");
@@ -42,90 +42,51 @@ public class TextMetaXMLParser {
 		file = new File(inputFile);
 		
 		MetaXMLParser newParser = new MetaXMLParser();
-		doc = newParser.metaTreeDoc(file);
+		doc = newParser.metaTreeDoc(file);				// send the metaTreeDoc method a file and it returns a DOM object.
+		doc.normalize();
 		nList = doc.getElementsByTagName("metadata");
 						
 		numDocTags = 0;
 		nNode = nList.item(0);
-		//whatToPrint(nNode);
 		treeTraverse(nNode);
+		//treeTraverse(nNode);
 		System.out.println("End of tree");
 				
 	}
 	
-	public static void treeTraverse(Node pNode)
-	{		
-		NodeList sList = pNode.getChildNodes();
-		Node cNode = null;										// set instantiate child
-		Node aNode = null;
-		Node rNode = null;
-		Node tNode = null;
-		String isValid = pNode.getNodeName();
-		String areNode = "";
-		String teeNode = "";
-		String ceeNode = "";
-		String ayeNode = "";
-		int index = 0;
-		int sibling = 0;
-		
-		rNode = pNode;
-		areNode = rNode.getNodeName();
-		while (rNode.getNodeName() != "metadata")				// branch spacing
-		{
+	//Lucas Hermann's super awesome node traversal
+	/**
+	 * TreeTraversal method walks a DOM tree extracting each element and the comments associated that element.
+	 * This method should be modified/upgraded to return a node or an array that contains two parts: the element name and the text of the comment.
+	 * @precondition the method assumes that the incoming node is the root of a DOM tree that was created from an XML or HTML file.
+	 * @param node is the first element of a DOM tree. 
+	 * @postcondition currently the method outputs the element and its associated comment text on the command line.
+	 */
+	public static void treeTraverse(Node node) {
+	
+	    //Print out *s for indentation place holders based on global variable numElementNode
+		for( int i = 0; i < numElementNode; i++)
 			System.out.print("*");
-			tNode = rNode.getParentNode();
-			teeNode = tNode.getNodeName();
-			rNode = tNode;
-			areNode = rNode.getNodeName();
-		}
-		System.out.println(pNode.getNodeName());				// print this node				
-			
-		// RECURSIVE CASE: Does node have a child?
-		if (pNode.hasChildNodes()) 									
-		{																			
-			cNode = pNode.getFirstChild();						// get oldest child					
-			ceeNode = isValid= cNode.getNodeName();			
-			index++;
-			
-			while ( (isValid == "#text") || (isValid == "#comment") || (isValid == null) && index < sList.getLength())
-			{				
-				// get next node				
-				cNode = sList.item(index);
-				ceeNode = isValid= cNode.getNodeName();					// load next node name into isValid string
-				index++;
+	    
+		//print the node. This is where we do any operations to the current parameter node 
+		System.out.print(node.getNodeName() + " ");
 
-			}	// loop while an invalid child
-								
-			treeTraverse(cNode);								// check if child has children	
-			
-		}
-		
-		//does child have siblings
-		if (pNode.getNextSibling() != null)
-		{													
-			sibling++;		
-			aNode = pNode.getNextSibling();				
-			ayeNode = isValid = aNode.getNodeName();
-			while ( ((isValid == "#text") || (isValid == "#comment") || (isValid == null)) && aNode != null)
-			{				
-				tNode = aNode.getNextSibling();					// get next sibling	
-				aNode = tNode;
-				if (aNode != null)
-					ayeNode = isValid= aNode.getNodeName();				
-				sibling++; 
-			}													// loop while and invalid child
-			if (aNode != null)
-				treeTraverse(aNode);							// check if sibling has children
-			return;
-		}
-		
-		//BASE CASE: parent has no children, return
-		if (!pNode.hasChildNodes()) 						
-		{											
-			return;
-		}
-		
-		return;
-	}	
-
+		//iterate through the nodeList
+	    NodeList nodeList = node.getChildNodes();
+	    for (int i = 0; i < nodeList.getLength(); i++) {
+	        Node currentNode = nodeList.item(i);
+	        
+	        //if the node is a comment node, print out the value
+	        if (currentNode.getNodeType() == Node.COMMENT_NODE)
+	        	System.out.println(currentNode.getNodeValue());
+	        
+	        if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
+	            //calls this method for all the children which is Element
+	        	numElementNode++;
+	        	treeTraverse(currentNode);
+	        	numElementNode--;
+	        } //end if
+	    } //end for
+	}//end Tree Traverse	
+	
 }

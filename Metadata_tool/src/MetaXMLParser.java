@@ -28,6 +28,7 @@ public class MetaXMLParser {
 	
 	/**
 	 * XML tree document creator
+	 * @precondition incoming file is an XML or HTML file	 * 
 	 * @param file File object from calling method
 	 * @return returns a Document tree object
 	 */
@@ -45,6 +46,8 @@ public class MetaXMLParser {
 		
 		return metaDoc; 		
 	}
+	
+	
 		
 	//Instance Variables
 	private DocumentBuilderFactory dbFact;
