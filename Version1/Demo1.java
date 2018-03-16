@@ -13,14 +13,20 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Demo1
 {
 
-	private JFrame frame;
+	private JFrame frmTeamFeMetadata;
 
 	/**
 	 * Launch the application.
@@ -34,7 +40,7 @@ public class Demo1
 				try
 				{
 					Demo1 window = new Demo1();
-					window.frame.setVisible(true);
+					window.frmTeamFeMetadata.setVisible(true);
 				}
 				catch (Exception e)
 				{
@@ -58,13 +64,20 @@ public class Demo1
 	@SuppressWarnings("unchecked")
 	private void initialize()
 	{
-		frame = new JFrame();
-		frame.setBounds(100, 100, 700, 579);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new CardLayout(0, 0));
+		try {
+	        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+	    } catch(Exception e) {
+	        System.out.println("Error setting native LAF: " + e);
+	    }
+		
+		frmTeamFeMetadata = new JFrame();
+		frmTeamFeMetadata.setTitle("Team FE Metadata tool - Demo 1");
+		frmTeamFeMetadata.setBounds(100, 100, 700, 579);
+		frmTeamFeMetadata.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmTeamFeMetadata.getContentPane().setLayout(new CardLayout(0, 0));
 
 		JPanel panel = new JPanel();
-		frame.getContentPane().add(panel, "name_1876606686560390");
+		frmTeamFeMetadata.getContentPane().add(panel, "name_1876606686560390");
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -120,25 +133,63 @@ public class Demo1
 		panel.add(editorPane, gbc_editorPane);
 
 		JMenuBar menuBar = new JMenuBar();
-		frame.setJMenuBar(menuBar);
+		frmTeamFeMetadata.setJMenuBar(menuBar);
 
 		JMenu mnFile = new JMenu("File");
 		// mnFile.setBorder(new LineBorder(new Color(0, 0, 0)));
 		menuBar.add(mnFile);
 
 		JMenuItem mntmNew = new JMenuItem("New");
+		mntmNew.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// the new menu option was selected
+				JOptionPane.showMessageDialog(null, "Create a new project option was selected"
+						+ "\nFunctionality coming soon..."
+						, "New", JOptionPane.INFORMATION_MESSAGE
+				);
+			}
+		});
 		mnFile.add(mntmNew);
 
 		JMenuItem mntmOpen = new JMenuItem("Open");
+		mntmOpen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// call the open code from FileOps1
+				System.out.println("Open menu option clicked");
+				FileOps1.openFile( );
+			}
+		});
 		mnFile.add(mntmOpen);
 
 		JMenuItem mntmSave = new JMenuItem("Save");
+		mntmSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JOptionPane.showMessageDialog(null, "Had there been a project open, it would have been saved."
+						, "Save", JOptionPane.INFORMATION_MESSAGE
+				);
+			}
+		});
 		mnFile.add(mntmSave);
 
 		JMenuItem mntmImport = new JMenuItem("Import");
+		mntmImport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// action for when import is selected
+				JOptionPane.showMessageDialog(null, "Import action coming soon..."
+						, "Import", JOptionPane.INFORMATION_MESSAGE
+				);
+			}
+		});
 		mnFile.add(mntmImport);
 
 		JMenuItem mntmExport = new JMenuItem("Export");
+		mntmExport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JOptionPane.showMessageDialog(null, "Export action coming soon..."
+						, "Export", JOptionPane.INFORMATION_MESSAGE
+				);
+			}
+		});
 		mnFile.add(mntmExport);
 
 		JMenu mnEdit = new JMenu("Edit");
@@ -159,6 +210,13 @@ public class Demo1
 		menuBar.add(mnView);
 
 		JMenuItem mntmPreview = new JMenuItem("Preview");
+		mntmPreview.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JOptionPane.showMessageDialog(null, "XML tree preview coming soon..."
+						, "Preview", JOptionPane.INFORMATION_MESSAGE
+				);
+			}
+		});
 		mnView.add(mntmPreview);
 
 		JMenu mnHelp = new JMenu("Help");
@@ -166,6 +224,15 @@ public class Demo1
 		menuBar.add(mnHelp);
 
 		JMenuItem mntmAbout = new JMenuItem("About");
+		mntmAbout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JOptionPane.showMessageDialog(null, "Metadata Software tool - version alpha 1.0" + 
+			"\n2018 March 15 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, " + 
+			"Jacob Espinoza, Isaias Gerena, Lucas Herrman\n" +
+			"(Not for external distribution - Work in Progress)", "About", JOptionPane.INFORMATION_MESSAGE
+						);
+			}
+		});
 		mnHelp.add(mntmAbout);
 	}
 
