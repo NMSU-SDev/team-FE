@@ -34,6 +34,7 @@ public class TextMetaXMLParser {
 		int numDocTags = 0;
 		NodeList nList = null;
 		Node nNode = null;
+		MetaXMLParser parse = new MetaXMLParser();
 				
 		Document doc = null;
 		
@@ -41,52 +42,18 @@ public class TextMetaXMLParser {
 		inputFile = scan.nextLine();
 		file = new File(inputFile);
 		
-		MetaXMLParser newParser = new MetaXMLParser();
+		doc = parse.MetadataParse(file);
+		/*MetaXMLParser newParser = new MetaXMLParser();
 		doc = newParser.metaTreeDoc(file);				// send the metaTreeDoc method a file and it returns a DOM object.
 		doc.normalize();
 		nList = doc.getElementsByTagName("metadata");
 						
 		numDocTags = 0;
 		nNode = nList.item(0);
-		treeTraverse(nNode);
-		//treeTraverse(nNode);
+		parse.treeTraverse(nNode);
+		//treeTraverse(nNode);*/
 		System.out.println("End of tree");
 				
-	}
-	
-	//Lucas Hermann's super awesome node traversal
-	/**
-	 * TreeTraversal method walks a DOM tree extracting each element and the comments associated that element.
-	 * This method should be modified/upgraded to return a node or an array that contains two parts: the element name and the text of the comment.
-	 * @precondition the method assumes that the incoming node is the root of a DOM tree that was created from an XML or HTML file.
-	 * @param node is the first element of a DOM tree. 
-	 * @postcondition currently the method outputs the element and its associated comment text on the command line.
-	 */
-	public static void treeTraverse(Node node) {
-	
-	    //Print out *s for indentation place holders based on global variable numElementNode
-		for( int i = 0; i < numElementNode; i++)
-			System.out.print("*");
-	    
-		//print the node. This is where we do any operations to the current parameter node 
-		System.out.print(node.getNodeName() + " ");
-
-		//iterate through the nodeList
-	    NodeList nodeList = node.getChildNodes();
-	    for (int i = 0; i < nodeList.getLength(); i++) {
-	        Node currentNode = nodeList.item(i);
-	        
-	        //if the node is a comment node, print out the value
-	        if (currentNode.getNodeType() == Node.COMMENT_NODE)
-	        	System.out.println(currentNode.getNodeValue());
-	        
-	        if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
-	            //calls this method for all the children which is Element
-	        	numElementNode++;
-	        	treeTraverse(currentNode);
-	        	numElementNode--;
-	        } //end if
-	    } //end for
-	}//end Tree Traverse	
+	}		
 	
 }
