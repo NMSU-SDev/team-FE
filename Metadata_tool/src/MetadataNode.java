@@ -13,7 +13,7 @@
  */
 public class MetadataNode <M> {
 	
-	private M element;
+	private String element;
 	private MetadataNode<M> child, sibling;
 	private String answer;
 	private String question;
@@ -61,7 +61,7 @@ public class MetadataNode <M> {
 	 * <dt><b>Postcondition:</b><dd>
 	 *   This node contains the specified element and links to its children.
 	 **/   
-	public MetadataNode( M initialElement, String quest, MetadataNode<M> initialChild, MetadataNode<M> initialSibling)
+	public MetadataNode( String initialElement, String quest, MetadataNode<M> initialChild, MetadataNode<M> initialSibling)
 	{
 		element = initialElement;		      
 		child = initialChild;
@@ -90,7 +90,7 @@ public class MetadataNode <M> {
 	 * <dt><b>Postcondition:</b><dd>
 	 *   This node contains the specified element and links to its children.
 	 **/   
-	public MetadataNode( M initialElement, String quest, String answ, MetadataNode<M> initialChild, MetadataNode<M> initialSibling)
+	public MetadataNode( String initialElement, String quest, String answ, MetadataNode<M> initialChild, MetadataNode<M> initialSibling)
 	{
 		element = initialElement;		      
 		child = initialChild;
@@ -121,7 +121,7 @@ public class MetadataNode <M> {
 	 * <dt><b>Postcondition:</b><dd>
 	 *   This node contains the specified element and links to its children.
 	 **/   
-	public MetadataNode( M initialElement, String initialQuestion, String initialAnswer, boolean initialVerified, MetadataNode<M> initialChild, MetadataNode<M> initialSibling)
+	public MetadataNode( String initialElement, String initialQuestion, String initialAnswer, boolean initialVerified, MetadataNode<M> initialChild, MetadataNode<M> initialSibling)
 	{
 		element = initialElement;		      
 		child = initialChild;
@@ -137,7 +137,7 @@ public class MetadataNode <M> {
 	 * @return
 	 *   the element from this node
 	 **/
-	public M getElement( )   
+	public String getElement( )   
 	{
 		return element;
 	}
@@ -195,12 +195,13 @@ public class MetadataNode <M> {
 	 *   the element from the deepest node that can be reached from this node by
 	 *   following child links.
 	 **/
-	public M getYoungestChild( )
+	public MetadataNode<M> getLastChild( )
 	{
+		MetadataNode thisNode = this;
 		if (child == null)
-			return element;
+			return thisNode;
 		else
-			return child.getYoungestChild( );
+			return child.getLastChild( );
 	}
 	
 	/**
@@ -215,7 +216,7 @@ public class MetadataNode <M> {
 	{
 		if (child != null)
 			child.inorderPrint( );
-		System.out.println(element);
+		System.out.println(element + ": Question: " + question + ", Answer: " + answer + ", Verified: " + ((verified) ? "verified" : "not verified"));
 		if (sibling != null)
 			sibling.inorderPrint( );
 	} 
@@ -361,7 +362,7 @@ public class MetadataNode <M> {
 	 * <dt><b>Postcondition:</b><dd>
 	 *   The element of this node has been set to <CODE>newElement</CODE>.
 	 **/
-	public void setElement(M newElement)   
+	public void setElement(String newElement)   
 	{
 		element = newElement;
 	}
@@ -412,7 +413,7 @@ public class MetadataNode <M> {
 	 *   Any other node (that used to be the first child) is no longer connected to
 	 *   this node.
 	 **/
-	public void setChild(MetadataNode<M> newChild)
+	public void addChild(MetadataNode<M> newChild)
 	{                    
 		child = newChild;
 	}
@@ -427,7 +428,7 @@ public class MetadataNode <M> {
 	 *   Any other node (that used to be the sibling) is no longer connected to
 	 *   this node.
 	 **/
-	public void setSibling(MetadataNode<M> newSibling)
+	public void addSibling(MetadataNode<M> newSibling)
 	{                    
 		sibling = newSibling;
 	}
