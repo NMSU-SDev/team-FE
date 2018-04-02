@@ -39,6 +39,8 @@ import java.awt.Label;
 import java.awt.TextArea;
 import java.awt.Button;
 import javax.swing.JInternalFrame;
+import javax.swing.JToggleButton;
+import javax.swing.JCheckBox;
 
 public class Demo2 {
 
@@ -102,7 +104,7 @@ public class Demo2 {
 	    }
 		frameTeamFeMetadata = new JFrame();
 		frameTeamFeMetadata.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Johnston\\Documents\\NMSU\\CS371-M01\\Metadata_tool\\Metadata_tool\\XSM.png"));
-		frameTeamFeMetadata.setBounds(100, 100, 700, 600);
+		frameTeamFeMetadata.setBounds(100, 100, 579, 551);
 		frameTeamFeMetadata.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frameTeamFeMetadata.getContentPane().setLayout(new CardLayout(0, 0));
 		
@@ -117,6 +119,7 @@ public class Demo2 {
 		
 		List list = new List(30, false);
 		GridBagConstraints gbc_list = new GridBagConstraints();
+		gbc_list.anchor = GridBagConstraints.WEST;
 		gbc_list.gridheight = 9;
 		gbc_list.insets = new Insets(0, 0, 5, 5);
 		gbc_list.gridx = 0;
@@ -126,9 +129,9 @@ public class Demo2 {
 		Label label_1 = new Label("Element Name goes here");
 		GridBagConstraints gbc_label_1 = new GridBagConstraints();
 		gbc_label_1.anchor = GridBagConstraints.WEST;
-		gbc_label_1.gridwidth = 6;
+		gbc_label_1.gridwidth = 7;
 		gbc_label_1.insets = new Insets(0, 0, 5, 5);
-		gbc_label_1.gridx = 2;
+		gbc_label_1.gridx = 1;
 		gbc_label_1.gridy = 0;
 		panel.add(label_1, gbc_label_1);
 		
@@ -136,21 +139,29 @@ public class Demo2 {
 		GridBagConstraints gbc_label = new GridBagConstraints();
 		gbc_label.anchor = GridBagConstraints.WEST;
 		gbc_label.gridheight = 3;
-		gbc_label.gridwidth = 6;
+		gbc_label.gridwidth = 7;
 		gbc_label.insets = new Insets(0, 0, 5, 5);
-		gbc_label.gridx = 2;
+		gbc_label.gridx = 1;
 		gbc_label.gridy = 1;
 		panel.add(label, gbc_label);
 		
 		JTextArea textArea = new JTextArea();
 		GridBagConstraints gbc_textArea = new GridBagConstraints();
-		gbc_textArea.gridheight = 5;
-		gbc_textArea.gridwidth = 6;
+		gbc_textArea.gridheight = 4;
+		gbc_textArea.gridwidth = 7;
 		gbc_textArea.insets = new Insets(0, 0, 5, 5);
 		gbc_textArea.fill = GridBagConstraints.BOTH;
-		gbc_textArea.gridx = 2;
+		gbc_textArea.gridx = 1;
 		gbc_textArea.gridy = 4;
 		panel.add(textArea, gbc_textArea);
+		
+		JCheckBox chckbxVerified = new JCheckBox("Verified");
+		GridBagConstraints gbc_chckbxVerified = new GridBagConstraints();
+		gbc_chckbxVerified.gridwidth = 6;
+		gbc_chckbxVerified.insets = new Insets(0, 0, 5, 5);
+		gbc_chckbxVerified.gridx = 2;
+		gbc_chckbxVerified.gridy = 8;
+		panel.add(chckbxVerified, gbc_chckbxVerified);
 		
 		Button button = new Button("Previous");
 		GridBagConstraints gbc_button = new GridBagConstraints();
