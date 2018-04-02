@@ -1,5 +1,5 @@
 /**
- * 
+ * The MetaXMLParser class is a collection of XML operating methods
  * @author SJohnston
  * @version 1.0.0
  * @date March 9, 2018 
@@ -84,7 +84,7 @@ public class MetaXMLParser {
 	
 	//Lucas Hermann's super awesome node traversal
 	/**
-	 * TreeTraversal method walks a DOM tree extracting each element and the comments associated that element.
+	 * TreePrint method walks a DOM tree extracting each element and the comments associated that element.
 	 * This method should be modified/upgraded to return a node or an array that contains two parts: the element name and the text of the comment.
 	 * @precondition the method assumes that the incoming node is the root of a DOM tree that was created from an XML or HTML file.
 	 * @param node is the first element of a DOM tree. 
