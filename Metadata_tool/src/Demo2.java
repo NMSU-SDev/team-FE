@@ -41,6 +41,7 @@ import java.awt.Button;
 import javax.swing.JInternalFrame;
 import javax.swing.JToggleButton;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 
 public class Demo2 {
 
@@ -50,6 +51,7 @@ public class Demo2 {
 	private NodeList nList = null;
 	private Node rootDOM = null;
 	private MetadataNode rootMNode = null;
+	private MetadataNode currentNode = null;
 	private MetaXMLParser parse = new MetaXMLParser();
 	Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();	
 	private FileOps1 fileOperations;
@@ -79,15 +81,15 @@ public class Demo2 {
 					e.printStackTrace();
 				}
 			}
-		});
+		});		
 	}
 
 	/**
 	 * Create the application.
 	 */
 	public Demo2() 
-	{
-		initialize();		
+	{		
+		initialize();			
 	}
 
 	/**
@@ -154,6 +156,7 @@ public class Demo2 {
 		gbc_textArea.gridx = 1;
 		gbc_textArea.gridy = 4;
 		panel.add(textArea, gbc_textArea);
+		//textArea.
 		
 		JCheckBox chckbxVerified = new JCheckBox("Verified");
 		GridBagConstraints gbc_chckbxVerified = new GridBagConstraints();
@@ -169,6 +172,14 @@ public class Demo2 {
 		gbc_button.gridx = 2;
 		gbc_button.gridy = 9;
 		panel.add(button, gbc_button);
+		
+		JButton btnNewButton = new JButton("Save");
+		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.gridwidth = 2;
+		gbc_btnNewButton.insets = new Insets(0, 0, 0, 5);
+		gbc_btnNewButton.gridx = 4;
+		gbc_btnNewButton.gridy = 9;
+		panel.add(btnNewButton, gbc_btnNewButton);
 		
 		Button button_1 = new Button("  Next  ");
 		GridBagConstraints gbc_button_1 = new GridBagConstraints();
@@ -192,7 +203,7 @@ public class Demo2 {
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
 						try {
-							NewSession frame = new NewSession();
+							NewSession frame = new NewSession(file);							
 							frame.setVisible(true);
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -201,9 +212,9 @@ public class Demo2 {
 				});
 				
 				// the new menu option was selected
-				JOptionPane.showMessageDialog(null, "Create a new project option was selected"
+				/*JOptionPane.showMessageDialog(null, "Create a new project option was selected"
 						+ "\nFunctionality coming soon..."
-						, "New", JOptionPane.INFORMATION_MESSAGE );				
+						, "New", JOptionPane.INFORMATION_MESSAGE );	*/			
 			}
 		});
 		menuFile.add(menuItemNew);

@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -12,15 +13,19 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.Component;
 import javax.swing.Box;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class USGSFiles extends JDialog {
 
+	private static File file;
+	private FileOps1 getAFile = new FileOps1();
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			USGSFiles dialog = new USGSFiles();
+			USGSFiles dialog = new USGSFiles(file);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -31,7 +36,8 @@ public class USGSFiles extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public USGSFiles() {
+	public USGSFiles(File nFile) {
+		file = nFile;
 		setBounds(100, 100, 450, 300);
 		{
 			JPanel panel = new JPanel();
@@ -58,6 +64,11 @@ public class USGSFiles extends JDialog {
 			JCheckBox chckbxNewCheckBox_8 = new JCheckBox("Contour");
 			
 			JButton btnNewButton = new JButton("Import New");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					file = getAFile.openFile();
+				}
+			});
 
 			GroupLayout gl_panel = new GroupLayout(panel);
 			gl_panel.setHorizontalGroup(

@@ -24,6 +24,7 @@ import static java.nio.file.StandardOpenOption.CREATE;
  * 
  * */
 public class FileOps1 {
+
 	
 	
 	
@@ -133,7 +134,7 @@ public class FileOps1 {
 	 * @param fileObj A File object that corresponds to the file to be opened.
 	 * @return a File object of the file that was opened or null if the file could not be opened.
 	 */
-	public File openFile ( ) {		
+	public File openFile () {		
 		
 		final JFileChooser openFileChoose = new JFileChooser();
 		FileFilter xmlFilter = new FileTypeFilter(".xml","XML - eXtendable Markup Language");
@@ -164,7 +165,7 @@ public class FileOps1 {
 		
 		
 		if ( fileChooserReturnVal == JFileChooser.APPROVE_OPTION ) {
-			try { d1.open( fileSelected ); }
+			try { /*d1.open( fileSelected );*/ }
 			catch (Exception e) { e.printStackTrace(); }
 			return fileSelected;
 		}

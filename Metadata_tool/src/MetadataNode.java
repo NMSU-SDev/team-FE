@@ -14,6 +14,7 @@
 public class MetadataNode <M> {
 	
 	private String element;
+	private String elementName;
 	private MetadataNode<M> child, sibling;
 	private String answer;
 	private String question;
@@ -123,7 +124,7 @@ public class MetadataNode <M> {
 	 **/   
 	public MetadataNode( String initialElement, String initialQuestion, String initialAnswer, boolean initialVerified, MetadataNode<M> initialChild, MetadataNode<M> initialSibling)
 	{
-		element = initialElement;		      
+		element = initialElement;		 
 		child = initialChild;
 		sibling = initialSibling;
 		question = initialQuestion;
@@ -140,6 +141,17 @@ public class MetadataNode <M> {
 	public String getElement( )   
 	{
 		return element;
+	}
+	
+	/**
+	 * Accessor method to get the element from this node.   
+	 * @param - none
+	 * @return
+	 *   the element from this node
+	 **/
+	public String getElementName( )   
+	{
+		return elementName;
 	}
 	
 	/**
@@ -365,6 +377,18 @@ public class MetadataNode <M> {
 	public void setElement(String newElement)   
 	{
 		element = newElement;
+	}
+	
+	/**
+	 * Modification method to set the element in this node.   
+	 * @param <CODE>newElement</CODE>
+	 *   the new element to place in this node
+	 * <dt><b>Postcondition:</b><dd>
+	 *   The element of this node has been set to <CODE>newElement</CODE>.
+	 **/
+	public void setElementName(String newElement)   
+	{
+		elementName = newElement;
 	}
 	
 	/**
