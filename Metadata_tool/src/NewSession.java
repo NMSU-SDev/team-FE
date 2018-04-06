@@ -11,6 +11,8 @@ import net.miginfocom.swing.MigLayout;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
+import com.sun.glass.ui.Window;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import java.awt.FlowLayout;
@@ -28,32 +30,36 @@ import java.io.File;
 import java.awt.event.ActionEvent;
 
 public class NewSession extends JFrame {
-		
-	private final JPanel panel = new JPanel();
+	public NewSession(File nFile) {
+		file = nFile;
+		session();
+	}
+			
+	private JFrame newFrame;
 	private FileOps1 non_USGS;
+	private static File file, fileInternal;
 	@SuppressWarnings("unused")
-	private File file;
+	
 	/**
 	 * Launch the application.
 	 */	
-	/*
-	public static void main(String[] args) {
+		public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					NewSession frame = new NewSession();
-					frame.setVisible(true);
+					NewSession nSession = new NewSession(file);
+					nSession.newFrame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
-	}*/
+	}
 
 	/**
 	 * Create the frame.
 	 */
-	public NewSession() {
+	public void session() {
 		try 
 		{
 	        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -69,7 +75,7 @@ public class NewSession extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				// open another dialog with USGS selectable items and an option to import from file
 				try {
-					USGSFiles dialog = new USGSFiles();
+					USGSFiles dialog = new USGSFiles(file);
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
 				} catch (Exception e) {
@@ -108,7 +114,7 @@ public class NewSession extends JFrame {
 						.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap(71, Short.MAX_VALUE))
 		);
-		getContentPane().setLayout(groupLayout);			
+		getContentPane().setLayout(groupLayout);		
 		
 	}
 }
