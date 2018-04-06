@@ -88,7 +88,7 @@ public class Demo2 {
 	 * Create the application.
 	 */
 	public Demo2() 
-	{
+	{		
 		initialize();			
 	}
 
@@ -212,9 +212,9 @@ public class Demo2 {
 				});
 				
 				// the new menu option was selected
-				JOptionPane.showMessageDialog(null, "Create a new project option was selected"
+				/*JOptionPane.showMessageDialog(null, "Create a new project option was selected"
 						+ "\nFunctionality coming soon..."
-						, "New", JOptionPane.INFORMATION_MESSAGE );				
+						, "New", JOptionPane.INFORMATION_MESSAGE );	*/			
 			}
 		});
 		menuFile.add(menuItemNew);

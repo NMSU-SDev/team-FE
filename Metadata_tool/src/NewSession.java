@@ -1,29 +1,10 @@
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.awt.Button;
-import java.awt.CardLayout;
-
-import net.miginfocom.swing.MigLayout;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-import com.sun.glass.ui.Window;
-
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import javax.swing.JSplitPane;
 import javax.swing.UIManager;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -31,6 +12,7 @@ import java.awt.event.ActionEvent;
 
 public class NewSession extends JFrame {
 	public NewSession(File nFile) {
+		setTitle("Choose Session Type");
 		file = nFile;
 		session();
 	}
@@ -68,7 +50,7 @@ public class NewSession extends JFrame {
 	        System.out.println("Error setting native LAF: " + e);
 	    }
 				
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 344, 290);
 		JButton btnNewButton = new JButton("USGS");
 		btnNewButton.addActionListener(new ActionListener() {
