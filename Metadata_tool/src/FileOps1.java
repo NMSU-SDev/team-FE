@@ -217,8 +217,11 @@ public class FileOps1 {
 			System.err.println( "There was a problem saving the file" );
 			return;
 		}
+	} // end method saveFile
 		
-		/** copied from openFile method. might be depricated
+		
+      
+  /** copied from openFile method. might be depricated
 		
 		//int fileChooserReturnVal;
 		// implementation 1: opens files using default programs
@@ -254,8 +257,6 @@ public class FileOps1 {
 		}
 		*/
 		
-	} // end method openFile
-
 	public static void main(String[] args) {
 		// Main for testing purposes only!
 		
