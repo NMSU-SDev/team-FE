@@ -1,5 +1,6 @@
 import java.awt.EventQueue;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.UIManager;
@@ -9,18 +10,39 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
+@SuppressWarnings({"serial", "unused"})
 public class NewSession extends JFrame {
+
 	public NewSession(File nFile) {
+		setResizable(false);
+		
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent we) {
+				System.out.println("Attempt to close NewSession");
+				
+				int result = JOptionPane.showConfirmDialog(newFrame, "A template was not selected\n Do you want to "
+						+ "abort starting an new project?", "Cancel new project?", JOptionPane.YES_OPTION);
+				
+				if (result == JOptionPane.YES_OPTION) {
+					dispose();
+				}
+			}
+		});
 		setTitle("Choose Session Type");
 		file = nFile;
 		session();
 	}
 			
 	private JFrame newFrame;
-	private FileOps1 non_USGS;
+	private FileOps1 non_USGS = new FileOps1();
 	private static File file, fileInternal;
-	@SuppressWarnings("unused")
+	
 	
 	/**
 	 * Launch the application.
@@ -50,9 +72,11 @@ public class NewSession extends JFrame {
 	        System.out.println("Error setting native LAF: " + e);
 	    }
 				
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 344, 290);
 		JButton btnNewButton = new JButton("USGS");
+		btnNewButton.setToolTipText("USGS compliant metadata");
+		
+		/*** USGS Button ****/
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// open another dialog with USGS selectable items and an option to import from file
@@ -60,6 +84,17 @@ public class NewSession extends JFrame {
 					USGSFiles dialog = new USGSFiles(file);
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
+					dialog.addWindowListener(new WindowAdapter() {
+						@Override
+						public void windowClosed( WindowEvent e ) {
+							if ( SharedData.isTemplateSet() == true ) {
+								JOptionPane.showMessageDialog( newFrame , "Template was set successfully to USGS standard"
+								, "Template Set", JOptionPane.INFORMATION_MESSAGE );
+								dispose();
+							}
+						}
+					}); // end window listener for dialog
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -68,11 +103,28 @@ public class NewSession extends JFrame {
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		
 		JButton btnNewButton_1 = new JButton("non-USGS");
+		btnNewButton_1.setToolTipText("non-USGS compliant metadata");
+		
+		/*** Non-USGS Button **/
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("Clicked on non-USGS");
 				// OpenFileChooser
-				file = non_USGS.openFile(); 
-				// need to send the file back to Demo2.java
+				file = non_USGS.openFile( newFrame ); 
+				// TODO: need to send the file back to Demo2.java
+				if ( file == null ) {
+					SharedData.changeTemplateSet( false );
+					SharedData.setTemplateFile( null );
+				} else {
+					SharedData.changeTemplateSet( true );
+					SharedData.setTemplateFile( file );
+				}
+				
+				
+				if ( SharedData.isTemplateSet() == true ) {
+					JOptionPane.showMessageDialog(newFrame, "Template was set to a custom standard", "Template Set", JOptionPane.INFORMATION_MESSAGE);
+					dispose();
+				}
 			}
 		});
 		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 20));

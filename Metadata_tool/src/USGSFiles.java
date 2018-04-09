@@ -16,10 +16,14 @@ import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+/*** When done, this class should return an XML file with the user selected attributes */
+
+@SuppressWarnings({"unused", "serial"})
 public class USGSFiles extends JDialog {
 
 	private static File file;
 	private FileOps1 getAFile = new FileOps1();
+	private boolean successful = false;
 	/**
 	 * Launch the application.
 	 */
@@ -37,13 +41,30 @@ public class USGSFiles extends JDialog {
 	 * Create the dialog.
 	 */
 	public USGSFiles(File nFile) {
+		setTitle("USGS Project Attributes");
 		file = nFile;
 		setBounds(100, 100, 450, 300);
 		{
 			JPanel panel = new JPanel();
 			getContentPane().add(panel, BorderLayout.CENTER);
 			JButton btnOk = new JButton("OK");
+			btnOk.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					System.out.println("(future) Save user input in an xml file...");
+					SharedData.changeTemplateSet(true);
+					SharedData.setTemplateFile(file);
+					dispose();
+				}
+			});
 			JButton btnCancel = new JButton("Cancel");
+			btnCancel.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					System.out.println("Discard user changes...");
+					SharedData.changeTemplateSet( false );
+					SharedData.setTemplateFile( null );
+					dispose();
+				}
+			});
 			
 			JCheckBox chckbxNewCheckBox = new JCheckBox("Breakline");
 			
@@ -64,22 +85,22 @@ public class USGSFiles extends JDialog {
 			JCheckBox chckbxNewCheckBox_8 = new JCheckBox("Contour");
 			
 			JButton btnNewButton = new JButton("Import New");
+			btnNewButton.setToolTipText("Import a new USGS compatible template");
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					file = getAFile.openFile();
+					file = getAFile.openFile( null );
 				}
 			});
 
 			GroupLayout gl_panel = new GroupLayout(panel);
 			gl_panel.setHorizontalGroup(
 				gl_panel.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panel.createSequentialGroup()
-						.addContainerGap(189, Short.MAX_VALUE)						
-						.addGap(116)
+					.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+						.addContainerGap(289, Short.MAX_VALUE)
 						.addComponent(btnOk)
-						.addPreferredGap(ComponentPlacement.RELATED)
+						.addPreferredGap(ComponentPlacement.UNRELATED)
 						.addComponent(btnCancel)
-						.addContainerGap())
+						.addGap(29))
 					.addGroup(gl_panel.createSequentialGroup()
 						.addGap(17)
 						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
@@ -121,11 +142,11 @@ public class USGSFiles extends JDialog {
 								.addPreferredGap(ComponentPlacement.RELATED)
 								.addComponent(chckbxNewCheckBox_8))
 							.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnOk)
-								.addComponent(btnCancel))))
+						.addGap(11)
+						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+							.addComponent(btnOk)
+							.addComponent(btnCancel))
+						.addContainerGap())
 			);
 			panel.setLayout(gl_panel);
 		}
