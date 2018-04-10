@@ -217,22 +217,17 @@ public class MetadataNode <M> {
 	}
 	
 	/**
-	 * Uses an in-order traversal to print the element from each node at or below
-	 * this node of the binary tree.
+	 * Accessor method to get a reference to the next sibling of this node. 
 	 * @param - none
-	 * <dt><b>Postcondition:</b><dd>
-	 *   The element of this node and all its descendants have been written by
-	 *   <CODE>System.out.println( )</CODE> using an in-order traversal.
+	 * @return
+	 *   a reference to the next sibling of this node (or the null reference if there
+	 *   is no child)
 	 **/
-	public void inorderPrint( )
+	public MetadataNode<M> getSibling( )
 	{
-		if (child != null)
-			child.inorderPrint( );
-		System.out.println(element + ": Question: " + question + ", Answer: " + answer + ", Verified: " + ((verified) ? "verified" : "not verified"));
-		if (sibling != null)
-			sibling.inorderPrint( );
-	} 
-
+		return sibling;                                               
+	}
+	
 	/**
 	 * Accessor method to determine whether a node is a leaf. 
 	 * @param - none
@@ -243,86 +238,6 @@ public class MetadataNode <M> {
 	public boolean isLeaf( )
 	{
 		return (child == null) && (child == null);                                               
-	}
-	
-	/**
-	 * Uses a pre-order traversal to print the element from each node at or below
-	 * this node of the binary tree.
-	 * @param - none
-	 * <dt><b>Postcondition:</b><dd>
-	 *   The element of this node and all its descendants have been written by
-	 *   <CODE>System.out.println( )</CODE> using a pre-order traversal.
-	 **/
-	public void preorderPrint( )
-	{
-		System.out.println(element);
-		if (child != null)
-			child.preorderPrint( );
-		if (sibling != null)
-			sibling.preorderPrint( );
-	} 
-	
-	/**
-	 * Uses a post-order traversal to print the element from each node at or below
-	 * this node of the binary tree.
-	 * @param - none
-	 * <dt><b>Postcondition:</b><dd>
-	 *   The element of this node and all its descendants have been written by
-	 *   <CODE>System.out.println( )</CODE> using a post-order traversal.
-	 **/
-	public void postorderPrint( )
-	{
-		if (child != null)
-			child.postorderPrint( );
-		if (sibling != null)
-			sibling.postorderPrint( );
-		System.out.println(element);
-	}
-
-	/**
-	 * Uses an inorder traversal to print the element from each node at or below
-	 * this node of the binary tree, with indentations to indicate the depth
-	 * of each node.
-	 * @param <CODE>depth</CODE>
-	 *   the depth of this node (with 0 for root, 1 for the root's
-	 *   children, and so on)(
-	 * <dt><b>Precondition:</b><dd>
-	 *   <CODE>depth</CODE> is the depth of this node.
-	 * <dt><b>Postcondition:</b><dd>
-	 *   The element of this node and all its descendants have been writeen by
-	 *   <CODE>System.out.println( )</CODE> using an inorder traversal.
-	 *   The indentation of each line of element is four times its depth in the
-	 *   tree. A dash "--" is printed at any place where a child has no
-	 *   sibling.
-	 **/
-	public void print(int depth)
-	{
-		int i;
-
-		// Print the indentation and the element from the current node:
-		for (i = 1; i <= depth; i++)
-			System.out.print("    ");
-		System.out.println(element);
-
-		// Print the left subtree (or a dash if there is a right child and no left child)   
-		if (child != null)
-			child.print(depth+1);
-		else if (sibling != null)
-		{
-			for (i = 1; i <= depth+1; i++)
-				System.out.print("    ");
-			System.out.println("--");
-		}
-
-		// Print the right subtree (or a dash if there is a left child and no left child)  
-		if (sibling != null)
-			sibling.print(depth+1);
-		else if (child != null)
-		{
-			for (i = 1; i <= depth+1; i++)
-				System.out.print("    ");
-			System.out.println("--");
-		}
 	}
 	
 	/**
@@ -506,6 +421,102 @@ public class MetadataNode <M> {
 			return 1 + treeSize(root.child) + treeSize(root.sibling);
 	}   
 
+	/**
+	 * Uses an in-order traversal to print the element from each node at or below
+	 * this node of the binary tree.
+	 * @param - none
+	 * <dt><b>Postcondition:</b><dd>
+	 *   The element of this node and all its descendants have been written by
+	 *   <CODE>System.out.println( )</CODE> using an in-order traversal.
+	 **/
+	public void inorderPrint( )
+	{
+		if (child != null)
+			child.inorderPrint( );
+		System.out.println(element + " : " + elementName + " : " + question + " : " + answer + " : " + ((verified) ? "verified" : "not verified"));
+		if (sibling != null)
+			sibling.inorderPrint( );
+	} 
+	
+	/**
+	 * Uses a pre-order traversal to print the element from each node at or below
+	 * this node of the binary tree.
+	 * @param - none
+	 * <dt><b>Postcondition:</b><dd>
+	 *   The element of this node and all its descendants have been written by
+	 *   <CODE>System.out.println( )</CODE> using a pre-order traversal.
+	 **/
+	public void preorderPrint( )
+	{
+		System.out.println(element + " : " + elementName + " : " + question + " : " + answer + " : " + ((verified) ? "verified" : "not verified"));
+		if (child != null)
+			child.preorderPrint( );
+		if (sibling != null)
+			sibling.preorderPrint( );
+	} 
+	
+	/**
+	 * Uses a post-order traversal to print the element from each node at or below
+	 * this node of the binary tree.
+	 * @param - none
+	 * <dt><b>Postcondition:</b><dd>
+	 *   The element of this node and all its descendants have been written by
+	 *   <CODE>System.out.println( )</CODE> using a post-order traversal.
+	 **/
+	public void postorderPrint( )
+	{
+		if (child != null)
+			child.postorderPrint( );
+		if (sibling != null)
+			sibling.postorderPrint( );
+		System.out.println(element + " : " + elementName + " : " + question + " : " + answer + " : " + ((verified) ? "verified" : "not verified"));
+	}
+
+	/**
+	 * Uses an inorder traversal to print the element from each node at or below
+	 * this node of the binary tree, with indentations to indicate the depth
+	 * of each node.
+	 * @param <CODE>depth</CODE>
+	 *   the depth of this node (with 0 for root, 1 for the root's
+	 *   children, and so on)(
+	 * <dt><b>Precondition:</b><dd>
+	 *   <CODE>depth</CODE> is the depth of this node.
+	 * <dt><b>Postcondition:</b><dd>
+	 *   The element of this node and all its descendants have been writeen by
+	 *   <CODE>System.out.println( )</CODE> using an inorder traversal.
+	 *   The indentation of each line of element is four times its depth in the
+	 *   tree. A dash "--" is printed at any place where a child has no
+	 *   sibling.
+	 **/
+	public void print(int depth)
+	{
+		int i;
+
+		// Print the indentation and the contents from the current node:
+		for (i = 1; i <= depth; i++)
+			System.out.print("    ");
+		System.out.println(element + " : " + elementName + " : " + question + " : " + answer + " : " + ((verified) ? "verified" : "not verified"));
+
+		// Print the left subtree (or a dash if there is a right child and no left child)   
+		if (child != null)
+			child.print(depth+1);
+		else if (sibling != null)
+		{
+			for (i = 1; i <= depth+1; i++)
+				System.out.print("    ");
+			System.out.println("--");
+		}
+
+		// Print the right subtree (or a dash if there is a left child and no left child)  
+		if (sibling != null)
+			sibling.print(depth+1);
+		else if (child != null)
+		{
+			for (i = 1; i <= depth+1; i++)
+				System.out.print("    ");
+			System.out.println("--");
+		}
+	}
 
 	/**
 	 * print only the leaves of a binary tree.

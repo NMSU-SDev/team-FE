@@ -39,43 +39,20 @@ public class MetaXMLParser {
 	}
 	
 	/**
-	 * MetadataParse takes in a valid XML or HTML file and returns a Document Object Model tree
-	 * @param file is an XML or HTML file
-	 * @return Document is a DOM tree of the XML or HTML contents <ELEMENT>, <ATTRIBUTE>, <CONTENT>
-	 * @throws Throws an exception if the incoming file is not an XML or HTML
-	 */
-	public Document metadataParse (File file)
-	{
-		Document doc = null;
-		int numDocTags = 0;
-		NodeList nList = null;
-		Node nNode = null;
-		doc = metaTreeDoc(file);				// send the metaTreeDoc method a file and it returns a DOM object.
-		doc.normalize();
-		nList = doc.getElementsByTagName("metadata");
-						
-		numDocTags = 0;
-		nNode = nList.item(0);
-		treePrint(nNode);
-		//treeTraverse(nNode);
-		System.out.println("End of tree");
-		return doc;
-	}
-	
-	/**
-	 * XML tree document creator
+	 * file to DOM takes in a valid XML or HTML file and returns a Document Object Model
 	 * @precondition incoming file is an XML or HTML file	  
 	 * @param file File object from calling method
-	 * @return returns a Document tree object
+	 * @return returns a Document Object Model of the XML or HTML contents <ELEMENT>, <ATTRIBUTE>, <CONTENT>
 	 * @throws Throws and exception if the incoming file is not an XML or HTML
 	 */
-	public Document metaTreeDoc (File file)
+	public Document fileToDOM (File file)
 	{		
 		try 
 		{
 			dbFact = DocumentBuilderFactory.newInstance(); 
 			dBuild = dbFact.newDocumentBuilder();
 			metaDoc = dBuild.parse(file);
+			metaDoc.normalize();
 		}
 		catch (Exception e) {
 			System.out.println(e);
@@ -83,8 +60,7 @@ public class MetaXMLParser {
 		
 		return metaDoc; 		
 	}
-	
-	//Lucas Hermann's super awesome node traversal
+		
 	/**
 	 * TreePrint method walks a DOM tree extracting each element and the comments associated that element.
 	 * This method should be modified/upgraded to return a node or an array that contains two parts: the element name and the text of the comment.
@@ -92,7 +68,7 @@ public class MetaXMLParser {
 	 * @param node is the first element of a DOM tree. 
 	 * @postcondition currently the method outputs the element and its associated comment text on the command line.
 	 */
-	public void treePrint(Node node) 
+	public void printDOM(Node node) 
 	{
 		
 	    //Print out *s for indentation place holders based on loop variable numElementNode
@@ -123,58 +99,58 @@ public class MetaXMLParser {
 	        {
 	            //calls this method for all the children which is Element
 	        	numElementNode++;
-	        	treePrint(currentNode);
+	        	printDOM(currentNode);
 	        	numElementNode--;
 	        } //end if
 	    } //end for
 	    
 	}//end treePrint	
 	
-	//Lucas Hermann's super awesome node traversal
-		/**
-		 * TreePrint method walks a DOM tree extracting each element and the comments associated that element.
-		 * This method should be modified/upgraded to return a node or an array that contains two parts: the element name and the text of the comment.
-		 * @precondition the method assumes that the incoming node is the root of a DOM tree that was created from an XML or HTML file.
-		 * @param node is the first element of a DOM tree. 
-		 * @postcondition currently the method outputs the element and its associated comment text on the command line.
-		 */
-		public void treePrint(MetadataNode node) 
-		{
-			
-		    //Print out *s for indentation place holders based on loop variable numElementNode
-			for( int i = 0; i < numElementNode; i++)
-			{
-				System.out.print("*");
-				tempString += "*";
-			}
-		    
-			//print the node. This is where we do any operations to the current parameter node 
-			System.out.print(node.getElementName() + " ");
-			tempString += node.getElementName() + " ";
+	
+	/**
+	 * TreePrint method walks a DOM tree extracting each element and the comments associated that element.
+	 * This method should be modified/upgraded to return a node or an array that contains two parts: the element name and the text of the comment.
+	 * @precondition the method assumes that the incoming node is the root of a DOM tree that was created from an XML or HTML file.
+	 * @param mNode is the first element of a DOM tree. 
+	 * @postcondition currently the method outputs the element and its associated comment text on the command line.
+	 */
+	public void printMetadataTree(MetadataNode mNode) 
+	{
 
-			//iterate through the nodeList
-		    NodeList nodeList = (NodeList) node.getChild();
-		    for (int i = 0; i < nodeList.getLength(); i++) 
-		    {
-		        Node currentNode = nodeList.item(i);
-		        
-		        //if the node is a comment node, print out the value
-		        if (currentNode.getNodeType() == Node.COMMENT_NODE)
-		        {
-		        	System.out.println(currentNode.getNodeValue());
-		        	tempString += currentNode.getNodeValue();
-		        }
-		        
-		        if (currentNode.getNodeType() == Node.ELEMENT_NODE) 
-		        {
-		            //calls this method for all the children which is Element
-		        	numElementNode++;
-		        	treePrint(currentNode);
-		        	numElementNode--;
-		        } //end if
-		    } //end for
-		    
-		}//end treePrint
+		//Print out *s for indentation place holders based on loop variable numElementNode
+		for( int i = 0; i < numElementNode; i++)
+		{
+			System.out.print("*");
+			tempString += "*";
+		}
+
+		//print the node. This is where we do any operations to the current parameter node 
+		System.out.print(mNode.getElementName() + " ");
+		tempString += mNode.getElementName() + " ";
+
+		//iterate through the nodeList
+		NodeList nodeList = (NodeList) mNode.getChild();
+		for (int i = 0; i < nodeList.getLength(); i++) 
+		{
+			Node currentNode = nodeList.item(i);
+
+			//if the node is a comment node, print out the value
+			if (currentNode.getNodeType() == Node.COMMENT_NODE)
+			{
+				System.out.println(currentNode.getNodeValue());
+				tempString += currentNode.getNodeValue();
+			}
+
+			if (currentNode.getNodeType() == Node.ELEMENT_NODE) 
+			{
+				//calls this method for all the children which is Element
+				numElementNode++;
+				printDOM(currentNode);
+				numElementNode--;
+			} //end if
+		} //end for
+
+	}//end treePrint
 	
 	/**
 	 * Import DOM Tree method takes in a Document Object Model tree at its root and returns 
@@ -185,7 +161,7 @@ public class MetaXMLParser {
 	 * @param root a MetadataNode object that is the root of the tree or subtree
 	 * @return root, the root of the entire MetadataNode tree
 	 */
-	public MetadataNode importDOMTree(Document dom)
+	public MetadataNode importDOMToMetadata(Node node)
 	{
 		MetadataNode root = new MetadataNode(null, null, null);
 		return root;
@@ -202,11 +178,12 @@ public class MetaXMLParser {
 	 * @return the root of the MetadataNode tree.
 	 */
 	@SuppressWarnings("rawtypes")
-	public MetadataNode addDOMTree(Document dom, MetadataNode root)
+	public MetadataNode addDOMToTree(Node dom, MetadataNode root)
 	{
+		// search mNode tree for 		
 		return root;
 	}
-	
+			
 	/**
 	 * Open Session Tree method takes in a Metadata Tool proprietary file(s) and 
 	 * creates a populated MetadataNode tree with the state of all elements, 
@@ -214,7 +191,7 @@ public class MetaXMLParser {
 	 * @param file
 	 * @return
 	 */
-	public MetadataNode openSessionTree(File file)
+	public MetadataNode openSession(File file)
 	{
 		MetadataNode root = new MetadataNode(null, null, null);
 		return root;
@@ -230,9 +207,9 @@ public class MetaXMLParser {
 	 * @param sessionState
 	 * @return sessionState : a String of the full MetadataNode tree
 	 */
-	public String saveSessionTree(MetadataNode root)
+	public String saveSession(MetadataNode root)
 	{
-		treePrint(root);
+		printMetadataTree(root);
 		return tempString;
 	}
 }

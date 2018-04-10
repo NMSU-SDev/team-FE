@@ -37,32 +37,45 @@ public class TestMetaXMLParser {
 		MetadataNode nNode = null;
 		MetaXMLParser parse = new MetaXMLParser();
 				
-		Document doc1 = null;
-		Document doc2 = null; 
+		Document doc1 = null;		 
 		
 		System.out.print("Enter file name and path: ");
 		inputFile = scan.nextLine();
 		file = new File(inputFile);
-		doc1 = parse.metadataParse(file);
 		
-		System.out.print("Enter a second file name and path: ");
-		inputFile = scan.nextLine();
-		file = new File(inputFile);
-		doc2 = parse.metadataParse(file);
+		// ** TEST XML FILE PARSER ** //
+		doc1 = parse.fileToDOM(file);				//doc1 is a Document Object Model (DOM)
+				
+		// ** TEST PARSE DOM
 		
-		nNode = parse.importDOMTree(doc1);
-		domNode = doc1.getParentNode();
-		parse.treePrint(domNode);
-		
-		nNode = parse.addDOMTree(doc2, nNode);
-		domNode = doc2.getParentNode();
-		parse.treePrint(domNode);
-		
-		nNode = parse.openSessionTree(file);
-		inputFile = parse.saveSessionTree(nNode);
 				
 		System.out.println("End of tree");
 				
-	}		
+	}	
 	
+	
+	public void printNode(MetadataNode mNode)
+	{
+		System.out.println("Element: " + mNode.getElement());
+		System.out.println("Element Name: " + mNode.getElementName());
+		System.out.println("Question: " + mNode.getQuestion());
+		System.out.println("Answer: " + mNode.getAnswer());
+		System.out.println("Verified: " + mNode.getVerified());
+		System.out.println(!(mNode.getChild()==null) ? "Has child" : "Has no child");
+		System.out.println(!(mNode.getSibling()==null) ? "Has sibling" : "Has no sibling");
+		return;
+	}
+	
+	/**
+	 * TreePrint method walks a MetadataNode tree extracting each element and the comments associated that element.
+	 * This method has been modified/upgraded to call the node methods print() and treeSize. Elements are displayed in the console.
+	 * @precondition the method assumes that the incoming node is the root of a DOM tree that was created from an XML or HTML file.
+	 * @param node is the first element of a DOM tree. 
+	 * @postcondition currently the method outputs the element and its associated comment text on the command line.
+	 */
+	public void treePrint(MetadataNode node) 
+	{
+		node.print((int) node.treeSize(node));
+	    
+	}//end treePrint
 }
