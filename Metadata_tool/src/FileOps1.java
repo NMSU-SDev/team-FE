@@ -141,8 +141,10 @@ public class FileOps1 {
 		
 		final JFileChooser openFileChoose = new JFileChooser();
 		FileFilter xmlFilter = new FileNameExtensionFilter("XML File - eXtensible Markup Language (*.xml)","xml");
-		FileFilter htmlFilter = new FileNameExtensionFilter("HTML Webpage File - Hyper Text Markup Language (*.html; *.htm)", "html", "htm");		
+		FileFilter htmlFilter = new FileNameExtensionFilter("HTML Webpage File - Hyper Text Markup Language (*.html; *.htm)", "html", "htm");
+      FileFilter xsmFilter = new FileNameExtensionFilter("XSM File - XML Session Metadata file (*.xsm)", "xsm");		
 		
+      openFileChoose.addChoosableFileFilter( xsmFilter );
 		openFileChoose.addChoosableFileFilter( xmlFilter );
 		openFileChoose.addChoosableFileFilter( htmlFilter );
 
