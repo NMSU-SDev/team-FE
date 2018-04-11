@@ -5,7 +5,9 @@ import java.util.Scanner;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
+import java.awt.Component;
 import java.awt.Desktop;
 
 import static java.nio.file.StandardOpenOption.APPEND;
@@ -23,11 +25,9 @@ import static java.nio.file.StandardOpenOption.CREATE;
  * Description: Basic File I/O operations that work on text files
  * 
  * */
+@SuppressWarnings("unused")
 public class FileOps1 {
 
-	
-	
-	
 	/**
 	 * Attempts to create a blank new file, given a path object for the location of the new file.
 	 * Displays a message if the file was created or not.
@@ -134,18 +134,23 @@ public class FileOps1 {
 	 * @param fileObj A File object that corresponds to the file to be opened.
 	 * @return a File object of the file that was opened or null if the file could not be opened.
 	 */
-	public File openFile () {		
+	@SuppressWarnings("unused")
+	public File openFile (Component parent) {
+		
+		System.out.println("Initializing JFileChooser");
 		
 		final JFileChooser openFileChoose = new JFileChooser();
-		FileFilter xmlFilter = new FileTypeFilter(".xml","XML - eXtendable Markup Language");
-		FileFilter htmlFilter = new FileTypeFilter(".html","HTML - Hyper Text Markup Language");		
+		FileFilter xmlFilter = new FileNameExtensionFilter("XML File - eXtensible Markup Language (*.xml)","xml");
+		FileFilter htmlFilter = new FileNameExtensionFilter("HTML Webpage File - Hyper Text Markup Language (*.html; *.htm)", "html", "htm");
+      FileFilter xsmFilter = new FileNameExtensionFilter("XSM File - XML Session Metadata file (*.xsm)", "xsm");		
 		
+      openFileChoose.addChoosableFileFilter( xsmFilter );
 		openFileChoose.addChoosableFileFilter( xmlFilter );
 		openFileChoose.addChoosableFileFilter( htmlFilter );
 
 		int fileChooserReturnVal;
 		File fileSelected = null;
-		
+		/*
 		// implementation 1: opens files using default programs
 		// ** mainly for testing, requires an OS with a GUI
 		if (!Desktop.isDesktopSupported() ) {
@@ -154,9 +159,10 @@ public class FileOps1 {
 		}
 		// desktop is used for now to open the file in the OS' default program
 		Desktop d1 = Desktop.getDesktop();
+		*/
 		
 		// will need to change parameter of showOpenDialog to the parent component of the dialog box
-		fileChooserReturnVal = openFileChoose.showOpenDialog(null);
+		fileChooserReturnVal = openFileChoose.showOpenDialog( parent );
 		fileSelected = openFileChoose.getSelectedFile();
 		if ( fileSelected != null ) {
 			System.out.printf("File selected = %s\n", fileSelected.toString() );
@@ -195,9 +201,10 @@ public class FileOps1 {
 		final JFileChooser saveFileChoose = new JFileChooser();	
 		saveFileChoose.setDialogTitle("Save Session As");
 		
-		FileFilter xsmFilter = new FileTypeFilter(".xsm", "XSM - Xml Session Metadata");
+		FileFilter xsmFilter = new FileNameExtensionFilter("XML Session Metadata file (*.xsm)", ".xsm");
 		
-		saveFileChoose.addChoosableFileFilter( xsmFilter );
+		saveFileChoose.setFileFilter( xsmFilter );
+		saveFileChoose.setSelectedFile( new File("*.xsm"));
 		saveFileChoose.setCurrentDirectory(null);  // null points the dialog initially to the user's default directory
 		
 		int userSelection = saveFileChoose.showSaveDialog(saveFrame);
@@ -217,8 +224,11 @@ public class FileOps1 {
 			System.err.println( "There was a problem saving the file" );
 			return;
 		}
+	} // end method saveFile
 		
-		/** copied from openFile method. might be depricated
+		
+      
+  /** copied from openFile method, might be deprecated
 		
 		//int fileChooserReturnVal;
 		// implementation 1: opens files using default programs
@@ -254,8 +264,7 @@ public class FileOps1 {
 		}
 		*/
 		
-	} // end method openFile
-
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		// Main for testing purposes only!
 		
