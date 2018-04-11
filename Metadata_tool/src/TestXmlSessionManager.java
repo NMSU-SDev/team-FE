@@ -3,7 +3,7 @@
  * @author SJohnston & LHermann
  * @version 1.0.1
  * @date March 12, 2018
- * Command line test code for interfacing with the MetaXMLParser and learning how to navigate a DOM tree object.
+ * Command line test code for interfacing with the XmlSessionManager and learning how to navigate a DOM tree object.
  */
 
 import java.io.File;
@@ -15,7 +15,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 
-public class TestMetaXMLParser {
+public class TestXmlSessionManager {
 
 	static int numElementNode = 0;
 	
@@ -35,7 +35,7 @@ public class TestMetaXMLParser {
 		NodeList nList = null;
 		Node domNode = null;
 		MetadataNode nNode = null;
-		MetaXMLParser parse = new MetaXMLParser();
+		XmlSessionManager parse = new XmlSessionManager();
 				
 		Document doc1 = null;		 
 		
@@ -43,10 +43,35 @@ public class TestMetaXMLParser {
 		inputFile = scan.nextLine();
 		file = new File(inputFile);
 		
-		// ** TEST XML FILE PARSER ** //
-		doc1 = parse.fileToDOM(file);				//doc1 is a Document Object Model (DOM)
+		// ** TEST XML FILE PARSER ** input a file, output a Document object //
+		doc1 = parse.fileToDOM(file);				
 				
-		// ** TEST PARSE DOM
+		// ** TEST IMPORT DOM TO METADATA ** //
+		nNode = parse.importDOMToMetadata(doc1.getParentNode());
+		
+		
+		// ** TEST DOM PRINT ** //
+		
+		
+		
+		// ** TEST METADATA TREE PRINT ** //
+		
+		
+		
+		// ** TEST DOM TO METADATA TREE ** //
+		nNode = parse.addDOMToTree(doc1.getParentNode(), nNode);
+		
+		
+		
+		// ** TEST ADD DOME TO METADATA TREE ** //
+		
+		
+		
+		// ** TEST OPEN SESSION ** //
+		
+		
+		
+		// ** TEST SAVE SESSION ** //
 		
 				
 		System.out.println("End of tree");
