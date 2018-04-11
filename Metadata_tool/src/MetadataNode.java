@@ -209,7 +209,7 @@ public class MetadataNode <M> {
 	 **/
 	public MetadataNode<M> getLastChild( )
 	{
-		MetadataNode thisNode = this;
+		MetadataNode<M> thisNode = this;
 		if (child == null)
 			return thisNode;
 		else
@@ -413,12 +413,12 @@ public class MetadataNode <M> {
 	 *   A wrong answer occurs for trees larger than 
 	 *   <CODE>INT.MAX_VALUE</CODE>.    
 	 **/ 
-	public static <M> long treeSize(MetadataNode<M> root)
+	public static long treeSize(MetadataNode<?> node)
 	{
-		if (root == null)
+		if (node == null)
 			return 0;
 		else
-			return 1 + treeSize(root.child) + treeSize(root.sibling);
+			return 1 + treeSize(node.child) + treeSize(node.sibling);
 	}   
 
 	/**

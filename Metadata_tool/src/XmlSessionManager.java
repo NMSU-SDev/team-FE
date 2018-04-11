@@ -11,11 +11,16 @@ import java.io.*;
 import java.lang.Object;
 
 import javax.xml.parsers.*;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 public class XmlSessionManager {
 
@@ -24,6 +29,7 @@ public class XmlSessionManager {
 	private DocumentBuilder dBuild;
 	private Document metaDoc;
 	private static int numElementNode = 0;
+
 	/**
 	 * Default XmlSessionManager constructor
 	 */
@@ -48,6 +54,7 @@ public class XmlSessionManager {
 	public Document fileToDOM(File file) {
 		try {
 			dbFact = DocumentBuilderFactory.newInstance();
+			dbFact.setNamespaceAware(true);
 			dBuild = dbFact.newDocumentBuilder();
 			metaDoc = dBuild.parse(file);
 			metaDoc.normalize();
@@ -75,12 +82,34 @@ public class XmlSessionManager {
 		MetadataNode<?> root = new MetadataNode<Object>(null, null, null);
 		return root;
 	}
+	
+	/**
+	 * The saveMetadataToDOM method takes a MetadataNode at its root and an array of 
+	 * all of the DOM files that are being updated for the session. It copies
+	 * the DOM files, each to a new name, then updates appropriate element contents.
+	 * @precondition the Document files are NOT the templates originally used at the beginning
+	 * of the session but are copies of the templates.   
+	 * @param mNode is the root of the MetadataNode tree
+	 * @param udpateFileList is an array of the Document objects that are being updated
+	 * as the session progresses.
+	 * @postcondition Document files are updated with changes from the MetadataNode tree
+	 * and are in a state that can readily be exported to valid XML metadata files
+	 */
+	public void saveMetadataToDOM(MetadataNode<?> mNode, Document[] udpateFileList)
+	{
+		// Loop (Begin with first Document object in array)
+			// Loop find matching elements that should contain comments (leaves in both trees)
+			// ensure matched element is really for the current data type and not for a different data type
+				// update Document COMMENT for that ELEMENT
+			// get next Document object
+		return;
+	}
 
 	/**
-	 * The addDOMToTree method takes in a Document Object Model tree and the
-	 * root to a MetadataNode tree and adds only those nodes from the DOM that
-	 * are necessary copies or are non- duplicates of elements already in the
-	 * MetadataNode tree
+	 * The addDOMToTree method takes in a Document Object Model (DOM) root node
+	 * and the root to a MetadataNode tree and adds only those nodes from the
+	 * DOM that are necessary copies or are non-duplicates of elements already
+	 * in the MetadataNode tree. Implementation planned for Demo 3
 	 * 
 	 * @assumption Add DOM Tree assumes the incoming DOM tree and the
 	 *             MetadataNode tree are geospatial metadata files that follow
@@ -92,8 +121,60 @@ public class XmlSessionManager {
 	 * @return the root of the MetadataNode tree.
 	 */
 	public MetadataNode<?> addDOMToTree(Node dom, MetadataNode<?> root) {
-		// search mNode tree for
+		// PSEUDOCODE
+		// POINTER MetadataNode currentMetaNode
+		// LOOP
+			// COMPARE Does DOM have element equal to currentMetaNode
+			// IF YES
+				// CONDITIONS
+				// FOR 
 		return root;
+	}
+	
+	/**
+	 * The exportXMLFiles method takes in an array of Documents and an array of names of the 
+	 * files to be exported and the file path to export those files. 
+	 * @precondition the Documents and the names of files should be in matching order
+	 * @param domList is a list of Document objects uses as the DOMSource
+	 * @param nameList is a list of names for the files of each Document
+	 * @param savePath is the folder in which the files are to be saved
+	 * @return 
+	 * @throws FileNotFoundException 
+	 */
+	public void exportXMLFiles(Document [] domList, String [] nameList, String savePath) throws FileNotFoundException
+	{		
+		// Create TransformerFactory		
+		TransformerFactory transFactory = TransformerFactory.newInstance();
+		try {
+			// Create Transformer
+			Transformer trans = transFactory.newTransformer();
+			// Transform each Document to a Result
+			for (int index = 0; index < domList.length; index++)
+			{
+				DOMSource source = new DOMSource(domList[index]);
+				StreamResult result = new StreamResult(System.out); //!!! need this to output to an array of file objects
+				trans.transform(source, result);
+				// Convert Result to a file, stored in an array
+				String newPath = (savePath + "\\" + nameList[index] + ".xml");
+				try 
+				{ 
+					PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(newPath)));
+					out.close();
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		} catch (TransformerConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return;
 	}
 
 	/**
