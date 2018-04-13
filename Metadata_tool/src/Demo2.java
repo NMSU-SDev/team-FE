@@ -229,7 +229,9 @@ public class Demo2
 			public void actionPerformed(ActionEvent e)
 			{
 				// TODO Auto-generated method stub
-				if (true)
+				MetadataNode tempNode;
+				tempNode = currentNode.getParent();
+				if (tempNode != null)
 				{
 					currentNode = currentNode.getParent();
 					elementLabel.setText(currentNode.getElementName());
@@ -237,7 +239,7 @@ public class Demo2
 				}
 				else
 				{
-
+					
 				}
 			}
 
@@ -264,7 +266,9 @@ public class Demo2
 			public void actionPerformed(ActionEvent e)
 			{
 				// TODO Auto-generated method stub
-				if (true)
+				MetadataNode tempNode;
+				tempNode = currentNode.getChild();
+				if (tempNode != null)
 				{
 					currentNode = currentNode.getChild();
 					elementLabel.setText(currentNode.getElementName());
