@@ -45,10 +45,13 @@ import javax.swing.JDialog;
 import java.awt.Rectangle;
 import java.awt.Point;
 import javax.swing.JLabel;
+import javax.swing.JList;
+
 import java.awt.Component;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
+import javax.swing.border.LineBorder;
 
 @SuppressWarnings({"unused","rawtypes"})
 public class Demo2 {
@@ -121,17 +124,18 @@ public class Demo2 {
 		JPanel panel = new JPanel();
 		frameTeamFeMetadata.getContentPane().add(panel, "name_1876606686560390");
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[] { 122, 50, 80, 0, 0, 0, 90, 25, 0 };
+		gbl_panel.columnWidths = new int[] { 120, 50, 80, 0, 50, 0, 90, 25, 0 };
 		gbl_panel.rowHeights = new int[] { 33, 20, 0, 0, 0, 0, 0, 0, 0, 0, 15, 0 };
-		gbl_panel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panel.columnWeights = new double[] { 4.0, 0.0, 0.0, 0.0, 20.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
 		
 		JLabel navLabel = new JLabel("Navigation");
+		navLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
 		navLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		GridBagConstraints gbc_navLabel = new GridBagConstraints();
 		gbc_navLabel.ipadx = 20;
-		gbc_navLabel.anchor = GridBagConstraints.SOUTHWEST;
+		gbc_navLabel.anchor = GridBagConstraints.SOUTH;
 		gbc_navLabel.insets = new Insets(0, 35, 5, 5);
 		gbc_navLabel.gridx = 0;
 		gbc_navLabel.gridy = 0;
@@ -149,17 +153,6 @@ public class Demo2 {
 		gbc_elementLabel.gridy = 0;
 		panel.add(elementLabel, gbc_elementLabel);
 		
-		List list = new List(30, false);
-		list.setLocation(new Point(10, 0));
-		list.setBounds(new Rectangle(10, 0, 0, 0));
-		GridBagConstraints gbc_list = new GridBagConstraints();
-		gbc_list.anchor = GridBagConstraints.WEST;
-		gbc_list.gridheight = 8;
-		gbc_list.insets = new Insets(0, 10, 5, 5);
-		gbc_list.gridx = 0;
-		gbc_list.gridy = 1;
-		panel.add(list, gbc_list);
-		
 		JLabel questionLabel = new JLabel("Question goes here:");
 		questionLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		GridBagConstraints gbc_questionLabel = new GridBagConstraints();
@@ -169,6 +162,16 @@ public class Demo2 {
 		gbc_questionLabel.gridx = 2;
 		gbc_questionLabel.gridy = 2;
 		panel.add(questionLabel, gbc_questionLabel);
+		
+		JList list = new JList();
+		list.setBorder(new EtchedBorder(EtchedBorder.LOWERED, Color.GRAY, null));
+		GridBagConstraints gbc_list = new GridBagConstraints();
+		gbc_list.gridheight = 8;
+		gbc_list.insets = new Insets(0, 10, 5, 5);
+		gbc_list.fill = GridBagConstraints.BOTH;
+		gbc_list.gridx = 0;
+		gbc_list.gridy = 1;
+		panel.add(list, gbc_list);
 		
 		JTextArea txtrEnterTextHere = new JTextArea();
 		txtrEnterTextHere.setBorder(new EtchedBorder(EtchedBorder.LOWERED, Color.GRAY, null));
@@ -240,12 +243,7 @@ public class Demo2 {
 							e.printStackTrace();
 						}
 					}
-				});
-				
-				// the new menu option was selected
-				/*JOptionPane.showMessageDialog(null, "Create a new project option was selected"
-						+ "\nFunctionality coming soon..."
-						, "New", JOptionPane.INFORMATION_MESSAGE );	*/			
+				});		
 			}
 		});
 		menuFile.add(menuItemNew);
@@ -260,7 +258,7 @@ public class Demo2 {
 				// if file is an xml, run Preview method
 				
 				// **DEBUG** //
-				//System.out.print(file.toString());
+				// System.out.print(file.toString());
 			}
 		});
 		menuFile.add(menuItemOpen);
@@ -271,9 +269,6 @@ public class Demo2 {
 				// call SaveSession() method that creates a File object to send to the saveFile(File) method
 				// call  FileOps1 save file method
 				fileOperations.saveFile( file );
-				/*
-				JOptionPane.showMessageDialog(null, "Had there been a project open, it would have been saved."
-						, "Save", JOptionPane.INFORMATION_MESSAGE ); */
 			}
 		});
 		menuFile.add(menuItemSave);
@@ -392,8 +387,8 @@ public class Demo2 {
 		JMenuItem menuAbout = new JMenuItem("About");
 		menuAbout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(null, "Metadata Software tool - version alpha 3.0" + 
-			"\n2018 April 10 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, " + 
+				JOptionPane.showMessageDialog(null, "Metadata Software tool - version alpha 3.2" + 
+			"\n2018 April 13 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, " + 
 			"Jacob Espinoza, Isaias Gerena, Lucas Herrman\n" +
 			"(Not for external distribution - Work in Progress)", "About", JOptionPane.INFORMATION_MESSAGE
 						);
