@@ -42,6 +42,8 @@ import javax.swing.JInternalFrame;
 import javax.swing.JToggleButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+
 import java.awt.Rectangle;
 import java.awt.Point;
 import javax.swing.JLabel;
@@ -52,6 +54,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 @SuppressWarnings({"unused","rawtypes"})
 public class Demo2 {
@@ -277,8 +281,26 @@ public class Demo2 {
 		menuItemImport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// action for when import is selected
-				JOptionPane.showMessageDialog(null, "Import action coming soon..."
-						, "Import", JOptionPane.INFORMATION_MESSAGE );
+				final JFileChooser importFileChoose = new JFileChooser();
+				FileFilter xmlFilter = new FileNameExtensionFilter("XML File - eXtensible Markup Language (*.xml)","xml");
+				
+				importFileChoose.setFileFilter( xmlFilter );
+				importFileChoose.setDialogTitle("Import");
+
+				int importChooseReturnVal;
+				File importF = null;
+			
+				importChooseReturnVal = importFileChoose.showOpenDialog( frameTeamFeMetadata );
+				importF = importFileChoose.getSelectedFile();
+				if ( importF != null ) {
+					System.out.printf("File to be imported is %s\n", importF.toString() );
+				} else 
+					System.out.println("No file was selected.");
+				
+		
+				if ( importChooseReturnVal == JFileChooser.CANCEL_OPTION ) {
+					System.out.println("User cancelled file selection.");
+				}
 			}
 		});
 		menuFile.add(menuItemImport);
@@ -286,8 +308,26 @@ public class Demo2 {
 		JMenuItem menuItemExport = new JMenuItem("Export");
 		menuItemExport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(null, "Export action coming soon..."
-						, "Export", JOptionPane.INFORMATION_MESSAGE );
+				final JFileChooser exportFileChoose = new JFileChooser();
+				FileFilter xmlFilter = new FileNameExtensionFilter("XML File - eXtensible Markup Language (*.xml)","xml");
+				
+				exportFileChoose.setFileFilter( xmlFilter );
+				exportFileChoose.setDialogTitle("Selection location for export...");
+
+				int exportChooseReturnVal;
+				File exportF = null;
+			
+				exportChooseReturnVal = exportFileChoose.showSaveDialog( frameTeamFeMetadata );
+				exportF = exportFileChoose.getSelectedFile();
+				if ( exportF != null ) {
+					System.out.printf("File to be exported is %s\n", exportF.toString() );
+				} else 
+					System.out.println("No file was selected.");
+				
+		
+				if ( exportChooseReturnVal == JFileChooser.CANCEL_OPTION ) {
+					System.out.println("User cancelled export.");
+				}
 			}
 		});
 		menuFile.add(menuItemExport);
@@ -387,7 +427,7 @@ public class Demo2 {
 		JMenuItem menuAbout = new JMenuItem("About");
 		menuAbout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(null, "Metadata Software tool - version alpha 3.2" + 
+				JOptionPane.showMessageDialog(null, "Metadata Software tool - version alpha 3.3" + 
 			"\n2018 April 13 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, " + 
 			"Jacob Espinoza, Isaias Gerena, Lucas Herrman\n" +
 			"(Not for external distribution - Work in Progress)", "About", JOptionPane.INFORMATION_MESSAGE

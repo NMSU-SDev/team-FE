@@ -150,18 +150,7 @@ public class FileOps1 {
 
 		int fileChooserReturnVal;
 		File fileSelected = null;
-		/*
-		// implementation 1: opens files using default programs
-		// ** mainly for testing, requires an OS with a GUI
-		if (!Desktop.isDesktopSupported() ) {
-			System.err.println(" *** ERROR: Desktop is not supported on this system.");
-			return null;
-		}
-		// desktop is used for now to open the file in the OS' default program
-		Desktop d1 = Desktop.getDesktop();
-		*/
 		
-		// will need to change parameter of showOpenDialog to the parent component of the dialog box
 		fileChooserReturnVal = openFileChoose.showOpenDialog( parent );
 		fileSelected = openFileChoose.getSelectedFile();
 		if ( fileSelected != null ) {
@@ -171,8 +160,6 @@ public class FileOps1 {
 		
 		
 		if ( fileChooserReturnVal == JFileChooser.APPROVE_OPTION ) {
-			try { /*d1.open( fileSelected );*/ }
-			catch (Exception e) { e.printStackTrace(); }
 			return fileSelected;
 		}
 		else if ( fileChooserReturnVal == JFileChooser.CANCEL_OPTION ) {
@@ -209,7 +196,6 @@ public class FileOps1 {
 		
 		int userSelection = saveFileChoose.showSaveDialog(saveFrame);
 		if (userSelection == JFileChooser.APPROVE_OPTION) {
-			// File fileToSave = saveFileChoose.getSelectedFile();
 			File testFile = writeFile(file);
 			System.out.println("Save as file: " + testFile.getAbsolutePath());
 			return;
@@ -226,48 +212,10 @@ public class FileOps1 {
 		}
 	} // end method saveFile
 		
-		
-      
-  /** copied from openFile method, might be deprecated
-		
-		//int fileChooserReturnVal;
-		// implementation 1: opens files using default programs
-		// ** mainly for testing, requires an OS with a GUI
-		if (!Desktop.isDesktopSupported() ) {
-			System.err.println(" *** ERROR: Desktop is not supported on this system.");
-			return null;
-		}
-		// desktop is used for now to open the file in the OS' default program
-		Desktop d1 = Desktop.getDesktop();
-		
-		// will need to change parameter of showOpenDialog to the parent component of the dialog box
-		fileChooserReturnVal = saveFileChoose.showSaveDialog(null);
-		fileSelected = saveFileChoose.getSelectedFile();
-		if ( fileSelected != null ) {
-			System.out.printf("File selected = %s\n", fileSelected.toString() );
-		} else 
-			System.out.println("No file was selected.");
-		
-		
-		if ( fileChooserReturnVal == JFileChooser.APPROVE_OPTION ) {
-			try { d1.open( fileSelected ); }
-			catch (Exception e) { e.printStackTrace(); }
-			return fileSelected;
-		}
-		else if ( fileChooserReturnVal == JFileChooser.CANCEL_OPTION ) {
-			System.out.println("User cancelled file selection.");
-			return null;
-		}
-		else {
-			// the user closed the dialog or an error occurred.
-			return null;
-		}
-		*/
-		
+	/* Main for testing purposes only!	
+	 ***********************************/
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
-		// Main for testing purposes only!
-		
 		Scanner s = new Scanner(System.in);
 		
 		Path p = Paths.get("./test.xml");
