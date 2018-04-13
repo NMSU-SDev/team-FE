@@ -57,8 +57,9 @@ import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-@SuppressWarnings({"unused","rawtypes"})
-public class Demo2 {
+@SuppressWarnings({ "unused", "rawtypes" })
+public class Demo2
+{
 
 	private JFrame frameTeamFeMetadata;
 	private File file;
@@ -66,65 +67,66 @@ public class Demo2 {
 	private NodeList nList = null;
 	private Node rootDOM = null;
 	private MetadataNode rootMNode = null;
-	private MetadataNode currentNode = null;
+	private static MetadataNode currentNode = null;
 	private MetaXMLParser parse = new MetaXMLParser();
-	Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();	
+	Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 	private FileOps1 fileOperations = new FileOps1();
 	private NewSession newSession;
-	
+
 	// TEST VARIABLES //
 	private Document doc1 = null;
 	private Document doc2 = null;
 	Scanner scan = new Scanner(System.in);
-	
-	
+
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) 
+	public static void main(String[] args)
 	{
-		EventQueue.invokeLater(new Runnable() 
+		EventQueue.invokeLater(new Runnable()
 		{
-			public void run() 
+			public void run()
 			{
-				try 
+				try
 				{
 					Demo2 window = new Demo2();
 					window.frameTeamFeMetadata.setVisible(true);
-				} catch (Exception e) 
+				}
+				catch (Exception e)
 				{
 					e.printStackTrace();
 				}
 			}
-		});		
+		});
 	}
 
 	/**
 	 * Create the application.
 	 */
-	public Demo2() 
-	{		
-		initialize();			
+	public Demo2()
+	{
+		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frameTeamFeMetadata.
 	 */
-	private void initialize() 
+	private void initialize()
 	{
-		try 
+		try
 		{
-	        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-	    } catch(Exception e) 
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}
+		catch (Exception e)
 		{
-	        System.out.println("Error setting native LAF: " + e);
-	    }
+			System.out.println("Error setting native LAF: " + e);
+		}
 		frameTeamFeMetadata = new JFrame();
 		frameTeamFeMetadata.setTitle("Team FE Metadata Project [Pre-Release]");
 		frameTeamFeMetadata.setBounds(100, 100, 600, 555);
 		frameTeamFeMetadata.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frameTeamFeMetadata.getContentPane().setLayout(new CardLayout(0, 0));
-		
+
 		JPanel panel = new JPanel();
 		frameTeamFeMetadata.getContentPane().add(panel, "name_1876606686560390");
 		GridBagLayout gbl_panel = new GridBagLayout();
@@ -133,7 +135,7 @@ public class Demo2 {
 		gbl_panel.columnWeights = new double[] { 4.0, 0.0, 0.0, 0.0, 20.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
-		
+
 		JLabel navLabel = new JLabel("Navigation");
 		navLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
 		navLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -144,7 +146,7 @@ public class Demo2 {
 		gbc_navLabel.gridx = 0;
 		gbc_navLabel.gridy = 0;
 		panel.add(navLabel, gbc_navLabel);
-		
+
 		JLabel elementLabel = new JLabel("Element names goes here:");
 		elementLabel.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 		elementLabel.setBounds(new Rectangle(0, 5, 0, 0));
@@ -156,7 +158,7 @@ public class Demo2 {
 		gbc_elementLabel.gridx = 2;
 		gbc_elementLabel.gridy = 0;
 		panel.add(elementLabel, gbc_elementLabel);
-		
+
 		JLabel questionLabel = new JLabel("Question goes here:");
 		questionLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		GridBagConstraints gbc_questionLabel = new GridBagConstraints();
@@ -166,7 +168,7 @@ public class Demo2 {
 		gbc_questionLabel.gridx = 2;
 		gbc_questionLabel.gridy = 2;
 		panel.add(questionLabel, gbc_questionLabel);
-		
+
 		JList list = new JList();
 		list.setBorder(new EtchedBorder(EtchedBorder.LOWERED, Color.GRAY, null));
 		GridBagConstraints gbc_list = new GridBagConstraints();
@@ -176,7 +178,7 @@ public class Demo2 {
 		gbc_list.gridx = 0;
 		gbc_list.gridy = 1;
 		panel.add(list, gbc_list);
-		
+
 		JTextArea txtrEnterTextHere = new JTextArea();
 		txtrEnterTextHere.setBorder(new EtchedBorder(EtchedBorder.LOWERED, Color.GRAY, null));
 		txtrEnterTextHere.setFont(new Font("Monospaced", Font.PLAIN, 12));
@@ -188,7 +190,7 @@ public class Demo2 {
 		gbc_txtrEnterTextHere.gridx = 2;
 		gbc_txtrEnterTextHere.gridy = 4;
 		panel.add(txtrEnterTextHere, gbc_txtrEnterTextHere);
-		
+
 		JCheckBox chckbxVerified = new JCheckBox("Verified");
 		chckbxVerified.setEnabled(false);
 		chckbxVerified.setFocusable(false);
@@ -198,7 +200,20 @@ public class Demo2 {
 		gbc_chckbxVerified.gridx = 2;
 		gbc_chckbxVerified.gridy = 8;
 		panel.add(chckbxVerified, gbc_chckbxVerified);
-		
+
+		MetadataNode page1 = new MetadataNode("First name", "First element name", "First question", "answer");
+		MetadataNode page2 = new MetadataNode("Second name", "Second element name", "Second question", "answer");
+		MetadataNode page3 = new MetadataNode("Third name", "Third element name", "Third question", "answer");
+		page1.addChild(page2);
+		page2.addChild(page3);
+		page2.setParent(page1);
+		page3.setParent(page2);
+		currentNode = page1;
+		elementLabel.setText(currentNode.getElementName());
+		questionLabel.setText(currentNode.getQuestion());
+		String elements[] = new String[] { page1.getElement(), page2.getElement(), page3.getElement() };
+		list.setListData(elements);
+
 		JButton prevButton = new JButton("Previous");
 		prevButton.setHorizontalAlignment(SwingConstants.RIGHT);
 		GridBagConstraints gbc_prevButton = new GridBagConstraints();
@@ -207,14 +222,34 @@ public class Demo2 {
 		gbc_prevButton.gridx = 3;
 		gbc_prevButton.gridy = 9;
 		panel.add(prevButton, gbc_prevButton);
-		
+		prevButton.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				// TODO Auto-generated method stub
+				if (true)
+				{
+					currentNode = currentNode.getParent();
+					elementLabel.setText(currentNode.getElementName());
+					questionLabel.setText(currentNode.getQuestion());
+				}
+				else
+				{
+
+				}
+			}
+
+		});
+
 		JButton saveButton = new JButton("Save");
 		GridBagConstraints gbc_saveButton = new GridBagConstraints();
 		gbc_saveButton.insets = new Insets(0, 0, 5, 5);
 		gbc_saveButton.gridx = 4;
 		gbc_saveButton.gridy = 9;
 		panel.add(saveButton, gbc_saveButton);
-		
+
 		JButton nextButton = new JButton("Next");
 		GridBagConstraints gbc_nextButton = new GridBagConstraints();
 		gbc_nextButton.anchor = GridBagConstraints.NORTHWEST;
@@ -222,45 +257,74 @@ public class Demo2 {
 		gbc_nextButton.gridx = 5;
 		gbc_nextButton.gridy = 9;
 		panel.add(nextButton, gbc_nextButton);
-		
+		nextButton.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				// TODO Auto-generated method stub
+				if (true)
+				{
+					currentNode = currentNode.getChild();
+					elementLabel.setText(currentNode.getElementName());
+					questionLabel.setText(currentNode.getQuestion());
+				}
+				else
+				{
+
+				}
+			}
+
+		});
+
 		JMenuBar menuBar = new JMenuBar();
 		frameTeamFeMetadata.setJMenuBar(menuBar);
-		
+
 		JMenu menuFile = new JMenu("File");
 		// mnFile.setBorder(new LineBorder(new Color(0, 0, 0)));
 		menuBar.add(menuFile);
 
 		JMenuItem menuItemNew = new JMenuItem("New");
-		menuItemNew.addActionListener(new ActionListener() 
+		menuItemNew.addActionListener(new ActionListener()
 		{
-			public void actionPerformed(ActionEvent arg0) {
-				// Open a new dialog window with two buttons: "USGS" and "non-USGS"
+			public void actionPerformed(ActionEvent arg0)
+			{
+				// Open a new dialog window with two buttons: "USGS" and
+				// "non-USGS"
 				// newSession.setVisible(true);
 				System.out.println("Calling NewSession frame");
-				EventQueue.invokeLater(new Runnable() {
-					public void run() {
-						try {
-							NewSession frame = new NewSession(file);							
+				EventQueue.invokeLater(new Runnable()
+				{
+					public void run()
+					{
+						try
+						{
+							NewSession frame = new NewSession(file);
 							frame.setVisible(true);
-							
-						} catch (Exception e) {
+
+						}
+						catch (Exception e)
+						{
 							e.printStackTrace();
 						}
 					}
-				});		
+				});
 			}
 		});
 		menuFile.add(menuItemNew);
 
 		JMenuItem menuItemOpen = new JMenuItem("Open");
-		menuItemOpen.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		menuItemOpen.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
 				// call the open code from FileOps1
 				System.out.println("Open menu option clicked");
 				// load metadata or session file into 'file'
-				file = fileOperations.openFile( frameTeamFeMetadata ); 	
+				file = fileOperations.openFile(frameTeamFeMetadata);
 				// if file is an xml, run Preview method
-				
+
 				// **DEBUG** //
 				// System.out.print(file.toString());
 			}
@@ -268,37 +332,45 @@ public class Demo2 {
 		menuFile.add(menuItemOpen);
 
 		JMenuItem menuItemSave = new JMenuItem("Save");
-		menuItemSave.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				// call SaveSession() method that creates a File object to send to the saveFile(File) method
-				// call  FileOps1 save file method
-				fileOperations.saveFile( file );
+		menuItemSave.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
+				// call SaveSession() method that creates a File object to send
+				// to the saveFile(File) method
+				// call FileOps1 save file method
+				fileOperations.saveFile(file);
 			}
 		});
 		menuFile.add(menuItemSave);
 
 		JMenuItem menuItemImport = new JMenuItem("Import");
-		menuItemImport.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		menuItemImport.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
 				// action for when import is selected
 				final JFileChooser importFileChoose = new JFileChooser();
-				FileFilter xmlFilter = new FileNameExtensionFilter("XML File - eXtensible Markup Language (*.xml)","xml");
-				
-				importFileChoose.setFileFilter( xmlFilter );
+				FileFilter xmlFilter = new FileNameExtensionFilter("XML File - eXtensible Markup Language (*.xml)",
+						"xml");
+
+				importFileChoose.setFileFilter(xmlFilter);
 				importFileChoose.setDialogTitle("Import");
 
 				int importChooseReturnVal;
 				File importF = null;
-			
-				importChooseReturnVal = importFileChoose.showOpenDialog( frameTeamFeMetadata );
+
+				importChooseReturnVal = importFileChoose.showOpenDialog(frameTeamFeMetadata);
 				importF = importFileChoose.getSelectedFile();
-				if ( importF != null ) {
-					System.out.printf("File to be imported is %s\n", importF.toString() );
-				} else 
+				if (importF != null)
+				{
+					System.out.printf("File to be imported is %s\n", importF.toString());
+				}
+				else
 					System.out.println("No file was selected.");
-				
-		
-				if ( importChooseReturnVal == JFileChooser.CANCEL_OPTION ) {
+
+				if (importChooseReturnVal == JFileChooser.CANCEL_OPTION)
+				{
 					System.out.println("User cancelled file selection.");
 				}
 			}
@@ -306,37 +378,44 @@ public class Demo2 {
 		menuFile.add(menuItemImport);
 
 		JMenuItem menuItemExport = new JMenuItem("Export");
-		menuItemExport.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		menuItemExport.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
 				final JFileChooser exportFileChoose = new JFileChooser();
-				FileFilter xmlFilter = new FileNameExtensionFilter("XML File - eXtensible Markup Language (*.xml)","xml");
-				
-				exportFileChoose.setFileFilter( xmlFilter );
+				FileFilter xmlFilter = new FileNameExtensionFilter("XML File - eXtensible Markup Language (*.xml)",
+						"xml");
+
+				exportFileChoose.setFileFilter(xmlFilter);
 				exportFileChoose.setDialogTitle("Selection location for export...");
 
 				int exportChooseReturnVal;
 				File exportF = null;
-			
-				exportChooseReturnVal = exportFileChoose.showSaveDialog( frameTeamFeMetadata );
+
+				exportChooseReturnVal = exportFileChoose.showSaveDialog(frameTeamFeMetadata);
 				exportF = exportFileChoose.getSelectedFile();
-				if ( exportF != null ) {
-					System.out.printf("File to be exported is %s\n", exportF.toString() );
-				} else 
+				if (exportF != null)
+				{
+					System.out.printf("File to be exported is %s\n", exportF.toString());
+				}
+				else
 					System.out.println("No file was selected.");
-				
-		
-				if ( exportChooseReturnVal == JFileChooser.CANCEL_OPTION ) {
+
+				if (exportChooseReturnVal == JFileChooser.CANCEL_OPTION)
+				{
 					System.out.println("User cancelled export.");
 				}
 			}
 		});
 		menuFile.add(menuItemExport);
-		
+
 		JMenuItem menuAdd = new JMenuItem("Add");
-		menuAdd.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Add XML to Session action coming soon..."
-						, "Add XML to Session", JOptionPane.INFORMATION_MESSAGE );
+		menuAdd.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				JOptionPane.showMessageDialog(null, "Add XML to Session action coming soon...", "Add XML to Session",
+						JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		menuFile.add(menuAdd);
@@ -346,62 +425,67 @@ public class Demo2 {
 		menuBar.add(menuEdit);
 
 		JMenuItem menuItemCut = new JMenuItem("Cut");
-		menuItemCut.addActionListener(new ActionListener() 
+		menuItemCut.addActionListener(new ActionListener()
 		{
 			// Cut command
-			public void actionPerformed(ActionEvent e) 
+			public void actionPerformed(ActionEvent e)
 			{
-				if(e.getActionCommand().equals("Cut"))
+				if (e.getActionCommand().equals("Cut"))
 				{
 
-					String selection=txtrEnterTextHere.getSelectedText();
+					String selection = txtrEnterTextHere.getSelectedText();
 
-					if(selection==null){
+					if (selection == null)
+					{
 						return;
 					}
-					StringSelection clipString=new StringSelection(selection);
-					clipboard.setContents(clipString,clipString);
-					txtrEnterTextHere.replaceSelection("");	
+					StringSelection clipString = new StringSelection(selection);
+					clipboard.setContents(clipString, clipString);
+					txtrEnterTextHere.replaceSelection("");
 				}
 			}
 		});
 		menuEdit.add(menuItemCut);
 
 		JMenuItem menuItemCopy = new JMenuItem("Copy");
-		menuItemCopy.addActionListener(new ActionListener() 
+		menuItemCopy.addActionListener(new ActionListener()
 		{
 			// Cut command
-			public void actionPerformed(ActionEvent e) 
+			public void actionPerformed(ActionEvent e)
 			{
-				if(e.getActionCommand().equals("Copy"))
+				if (e.getActionCommand().equals("Copy"))
 				{
 
-					String selection=txtrEnterTextHere.getSelectedText();
+					String selection = txtrEnterTextHere.getSelectedText();
 
-					if(selection==null){
+					if (selection == null)
+					{
 						return;
 					}
-					StringSelection clipString=new StringSelection(selection);
-					clipboard.setContents(clipString,clipString);
+					StringSelection clipString = new StringSelection(selection);
+					clipboard.setContents(clipString, clipString);
 				}
 			}
 		});
 		menuEdit.add(menuItemCopy);
 
 		JMenuItem menuItemPaste = new JMenuItem("Paste");
-		menuItemPaste.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(e.getActionCommand().equals("Paste")){
+		menuItemPaste.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				if (e.getActionCommand().equals("Paste"))
+				{
 					Transferable clip_data = clipboard.getContents(this);
-					
-					try{
-						String clip_string= (String)clip_data.getTransferData(DataFlavor.stringFlavor);
-						txtrEnterTextHere.replaceSelection(clip_string);						
+
+					try
+					{
+						String clip_string = (String) clip_data.getTransferData(DataFlavor.stringFlavor);
+						txtrEnterTextHere.replaceSelection(clip_string);
 					}
-					catch(Exception exception){
-						JOptionPane.showMessageDialog(null, exception
-								, "Preview", JOptionPane.INFORMATION_MESSAGE
-						);
+					catch (Exception exception)
+					{
+						JOptionPane.showMessageDialog(null, exception, "Preview", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 			}
@@ -412,11 +496,12 @@ public class Demo2 {
 		menuBar.add(menuView);
 
 		JMenuItem menuItemPreview = new JMenuItem("Preview");
-		menuItemPreview.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(null, "XML tree preview coming soon..."
-						, "Preview", JOptionPane.INFORMATION_MESSAGE
-				);
+		menuItemPreview.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
+				JOptionPane.showMessageDialog(null, "XML tree preview coming soon...", "Preview",
+						JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		menuView.add(menuItemPreview);
@@ -425,16 +510,23 @@ public class Demo2 {
 		menuBar.add(menuHelp);
 
 		JMenuItem menuAbout = new JMenuItem("About");
-		menuAbout.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(null, "Metadata Software tool - version alpha 3.3" + 
-			"\n2018 April 13 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, " + 
-			"Jacob Espinoza, Isaias Gerena, Lucas Herrman\n" +
-			"(Not for external distribution - Work in Progress)", "About", JOptionPane.INFORMATION_MESSAGE
-						);
+		menuAbout.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
+				JOptionPane.showMessageDialog(null,
+						"Metadata Software tool - version alpha 3.3"
+								+ "\n2018 April 13 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
+								+ "Jacob Espinoza, Isaias Gerena, Lucas Herrman\n"
+								+ "(Not for external distribution - Work in Progress)",
+						"About", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		menuHelp.add(menuAbout);
-	}		
-	
+	}
+
+	public static void setCurrentNode(MetadataNode m)
+	{
+		currentNode = m;
+	}
 }

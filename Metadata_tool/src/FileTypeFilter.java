@@ -1,3 +1,4 @@
+
 /**
  * FileTypeFilter permits the filtered display of only certain file
  * types in the JFileChooser dialog box. More than one file type are
@@ -11,30 +12,34 @@ import java.io.File;
 
 import javax.swing.filechooser.FileFilter;
 
-public class FileTypeFilter extends FileFilter 
+public class FileTypeFilter extends FileFilter
 {
 
 	private String description = "";
 	private String fileExt = "";
 
-	public FileTypeFilter(String extension) {
+	public FileTypeFilter(String extension)
+	{
 		fileExt = extension;
 	}
 
-	public FileTypeFilter(String extension, String typeDescription) {
+	public FileTypeFilter(String extension, String typeDescription)
+	{
 		fileExt = extension;
 		this.description = typeDescription;
 	}
 
 	@Override
-	public boolean accept(File file) {
+	public boolean accept(File file)
+	{
 		if (file.isDirectory())
 			return true;
 		return (file.getName().toLowerCase().endsWith(fileExt));
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription()
+	{
 		return description + String.format(" (*$s, args)", fileExt);
 	}
 

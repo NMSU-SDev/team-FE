@@ -16,23 +16,32 @@ import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-/*** When done, this class should return an XML file with the user selected attributes */
+/***
+ * When done, this class should return an XML file with the user selected
+ * attributes
+ */
 
-@SuppressWarnings({"unused", "serial"})
-public class USGSFiles extends JDialog {
+@SuppressWarnings({ "unused", "serial" })
+public class USGSFiles extends JDialog
+{
 
 	private static File file;
 	private FileOps1 getAFile = new FileOps1();
 	private boolean successful = false;
+
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		try {
+	public static void main(String[] args)
+	{
+		try
+		{
 			USGSFiles dialog = new USGSFiles(file);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 	}
@@ -40,7 +49,8 @@ public class USGSFiles extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public USGSFiles(File nFile) {
+	public USGSFiles(File nFile)
+	{
 		setTitle("USGS Project Attributes");
 		file = nFile;
 		setBounds(100, 100, 450, 300);
@@ -48,8 +58,10 @@ public class USGSFiles extends JDialog {
 			JPanel panel = new JPanel();
 			getContentPane().add(panel, BorderLayout.CENTER);
 			JButton btnOk = new JButton("OK");
-			btnOk.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+			btnOk.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent e)
+				{
 					System.out.println("(future) Save user input in an xml file...");
 					SharedData.changeTemplateSet(true);
 					SharedData.setTemplateFile(file);
@@ -57,97 +69,96 @@ public class USGSFiles extends JDialog {
 				}
 			});
 			JButton btnCancel = new JButton("Cancel");
-			btnCancel.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+			btnCancel.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent e)
+				{
 					System.out.println("Discard user changes...");
-					SharedData.changeTemplateSet( false );
-					SharedData.setTemplateFile( null );
+					SharedData.changeTemplateSet(false);
+					SharedData.setTemplateFile(null);
 					dispose();
 				}
 			});
-			
+
 			JCheckBox chckbxNewCheckBox = new JCheckBox("Breakline");
-			
+
 			JCheckBox chckbxNewCheckBox_1 = new JCheckBox("Classified Point Cloud");
-			
+
 			JCheckBox chckbxNewCheckBox_2 = new JCheckBox("Digital Elevation Model");
-			
+
 			JCheckBox chckbxNewCheckBox_3 = new JCheckBox("Digital Surface Model");
-			
+
 			JCheckBox chckbxNewCheckBox_4 = new JCheckBox("Digital Terrain Model");
-			
+
 			JCheckBox chckbxNewCheckBox_5 = new JCheckBox("Intensity");
-			
+
 			JCheckBox chckbxNewCheckBox_6 = new JCheckBox("Swath Point Cloud");
-			
+
 			JCheckBox chckbxNewCheckBox_7 = new JCheckBox("Project Level");
-			
+
 			JCheckBox chckbxNewCheckBox_8 = new JCheckBox("Contour");
-			
+
 			JButton btnNewButton = new JButton("Import New");
 			btnNewButton.setToolTipText("Import a new USGS compatible template");
-			btnNewButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					file = getAFile.openFile( null );
+			btnNewButton.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent arg0)
+				{
+					file = getAFile.openFile(null);
 				}
 			});
 
 			GroupLayout gl_panel = new GroupLayout(panel);
 			gl_panel.setHorizontalGroup(
-				gl_panel.createParallelGroup(Alignment.LEADING)
-					.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
-						.addContainerGap(289, Short.MAX_VALUE)
-						.addComponent(btnOk)
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(btnCancel)
-						.addGap(29))
-					.addGroup(gl_panel.createSequentialGroup()
-						.addGap(17)
-						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-							.addComponent(chckbxNewCheckBox_8)
-							.addComponent(chckbxNewCheckBox)
-							.addGroup(gl_panel.createSequentialGroup()
-								.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-									.addComponent(chckbxNewCheckBox_1)
-									.addComponent(chckbxNewCheckBox_6)
-									.addComponent(chckbxNewCheckBox_7)
-									.addComponent(chckbxNewCheckBox_5)
-									.addComponent(chckbxNewCheckBox_4)
-									.addComponent(chckbxNewCheckBox_2)
-									.addComponent(chckbxNewCheckBox_3))
-								.addGap(98)
-								.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 126, GroupLayout.PREFERRED_SIZE)))
-						.addGap(60))
-			);
+					gl_panel.createParallelGroup(Alignment.LEADING)
+							.addGroup(Alignment.TRAILING,
+									gl_panel.createSequentialGroup().addContainerGap(289, Short.MAX_VALUE)
+											.addComponent(btnOk).addPreferredGap(ComponentPlacement.UNRELATED)
+											.addComponent(btnCancel).addGap(29))
+							.addGroup(
+									gl_panel.createSequentialGroup().addGap(17)
+											.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+													.addComponent(chckbxNewCheckBox_8).addComponent(
+															chckbxNewCheckBox)
+													.addGroup(gl_panel.createSequentialGroup()
+															.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+																	.addComponent(chckbxNewCheckBox_1)
+																	.addComponent(chckbxNewCheckBox_6)
+																	.addComponent(chckbxNewCheckBox_7)
+																	.addComponent(chckbxNewCheckBox_5)
+																	.addComponent(chckbxNewCheckBox_4)
+																	.addComponent(chckbxNewCheckBox_2)
+																	.addComponent(chckbxNewCheckBox_3))
+															.addGap(98).addComponent(btnNewButton,
+																	GroupLayout.PREFERRED_SIZE, 126,
+																	GroupLayout.PREFERRED_SIZE)))
+											.addGap(60)));
 			gl_panel.setVerticalGroup(
-				gl_panel.createParallelGroup(Alignment.TRAILING)
-					.addGroup(gl_panel.createSequentialGroup()
-						.addComponent(chckbxNewCheckBox_7)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(chckbxNewCheckBox_6)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_panel.createSequentialGroup()
-								.addComponent(chckbxNewCheckBox_1)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(chckbxNewCheckBox_2)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(chckbxNewCheckBox_3)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(chckbxNewCheckBox_4)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(chckbxNewCheckBox_5)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(chckbxNewCheckBox)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(chckbxNewCheckBox_8))
-							.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE))
-						.addGap(11)
-						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-							.addComponent(btnOk)
-							.addComponent(btnCancel))
-						.addContainerGap())
-			);
+					gl_panel.createParallelGroup(Alignment.TRAILING)
+							.addGroup(gl_panel.createSequentialGroup().addComponent(chckbxNewCheckBox_7)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(
+											chckbxNewCheckBox_6)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+											.addGroup(gl_panel.createSequentialGroup().addComponent(chckbxNewCheckBox_1)
+													.addPreferredGap(ComponentPlacement.RELATED)
+													.addComponent(chckbxNewCheckBox_2)
+													.addPreferredGap(ComponentPlacement.RELATED)
+													.addComponent(chckbxNewCheckBox_3)
+													.addPreferredGap(ComponentPlacement.RELATED)
+													.addComponent(chckbxNewCheckBox_4)
+													.addPreferredGap(ComponentPlacement.RELATED)
+													.addComponent(chckbxNewCheckBox_5)
+													.addPreferredGap(ComponentPlacement.RELATED)
+													.addComponent(chckbxNewCheckBox)
+													.addPreferredGap(ComponentPlacement.RELATED)
+													.addComponent(chckbxNewCheckBox_8))
+											.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 80,
+													GroupLayout.PREFERRED_SIZE))
+									.addGap(11).addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+											.addComponent(btnOk).addComponent(btnCancel))
+									.addContainerGap()));
 			panel.setLayout(gl_panel);
 		}
 	}
