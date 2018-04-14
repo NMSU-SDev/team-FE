@@ -26,6 +26,9 @@ import java.awt.datatransfer.Transferable;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.*;
 import java.util.Scanner;
 import java.awt.event.ActionListener;
@@ -71,6 +74,7 @@ public class Demo2
 	private MetaXMLParser parse = new MetaXMLParser();
 	Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 	private FileOps1 fileOperations = new FileOps1();
+	private XmlSessionManager session1 = new XmlSessionManager();
 	private NewSession newSession;
 
 	// TEST VARIABLES //
@@ -281,6 +285,8 @@ public class Demo2
 			}
 
 		});
+		
+		/***** MENU BAR and new menu option *****/
 
 		JMenuBar menuBar = new JMenuBar();
 		frameTeamFeMetadata.setJMenuBar(menuBar);
@@ -296,7 +302,6 @@ public class Demo2
 			{
 				// Open a new dialog window with two buttons: "USGS" and
 				// "non-USGS"
-				// newSession.setVisible(true);
 				System.out.println("Calling NewSession frame");
 				EventQueue.invokeLater(new Runnable()
 				{
@@ -304,8 +309,26 @@ public class Demo2
 					{
 						try
 						{
-							NewSession frame = new NewSession(file);
-							frame.setVisible(true);
+							newSession = new NewSession(file);
+							newSession.setVisible(true);
+							newSession.addWindowListener(new WindowAdapter()
+							{
+								@Override
+								public void windowClosed(WindowEvent e)
+								{
+									if ( SharedData.isTemplateSet() == true )
+									{
+										System.out.println("NewSession result: file was set");
+										
+										// call to create a document object model
+										// uses the XmlSessionManager class
+										System.out.println("Creating a document object model...");
+										doc1 = session1.fileToDOM( SharedData.templateFile );
+									}
+									else
+										System.out.println("NewSession result: file was NOT set");
+								}
+							}); // end window listener for dialog
 
 						}
 						catch (Exception e)
@@ -314,9 +337,6 @@ public class Demo2
 						}
 					}
 				});
-				// check if the file is null after NewSession has finished
-				if ( file == null ) System.out.println("NewSession result: file was NOT set");
-				else System.out.println("NewSession result: file was set");
 				
 			} // end new menu action performed
 		});
@@ -458,7 +478,7 @@ public class Demo2
 		JMenuItem menuItemCopy = new JMenuItem("Copy");
 		menuItemCopy.addActionListener(new ActionListener()
 		{
-			// Cut command
+			// Copy command
 			public void actionPerformed(ActionEvent e)
 			{
 				if (e.getActionCommand().equals("Copy"))
