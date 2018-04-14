@@ -314,7 +314,11 @@ public class Demo2
 						}
 					}
 				});
-			}
+				// check if the file is null after NewSession has finished
+				if ( file == null ) System.out.println("NewSession result: file was NOT set");
+				else System.out.println("NewSession result: file was set");
+				
+			} // end new menu action performed
 		});
 		menuFile.add(menuItemNew);
 

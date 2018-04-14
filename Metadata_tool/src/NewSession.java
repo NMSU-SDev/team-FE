@@ -32,7 +32,7 @@ public class NewSession extends JFrame
 				System.out.println("Attempt to close NewSession");
 
 				int result = JOptionPane.showConfirmDialog(newFrame,
-						"A template was not selected\n Do you want to " + "abort starting an new project?",
+						"A template was not selected\n Do you want to " + "cancel starting a new project?",
 						"Cancel new project?", JOptionPane.YES_OPTION);
 
 				if (result == JOptionPane.YES_OPTION)
