@@ -53,6 +53,8 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 
 import java.awt.Component;
+import java.awt.Desktop;
+
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
@@ -61,25 +63,25 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 @SuppressWarnings({ "unused", "rawtypes" })
-@Deprecated
-public class Demo2
+public class MainView
 {
 
 	private JFrame frameTeamFeMetadata;
 	private File file;
+	private String [] templates;
 	private String inputFile = "";
 	private NodeList nList = null;
 	private Node rootDOM = null;
 	private MetadataNode rootMNode = null;
-<<<<<<< Updated upstream
+/*<<<<<<< Updated upstream
 	private static MetadataNode currentNode = null;
-	private MetaXMLParser parse = new MetaXMLParser();
-	Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-=======
-	private MetadataNode currentNode = null;
 	private XmlSessionManager parse = new XmlSessionManager();
+	Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+//=======	
+	private XmlSessionManager parse = new XmlSessionManager();
+>>>>>>> Stashed changes*/	
 	Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();	
->>>>>>> Stashed changes
+	private static MetadataNode currentNode = null;
 	private FileOps1 fileOperations = new FileOps1();
 	private XmlSessionManager session1 = new XmlSessionManager();
 	private NewSession newSession;
@@ -100,7 +102,7 @@ public class Demo2
 			{
 				try
 				{
-					Demo2 window = new Demo2();
+					MainView window = new MainView();
 					window.frameTeamFeMetadata.setVisible(true);
 				}
 				catch (Exception e)
@@ -114,7 +116,7 @@ public class Demo2
 	/**
 	 * Create the application.
 	 */
-	public Demo2()
+	public MainView()
 	{
 		initialize();
 	}
@@ -358,10 +360,28 @@ public class Demo2
 				System.out.println("Open menu option clicked");
 				// load metadata or session file into 'file'
 				file = fileOperations.openFile(frameTeamFeMetadata);
-				// if file is an xml, run Preview method
-
-				// **DEBUG** //
-				// System.out.print(file.toString());
+				String extension = file.getName();
+				// if file is an XML, run Preview method
+				if (extension.contains(".xml"))
+				{
+					try {
+						Desktop.getDesktop().open(file);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
+				// else if file is an xsm, run openSession method
+				else if (extension.contains(".xsm"))
+				{
+					rootMNode = session1.openSession(file, currentNode, templates);
+				}	
+				
+				else 
+				{
+					System.err.println("Not a session file");
+				}
 			}
 		});
 		menuFile.add(menuItemOpen);
@@ -564,4 +584,6 @@ public class Demo2
 	{
 		currentNode = m;
 	}
+	
+	
 }
