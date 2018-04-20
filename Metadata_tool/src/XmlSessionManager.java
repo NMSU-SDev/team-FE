@@ -80,28 +80,208 @@ public class XmlSessionManager {
 	 */
 	public MetadataNode<?> importDOMToMetadata(Node node) {
 		MetadataNode<?> root = new MetadataNode<Object>(null, null, null);
+		int dashIndex = 0;
+
+		// Print out *s for indentation place holders based on loop variable
+		// numElementNode
+		for (int i = 0; i < numElementNode; i++) {
+			System.out.print("*");
+		}
+
+		// Get the node. This is where we do any operations to the current
+		// parameter node
+		root.setElement(node.getNodeName()); // root is now the parent
+		System.out.print(root.getElement() + " ");
+
+		// iterate through the nodeList
+		NodeList nodeList = node.getChildNodes();
+		System.out.print(" Node List Length : " + nodeList.getLength());
+		int index = 0;
+
+		while (index < nodeList.getLength()) {
+			Node childNode = nodeList.item(index);
+			if (childNode.getNodeType() == Node.COMMENT_NODE) {
+				// the following assumes that the comment node belongs to the
+				// parent
+				dashIndex = childNode.getNodeValue().indexOf('-');
+				if (dashIndex < 0)
+				{
+					dashIndex = 0;
+				}
+				
+				root.setElementName(childNode.getNodeValue().substring(0, dashIndex));
+				root.setQuestion(
+						childNode.getNodeValue().substring((dashIndex + 1), childNode.getNodeValue().length()));
+				// root.setElement(node.getNodeName());
+				// System.out.print(root.getElement() + " ");
+				System.out.print(root.getElementName() + " - " + root.getQuestion());
+			} else if (childNode.getNodeType() == Node.ELEMENT_NODE && childNode.hasChildNodes()) {
+				
+				System.out.println();
+				if (root.getChild() != null) {
+					// add a sibling to root, assume another branch (recursive call)					
+					root.addSibling(importDOMToMetadata(childNode));					
+				} else {
+					// add a child to root, then go down to next child (recursive call)
+					numElementNode++;
+					root.addChild(importDOMToMetadata(childNode)); 																					
+				}
+			} else if (childNode.getNodeType() == Node.ELEMENT_NODE && !(childNode.hasChildNodes())) {
+				System.out.println();
+				MetadataNode currentNode = new MetadataNode<Object>(childNode.getNodeName(), null, null);
+				numElementNode++;
+				root.addChild(currentNode);
+				root = currentNode;	
+				root.addSibling(importDOMToMetadata(childNode));
+				numElementNode--;				
+				/* assume the rest are leaves
+				index++;
+				while (index < nodeList.getLength()) {
+					
+					if (siblingNode.getNodeType() == Node.COMMENT_NODE) {
+						// the following assumes that the comment node belongs
+						// to the parent
+						dashIndex = siblingNode.getNodeValue().indexOf('-');
+						currentNode.setElementName(siblingNode.getNodeValue().substring(0, dashIndex));
+						currentNode.setQuestion(siblingNode.getNodeValue().substring((dashIndex + 1),
+								siblingNode.getNodeValue().length()));
+						// root.setElement(node.getNodeName());
+						System.out.print(currentNode.getElementName() + " - " + currentNode.getQuestion());
+					} // end if sibling is a Comment
+					if (siblingNode.getNodeType() == Node.ELEMENT_NODE) {
+						System.out.println();
+						MetadataNode newSibling = new MetadataNode<Object>(siblingNode.getNodeName(), null, null);
+						// add a sibling to root, then go down to next child (recursive call
+						currentNode.addSibling(newSibling); 
+						currentNode = newSibling;
+					} // end if sibling is an Element
+					if (siblingNode.hasChildNodes())
+					{
+						break;
+					}
+					index++;
+				} // end while there are more leaves
+				*/
+			} else {
+				// skip the junk
+			}
+			index++;
+		} // end while node has children
+		/*
+		 * for (int i = 0; i < nodeList.getLength(); i++) { Node childNode =
+		 * nodeList.item(i); // current node is a child of root // if the node
+		 * is a comment node, print out the value if (childNode.getNodeType() ==
+		 * Node.COMMENT_NODE) { if (root.getChild() != null) { MetadataNode
+		 * nextChildNode = root.getChild(); do { if (nextChildNode.getElement()
+		 * == childNode.getNodeName()) { // the following assumes that the
+		 * comment node belongs to one of the children dashIndex =
+		 * childNode.getNodeValue().indexOf('-');
+		 * nextChildNode.setElementName(childNode.getNodeValue().substring(0,
+		 * dashIndex));
+		 * nextChildNode.setQuestion(childNode.getNodeValue().substring((
+		 * dashIndex+1), childNode.getNodeValue().length()));
+		 * //childNode.setElement(node.getNodeName());
+		 * System.out.print(nextChildNode.getElementName() + " - " +
+		 * nextChildNode.getQuestion()); } if (nextChildNode.getSibling() !=
+		 * null) nextChildNode = nextChildNode.getSibling(); } while
+		 * (nextChildNode.getSibling() != null); } else { // the following
+		 * assumes that the comment node belongs to the parent dashIndex =
+		 * childNode.getNodeValue().indexOf('-');
+		 * root.setElementName(childNode.getNodeValue().substring(0,dashIndex));
+		 * root.setQuestion(childNode.getNodeValue().substring((dashIndex+1),
+		 * childNode.getNodeValue().length())); //
+		 * root.setElement(node.getNodeName()); //
+		 * System.out.print(root.getElement() + " ");
+		 * System.out.print(root.getElementName() + " - " + root.getQuestion());
+		 * // else loop - find root.getChild().getElement() ==
+		 * currentNode.getNodeName() } }
+		 * 
+		 * if (childNode.getNodeType() == Node.ELEMENT_NODE) { if
+		 * (childNode.hasChildNodes()) { // calls this method for all the
+		 * children which is Element numElementNode++; System.out.println();
+		 * root.addChild(importDOMToMetadata(childNode)); // add a child to
+		 * mNode and go down to next child (recursive call) numElementNode--; //
+		 * go up to parent } else // then it is an element node that has a
+		 * sibling for a comment { // loop to get past trash Node parent =
+		 * childNode.getParentNode(); NodeList parentList =
+		 * parent.getChildNodes(); int p = i+1; while (p <
+		 * parentList.getLength()) { Node siblingNode = parentList.item(p); if
+		 * (siblingNode.getNodeType() == Node.COMMENT_NODE) { // the following
+		 * assumes that the comment node belongs to one of the children
+		 * dashIndex = siblingNode.getNodeValue().indexOf('-');
+		 * root.setElementName(siblingNode.getNodeValue().substring(0,dashIndex)
+		 * );
+		 * root.setQuestion(siblingNode.getNodeValue().substring((dashIndex+1),
+		 * siblingNode.getNodeValue().length()));
+		 * //childNode.setElement(node.getNodeName());
+		 * System.out.print(root.getElementName() + " - " + root.getQuestion());
+		 * }
+		 * 
+		 * if (siblingNode.getNodeType() != Node.ELEMENT_NODE) {
+		 * System.out.println();
+		 * root.addSibling(importDOMToMetadata(siblingNode)); } p ++; } }
+		 * 
+		 * } // end if
+		 * 
+		 * } // end for
+		 */
+		numElementNode--;
 		return root;
 	}
-	
+
 	/**
-	 * The saveMetadataToDOM method takes a MetadataNode at its root and an array of 
-	 * all of the DOM files that are being updated for the session. It copies
-	 * the DOM files, each to a new name, then updates appropriate element contents.
-	 * @precondition the Document files are NOT the templates originally used at the beginning
-	 * of the session but are copies of the templates.   
-	 * @param mNode is the root of the MetadataNode tree
-	 * @param udpateFileList is an array of the Document objects that are being updated
-	 * as the session progresses.
-	 * @postcondition Document files are updated with changes from the MetadataNode tree
-	 * and are in a state that can readily be exported to valid XML metadata files
+	 * The saveMetadataToDOM method takes a MetadataNode at its root and an
+	 * array of all of the DOM files that are being updated for the session. It
+	 * copies the DOM files, each to a new name, then updates appropriate
+	 * element contents.
+	 * 
+	 * @precondition the Document files are NOT the templates originally used at
+	 *               the beginning of the session but are copies of the
+	 *               templates.
+	 * @param mNode
+	 *            is the root of the MetadataNode tree
+	 * @param udpateFileList
+	 *            is an array of the Document objects that are being updated as
+	 *            the session progresses.
+	 * @postcondition Document files are updated with changes from the
+	 *                MetadataNode tree and are in a state that can readily be
+	 *                exported to valid XML metadata files
 	 */
-	public void saveMetadataToDOM(MetadataNode<?> mNode, Document[] udpateFileList)
-	{
-		// Loop (Begin with first Document object in array)
-			// Loop find matching elements that should contain comments (leaves in both trees)
-			// ensure matched element is really for the current data type and not for a different data type
-				// update Document COMMENT for that ELEMENT
-			// get next Document object
+	public void saveMetadataToDOM(MetadataNode<?> mNode, Document document) {
+		// Loop find matching elements that should contain comments (leaves in
+		// both trees)
+		// ensure matched element is really for the current data type and not
+		// for a different data type
+		// update Document COMMENT for that ELEMENT
+		// get next Document object
+		MetadataNode<?> currentNode = mNode;
+		NodeList currentDoc = document.getElementsByTagName("metadta");
+		Node node = currentDoc.item(0);
+		while (!currentNode.equals(mNode.getLastChild())) {
+			currentDoc = document.getElementsByTagName(currentNode.getElement());
+			for (int index = 0; index < currentDoc.getLength(); index++) {
+				node = currentDoc.item(index);
+				node.setNodeValue(currentNode.getAnswer());
+			}
+			if (!(currentNode.getChild() == null)) // has child
+			{
+				currentNode = currentNode.getChild();
+			} else if (!(currentNode.getSibling() == null)) // not a child but
+															// has a sibling
+			{
+				currentNode = currentNode.getSibling();
+			} else // last child
+			{
+				do // loop: go up one
+				{
+					currentNode.getParent();
+				} while (currentNode.getSibling() == null); // find next
+															// sibling. if no
+															// sibling, go up
+															// one again
+				currentNode.getSibling(); // get next sibling
+			}
+		}
 		return;
 	}
 
@@ -124,45 +304,47 @@ public class XmlSessionManager {
 		// PSEUDOCODE
 		// POINTER MetadataNode currentMetaNode
 		// LOOP
-			// COMPARE Does DOM have element equal to currentMetaNode
-			// IF YES
-				// CONDITIONS
-				// FOR 
+		// COMPARE Does DOM have element equal to currentMetaNode
+		// IF YES
+		// CONDITIONS
+		// FOR
 		return root;
 	}
-	
+
 	/**
-	 * The exportXMLFiles method takes in an array of Documents and an array of names of the 
-	 * files to be exported and the file path to export those files. 
-	 * @precondition the Documents and the names of files should be in matching order
-	 * @param domList is a list of Document objects uses as the DOMSource
-	 * @param nameList is a list of names for the files of each Document
-	 * @param savePath is the folder in which the files are to be saved
-	 * @return 
-	 * @throws FileNotFoundException 
+	 * The exportXMLFiles method takes in an array of Documents and an array of
+	 * names of the files to be exported and the file path to export those
+	 * files.
+	 * 
+	 * @precondition the Documents and the names of files should be in matching
+	 *               order
+	 * @param domList
+	 *            is a list of Document objects uses as the DOMSource
+	 * @param nameList
+	 *            is a list of names for the files of each Document
+	 * @param savePath
+	 *            is the folder in which the files are to be saved
+	 * @return
+	 * @throws FileNotFoundException
 	 */
-	public void exportXMLFiles(Document [] domList, String [] nameList, String savePath) throws FileNotFoundException
-	{		
-		// Create TransformerFactory		
+	public void exportXMLFiles(Document[] domList, String[] nameList, String savePath) throws FileNotFoundException {
+		// Create TransformerFactory
 		TransformerFactory transFactory = TransformerFactory.newInstance();
 		try {
 			// Create Transformer
 			Transformer trans = transFactory.newTransformer();
 			// Transform each Document to a Result
-			for (int index = 0; index < domList.length; index++)
-			{
+			for (int index = 0; index < domList.length; index++) {
 				DOMSource source = new DOMSource(domList[index]);
-				StreamResult result = new StreamResult(System.out); //!!! need this to output to an array of file objects
+				// !!! need this to output to an array of file objects
+				StreamResult result = new StreamResult(System.out); 
 				trans.transform(source, result);
 				// Convert Result to a file, stored in an array
 				String newPath = (savePath + "\\" + nameList[index] + ".xml");
-				try 
-				{ 
+				try {
 					PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(newPath)));
 					out.close();
-				}
-				catch (IOException e)
-				{
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
@@ -173,7 +355,7 @@ public class XmlSessionManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return;
 	}
 
@@ -217,9 +399,10 @@ public class XmlSessionManager {
 	}// end printMetadataTree method
 
 	/**
-	 * openSession method takes in a Metadata Tool proprietary .xsm file and
+	 * The openSession method takes in a Metadata Tool proprietary .xsm file and
 	 * creates a populated MetadataNode tree with the state of all attributes
-	 * for all children and siblings from the .xsm session file.
+	 * for all children and siblings.
+	 * 
 	 * 
 	 * @precondition The incoming file is of type .xsm and not any other type.
 	 * @param file
@@ -231,20 +414,48 @@ public class XmlSessionManager {
 	 * @throws TypeMismatchException.
 	 * @catch returns a new, empty node to the calling method.
 	 */
-	public MetadataNode<?> openSession(File file) {
-		MetadataNode<?> root = new MetadataNode<Object>(null, null, null);
-		return root;
+	public MetadataNode<?> openSession(File file, MetadataNode<?> currentNode, String[] templates) {
+		MetadataNode<?> rootMNode = new MetadataNode<Object>(null, null, null);
+		/*
+		 * Set parentNode to rootMNode. Set parentIndentation = 0; Set
+		 * nextIndentation = parentIndentation; Get first String line
+		 * parentIndentation = count indentation markers in String line To
+		 * populate the attributes of the any Node, read String line, each line
+		 * represents a node. Parse text in each line into the 5 attributes of a
+		 * node: element, elementName, Question, Answer, Verified populate
+		 * parentNode Begin loop: get String nextLine while not encountering
+		 * special break character '\r' (known as a carriage return), create new
+		 * node nextIndentation = count indentation markers for new node parse
+		 * text to node attributes If next line has more indentation markers
+		 * '*', add newNode to parentNode; parentNode.addChild(newNode) else if
+		 * next line has equal indentation markers '*',, add newNode as sibling
+		 * to parentNode else if next line has less indentation markers '*'
+		 * point parentNode to getParent() for each 'less' indentation add
+		 * newNode as sibling to parentNode get String nextLine end loop
+		 * 
+		 * After the tree is created we want to set currentNode to the element
+		 * in rootMNode that = the element listed in the .xsm file
+		 * 
+		 * Last, we want to load into the file array the list of template files
+		 * by grabbing them from their absolute paths. !! CAUTION !! may throw a
+		 * FileNotFound exception if a user moved those files.
+		 * 
+		 */
+		return rootMNode;
 	}
 
 	/**
 	 * saveSession takes in a MetadataNode tree at its root along with the
-	 * currentNode pointer and creates a very long String object that represents
-	 * the state of a session at the moment it is saved. When opened in a text
-	 * editor, the .xsm file should show each Node of the tree, starting with
-	 * its root, cascading down the family genealogy, indenting each generation
-	 * of the family to the right unto the last leaf. Each leaf will have
-	 * displayed the state of its attributes at the time of save: Element,
-	 * ElementName, Question, Answer and Verified.
+	 * currentNode pointer and the list of xml files used as templates for this
+	 * session and creates a very long String object that represents the state
+	 * of this session at the moment it is saved. When opened in a text editor,
+	 * the .xsm file should show each Node of the tree, starting with its root,
+	 * cascading down the family genealogy, indenting each generation of the
+	 * family to the right unto the last leaf. Each leaf will have displayed the
+	 * state of its attributes at the time of save: Element, ElementName,
+	 * Question, Answer and Verified. After the MetadataNode tree, the String
+	 * should state the element name of the CurrentNode pointer. Last, the
+	 * String should list the template files that this session is based on.
 	 * 
 	 * @precondition the incoming node is the desired root of the tree.
 	 * @param root
@@ -253,17 +464,28 @@ public class XmlSessionManager {
 	 * @param currentNode
 	 *            is a pointer to the node that the Metadata Tool was currently
 	 *            working on when the session was saved.
-	 * @param xMlSessionManager
+	 * @param templates
+	 *            is an array of the file objects of all xml files used as the
+	 *            templates for this session
+	 * @param xMlSessionSave
 	 *            is the formatted string that represents the state of the saved
 	 *            Metadata Tool session.
 	 * @postcondition a String of the contents of the tree using indentation
 	 *                markers to represent the hierarchy
-	 * @return the xmlSessionManager String.
+	 * @return the xmlSessionManager String. ?!? should this instead return a
+	 *         File ?!?
 	 */
-	public String saveSession(MetadataNode<?> root, MetadataNode<?> currentNode) {
-		String xMlSessionManager = "Current Node: " + currentNode.getElement() + "\n";
-		xMlSessionManager += metadataTreeToString(root);
-		return xMlSessionManager;
+	public String saveSession(MetadataNode<?> root, MetadataNode<?> currentNode, String[] templates) {
+		String xMlSessionSave = "";
+		// File sessionFile;
+
+		xMlSessionSave += metadataTreeToString(root);
+		xMlSessionSave += "Current Node: " + currentNode.getElement() + "\n";
+		for (int index = 0; index < templates.length; index++) {
+			xMlSessionSave += templates[index] + "\n";
+		}
+
+		return xMlSessionSave;
 	}
 
 	/**
@@ -339,13 +561,13 @@ public class XmlSessionManager {
 		// Print out *s for indentation place holders based on loop variable
 		// numElementNode
 		for (int i = 0; i < numElementNode; i++) {
-			// System.out.print("*");
+			System.out.print("*");
 			domTreeString += "*";
 		}
 
 		// print the node. This is where we do any operations to the current
 		// parameter node
-		// System.out.print(node.getNodeName() + " ");
+		System.out.print(node.getNodeName() + " ");
 		domTreeString += node.getNodeName() + " ";
 
 		// iterate through the nodeList
@@ -355,7 +577,7 @@ public class XmlSessionManager {
 
 			// if the node is a comment node, print out the value
 			if (currentNode.getNodeType() == Node.COMMENT_NODE) {
-				// System.out.println(currentNode.getNodeValue());
+				System.out.println(currentNode.getNodeValue());
 				domTreeString += currentNode.getNodeValue() + "\n";
 			}
 
