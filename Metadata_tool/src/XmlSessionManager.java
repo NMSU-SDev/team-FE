@@ -117,7 +117,9 @@ public class XmlSessionManager {
 			}
 			// then we use that to add a sibling for you.
 			if (sibling != null)
-			root.addSibling(importDOMToMetadata(sibling));
+			{			
+				root.addSibling(importDOMToMetadata(sibling));				
+			} 
 			else
 				root.addSibling(null);
 		}
@@ -139,7 +141,11 @@ public class XmlSessionManager {
 			}
 			// then, we use that to add a child for you
 			if (child != null)
+			{
 				root.addChild(importDOMToMetadata(child));
+				root.getChild().setParent(root);
+				whoseYourDaddy(root.getChild());
+			}
 			else
 				root.addChild(null);
 			
@@ -148,10 +154,29 @@ public class XmlSessionManager {
 		System.out.println(root.getElement() + " " + root.getElementName() + " " + root.getQuestion() + " " + root.getAnswer() + " " + ((root.getVerified() ? "True" : "False")));
 		
 		// Hello Element Node. Let's build your family tree.
-		// send node to method that looks for an associated comment to this node (usually the next sibling or child node)
+		// send node to method that looks for an associated comment to this node (usually the next sibling or child node)		
 		return root;		
 	}
 	/**
+	 * The whoseYourDaddy method is a bandaid fix for setting the parent to a MetadataNode.
+	 * @param root
+	 */
+	private void whoseYourDaddy(MetadataNode root) 
+	{
+		MetadataNode adopted = root;
+		if (root.getSibling() != null)
+		{
+			adopted = root.getSibling();		
+			while (adopted != null)
+			{
+				adopted.setParent(root.getParent());
+				adopted = adopted.getSibling();
+			}
+		}
+		return;
+	}
+
+	/**
 	 * The retrieveNodeDescription method receives a node and a MetadataNode and 
 	 * applies the description of the node Element as the ElementName and Question 
 	 * for the MetadataNode.
@@ -175,7 +200,7 @@ private void retrieveNodeDescription(Node node, MetadataNode root)
 		Node sibling = node;
 		
 		if (node.getFirstChild() != null) // the description is a child
-		{
+		{			
 			for (int c = 0; (child.getNodeType() != Node.ELEMENT_NODE) && (c < nList.getLength()); c++ )
 			{
 				child = nList.item(c);
