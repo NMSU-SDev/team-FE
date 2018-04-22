@@ -66,9 +66,10 @@ public class TestXmlSessionManager
 		nList = doc1[0].getElementsByTagName("metadata");
 		nNode = nList.item(0);
 		//System.out.println(nNode.getNodeName());
-		mNode = parse.importDOMToMetadata(nNode);
-		System.out.println(mNode.toString());
-
+		mNode = parse.importDOMToMetadata(nNode);		
+		mNode.print(0); // print terminates
+		// code works find up to this point... <SJohnston 2:51am 4/22/2018> //
+		
 		// ** TEST ADD DOM TO TREE ** input a Node and the root of a
 		// MetadataNode tree, output an updated MetadataNode root with
 		// dissimilar nodes added //

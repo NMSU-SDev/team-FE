@@ -82,6 +82,7 @@ public class XmlSessionManager {
 		// starting over:
 		Node sibling, child;
 		MetadataNode root = new MetadataNode("root", null, null);
+		int attributeFlag = 0;
 		// Incoming node: what is it?
 		// Hello node. what type are you? Element, Comment, Attribute?
 		// if you are an element, I will create a Metadata node with your name on it
@@ -89,21 +90,21 @@ public class XmlSessionManager {
 			
 			// then, if you have children, we will connect you to your first child.
 		// if you are not an element, well, then we don't know what to do with you. 
-		// First, let us make some code to see what type of node is the root that is given to us
-		if (node.getNodeType() == Node.ATTRIBUTE_NODE)
-		{
-			System.out.println("I am an attribute. My name is: " + node.getNodeName() + " My contents are: " + node.getNodeValue());
-		}
+		// First, let us make some code to see what type of node is the root that is given to us		
 		if (node.getNodeType() == Node.ELEMENT_NODE)
 		{
 			root.setElement(node.getNodeName());
-			System.out.print("I am an element. My name is: " + root.getElement()); 			
+			//System.out.print("I am an element. My tag is: " + root.getElement()); 
+			if (node.hasChildNodes())
+			{
+				child = node.getFirstChild();
+				if (child.getNodeValue() == "\n")
+					root.setAnswer("");
+				else
+					root.setAnswer(child.getNodeValue());
+			}
 			retrieveNodeDescription(node, root);
-			System.out.println(" My contents are: " + root.getElementName() + " - " + root.getQuestion());
-		}
-		if (node.getNodeType() == Node.COMMENT_NODE)
-		{			
-			System.out.print("I am a comment. My name is: " + node.getNodeName() + " My contents are: " + node.getNodeValue());
+			//System.out.println(" My name is: " + root.getElementName() + " My description is: " + root.getQuestion());
 		}
 		
 		// now that we have you named, do you have siblings?
@@ -151,14 +152,17 @@ public class XmlSessionManager {
 			
 			
 		} // end importDOMToMetadataNode
-		System.out.println(root.getElement() + " " + root.getElementName() + " " + root.getQuestion() + " " + root.getAnswer() + " " + ((root.getVerified() ? "True" : "False")));
+		// mini report
+		System.out.print("Tag: " + root.getElement() + " Name: " + root.getElementName());		
+		System.out.print(" Question: " + root.getQuestion() + " Answer: " + root.getAnswer());
+		System.out.println(" Verified: " + ((root.getVerified() ? "True" : "False")));
 		
 		// Hello Element Node. Let's build your family tree.
 		// send node to method that looks for an associated comment to this node (usually the next sibling or child node)		
 		return root;		
 	}
 	/**
-	 * The whoseYourDaddy method is a bandaid fix for setting the parent to a MetadataNode.
+	 * The whoseYourDaddy method is a band-aid fix for setting the parent to a MetadataNode.
 	 * @param root
 	 */
 	private void whoseYourDaddy(MetadataNode root) 
@@ -172,7 +176,7 @@ public class XmlSessionManager {
 				adopted.setParent(root.getParent());
 				adopted = adopted.getSibling();
 			}
-		}
+		}		
 		return;
 	}
 
@@ -198,11 +202,12 @@ private void retrieveNodeDescription(Node node, MetadataNode root)
 		NodeList nList = node.getChildNodes();		
 		Node child = nList.item(0);
 		Node sibling = node;
+		int attributeFlag = 0;
 		
 		if (node.getFirstChild() != null) // the description is a child
 		{			
 			for (int c = 0; (child.getNodeType() != Node.ELEMENT_NODE) && (c < nList.getLength()); c++ )
-			{
+			{				
 				child = nList.item(c);
 				// if a comment node is not encountered, then this method ends.
 				if (child.getNodeType() == Node.COMMENT_NODE)
@@ -614,7 +619,7 @@ private void retrieveNodeDescription(Node node, MetadataNode root)
 
 		// print the node. This is where we do any operations to the current
 		// parameter node
-		System.out.print(node.getNodeName() + " ");
+		System.out.print(node.getNodeName() + " "); // !!! GET NULL POINTER EXCEPTION !!!//
 		domTreeString += node.getNodeName() + " ";
 
 		// iterate through the nodeList

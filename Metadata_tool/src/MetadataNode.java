@@ -570,7 +570,7 @@ public class MetadataNode<M>
 	 *            <dd><CODE>depth</CODE> is the depth of this node.
 	 *            <dt><b>Postcondition:</b>
 	 *            <dd>The element of this node and all its descendants have been
-	 *            writeen by <CODE>System.out.println( )</CODE> using an inorder
+	 *            writen by <CODE>System.out.println( )</CODE> using an inorder
 	 *            traversal. The indentation of each line of element is four
 	 *            times its depth in the tree. A dash "--" is printed at any
 	 *            place where a child has no sibling.
@@ -578,34 +578,34 @@ public class MetadataNode<M>
 	public void print(int depth)
 	{
 		int i;
-
 		// Print the indentation and the contents from the current node:
 		for (i = 1; i <= depth; i++)
 			System.out.print("    ");
 		System.out.println(element + " : " + elementName + " : " + question + " : " + answer + " : "
 				+ ((verified) ? "verified" : "not verified"));
 
-		// Print the left subtree (or a dash if there is a right child and no
-		// left child)
+		// Print the children first		
 		if (child != null)
 			child.print(depth + 1);
+		/*
 		else if (sibling != null)
 		{
-			for (i = 1; i <= depth + 1; i++)
+			for (i = 1; i <= depth+1; i++)
 				System.out.print("    ");
 			System.out.println("--");
 		}
-
-		// Print the right subtree (or a dash if there is a left child and no
-		// left child)
+		*/
+		// Print the siblings second
 		if (sibling != null)
-			sibling.print(depth + 1);
+			sibling.print(depth);
+		/*
 		else if (child != null)
 		{
 			for (i = 1; i <= depth + 1; i++)
 				System.out.print("    ");
 			System.out.println("--");
 		}
+		*/
 	}
 
 	/**
