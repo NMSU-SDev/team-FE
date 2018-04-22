@@ -34,49 +34,49 @@ public class TestXmlSessionManager
 	public static void main(String[] args) throws IOException
 	{
 		// Instance variables
+		final int MAX = 1;
+		int index = 0;
 		File file;
 		String inputFile = "";
 		Scanner scan = new Scanner(System.in);
 		MetadataNode<?> mNode = null;
 		XmlSessionManager parse = new XmlSessionManager();
-		String [] templates = new String[10];		
-
-		Document doc1 = null;
-		Document doc2 = null;
-
-		System.out.print("Enter file name and path: ");
+		
+		String [] templates = new String[MAX];		
+		Document [] doc1 = new Document [MAX];
+		
+		do {
+		System.out.print("Enter name and path for " + (index+1) + " of " + MAX + " files: ");
 		inputFile = scan.nextLine();
-		templates[0] = inputFile;
-		file = new File(templates[0]);
+		templates[index] = inputFile;
+		file = new File(templates[index]);
 		
 		// ** TEST XML FILE PARSER ** input a file, output a Document object //
-		doc1 = parse.fileToDOM(file);
-		System.out.println(doc1.getDocumentURI());
+		doc1 [index] = parse.fileToDOM(file);
+		System.out.println(doc1[index].getDocumentURI());
+		index ++;
+		} while (index < MAX);
+		// code works find up to this point... <SJohnston 12:23am 4/20/2018> //
+		
 
 		// ** TEST IMPORT DOM TO METADATA ** input a Node, output a MetadataNode
 		// object //
 		NodeList nList = null;
 		Node nNode = null;
-		nList = doc1.getElementsByTagName("metadata");
+		nList = doc1[0].getElementsByTagName("metadata");
 		nNode = nList.item(0);
-		System.out.println(nNode.getNodeName());
+		//System.out.println(nNode.getNodeName());
 		mNode = parse.importDOMToMetadata(nNode);
 		System.out.println(mNode.toString());
 
 		// ** TEST ADD DOM TO TREE ** input a Node and the root of a
 		// MetadataNode tree, output an updated MetadataNode root with
 		// dissimilar nodes added //
-		System.out.print("Enter file name and path: ");
-		inputFile = scan.nextLine();
-		templates[1] = inputFile;
-		file = new File(templates[1]);		
-		doc2 = parse.fileToDOM(file);
-		
-		mNode = parse.addDOMToTree(doc1.getParentNode(), mNode);
+		mNode = parse.addDOMToTree(doc1[0].getParentNode(), mNode);
 
 		// ** TEST DOM PRINT ** input a Node, output to console the contents of
 		// the Node tree //
-		parse.printDOM(doc1.getParentNode());
+		parse.printDOM(doc1[0].getParentNode());
 
 		// ** TEST METADATA TREE PRINT ** input a MetadataNode, output to
 		// console contents of the MetadataNode tree //
@@ -90,7 +90,6 @@ public class TestXmlSessionManager
 		{
 		    writer = new BufferedWriter( new FileWriter("test.xsm"));
 		    writer.write(inputFile);
-
 		}
 		catch ( IOException e)
 		{

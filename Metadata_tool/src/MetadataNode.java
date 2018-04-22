@@ -11,7 +11,8 @@ public class MetadataNode<M>
 
 	private String element;
 	private String elementName;
-	private MetadataNode<M> child, sibling, parent;
+	private MetadataNode<?> child, parent;
+	MetadataNode<?> sibling;
 	private String answer;
 	private String question;
 	private boolean verified;
@@ -35,11 +36,11 @@ public class MetadataNode<M>
 	 *            <dd>This node contains the specified element and links to its
 	 *            children.
 	 **/
-	public MetadataNode(String initialElement, MetadataNode<M> initialChild, MetadataNode<M> initialSibling)
+	public MetadataNode(String initialElement, MetadataNode<?> childCopy, MetadataNode<?> siblingCopy)
 	{
 		element = initialElement;
-		child = initialChild;
-		sibling = initialSibling;
+		child = childCopy;
+		sibling = siblingCopy;
 		question = "";
 		answer = "";
 		verified = false;
@@ -67,8 +68,8 @@ public class MetadataNode<M>
 	 *            <dd>This node contains the specified element and links to its
 	 *            children.
 	 **/
-	public MetadataNode(String initialElement, String quest, MetadataNode<M> initialChild,
-			MetadataNode<M> initialSibling)
+	public MetadataNode(String initialElement, String quest, MetadataNode<?> initialChild,
+			MetadataNode<?> initialSibling)
 	{
 		element = initialElement;
 		child = initialChild;
@@ -102,8 +103,8 @@ public class MetadataNode<M>
 	 *            <dd>This node contains the specified element and links to its
 	 *            children.
 	 **/
-	public MetadataNode(String initialElement, String quest, String answ, MetadataNode<M> initialChild,
-			MetadataNode<M> initialSibling)
+	public MetadataNode(String initialElement, String quest, String answ, MetadataNode<?> initialChild,
+			MetadataNode<?> initialSibling)
 	{
 		element = initialElement;
 		child = initialChild;
@@ -140,7 +141,7 @@ public class MetadataNode<M>
 	 *            children.
 	 **/
 	public MetadataNode(String initialElement, String initialQuestion, String initialAnswer, boolean initialVerified,
-			MetadataNode<M> initialChild, MetadataNode<M> initialSibling)
+			MetadataNode<?> initialChild, MetadataNode<?> initialSibling)
 	{
 		element = initialElement;
 		child = initialChild;
@@ -230,7 +231,7 @@ public class MetadataNode<M>
 	 * @return a reference to the first child of this node (or the null
 	 *         reference if there is no child)
 	 **/
-	public MetadataNode<M> getChild()
+	public MetadataNode<?> getChild()
 	{
 		return child;
 	}
@@ -244,9 +245,9 @@ public class MetadataNode<M>
 	 * @return the element from the deepest node that can be reached from this
 	 *         node by following child links.
 	 **/
-	public MetadataNode<M> getLastChild()
+	public MetadataNode<?> getLastChild()
 	{
-		MetadataNode<M> thisNode = this;
+		MetadataNode<?> thisNode = this;
 		if (child == null)
 			return thisNode;
 		else
@@ -261,12 +262,12 @@ public class MetadataNode<M>
 	 * @return a reference to the next sibling of this node (or the null
 	 *         reference if there is no child)
 	 **/
-	public MetadataNode<M> getSibling()
+	public MetadataNode<?> getSibling()
 	{
 		return sibling;
 	}
 	
-	public MetadataNode<M> getParent()
+	public MetadataNode<?> getParent()
 	{
 		return parent;
 	}
@@ -297,7 +298,7 @@ public class MetadataNode<M>
 	 *            null if the original tree had only one node (since that one
 	 *            node has now been removed).
 	 **/
-	public MetadataNode<M> removeLastChild()
+	public MetadataNode<?> removeLastChild()
 	{
 		if (child == null)
 			return sibling;
@@ -321,7 +322,7 @@ public class MetadataNode<M>
 	 *            value could be null if the original tree had only one node
 	 *            (since that one node has now been removed).
 	 **/
-	public MetadataNode<M> removeLastSibling()
+	public MetadataNode<?> removeLastSibling()
 	{
 		if (sibling == null)
 			return child;
@@ -414,9 +415,10 @@ public class MetadataNode<M>
 	 *            <CODE>newChild</CODE>. Any other node (that used to be the
 	 *            first child) is no longer connected to this node.
 	 **/
-	public void addChild(MetadataNode<M> newChild)
+	@SuppressWarnings("unchecked")
+	public void addChild(MetadataNode<?> metadataNode)
 	{
-		child = newChild;
+		child = (MetadataNode<M>) metadataNode;
 		
 	}
 
@@ -432,9 +434,9 @@ public class MetadataNode<M>
 	 *            <CODE>newSibling</CODE>. Any other node (that used to be the
 	 *            sibling) is no longer connected to this node.
 	 **/
-	public void addSibling(MetadataNode<M> newSibling)
+	public void addSibling(MetadataNode<?> metadataNode)
 	{
-		sibling = newSibling;
+		sibling = metadataNode;
 	}
 	
 	public void setParent(MetadataNode<M> newParent)
@@ -460,9 +462,9 @@ public class MetadataNode<M>
 	 *                Indicates that there is insufficient memory for the new
 	 *                tree.
 	 **/
-	public static <M> MetadataNode<M> treeCopy(MetadataNode<M> source)
+	public static <M> MetadataNode<?> treeCopy(MetadataNode<?> source)
 	{
-		MetadataNode<M> childCopy, siblingCopy;
+		MetadataNode<?> childCopy, siblingCopy;
 
 		if (source == null)
 			return null;
