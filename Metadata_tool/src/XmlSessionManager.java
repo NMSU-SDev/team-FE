@@ -207,7 +207,7 @@ private void retrieveNodeDescription(Node node, MetadataNode root)
 						root.setQuestion(child.getNodeValue().substring(delimiter, child.getNodeValue().length()));
 					}
 					
-				} // end if child is a comment					
+				} // end if child is a comment		 			
 			} // end for looping through siblings in a list.
 		}
 		else // the description is a sibling
