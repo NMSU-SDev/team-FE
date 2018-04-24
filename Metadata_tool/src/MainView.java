@@ -68,23 +68,24 @@ public class MainView
 
 	private JFrame frameTeamFeMetadata;
 	private File file;
-	private String [] templates;
+	private String[] templates;
 	private String inputFile = "";
 	private NodeList nList = null;
 	private Node rootDOM = null;
 	private MetadataNode rootMNode = null;
-/*<<<<<<< Updated upstream
-	private static MetadataNode currentNode = null;
-	private XmlSessionManager parse = new XmlSessionManager();
+	/*
+	 * <<<<<<< Updated upstream private static MetadataNode currentNode = null;
+	 * private XmlSessionManager parse = new XmlSessionManager(); Clipboard
+	 * clipboard = Toolkit.getDefaultToolkit().getSystemClipboard(); //=======
+	 * private XmlSessionManager parse = new XmlSessionManager(); >>>>>>>
+	 * Stashed changes
+	 */
 	Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-//=======	
-	private XmlSessionManager parse = new XmlSessionManager();
->>>>>>> Stashed changes*/	
-	Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();	
 	private static MetadataNode currentNode = null;
 	private FileOps1 fileOperations = new FileOps1();
 	private XmlSessionManager session1 = new XmlSessionManager();
 	private NewSession newSession;
+	private int treeLength = 0;
 
 	// TEST VARIABLES //
 	private Document doc1 = null;
@@ -214,6 +215,8 @@ public class MainView
 		gbc_chckbxVerified.gridy = 8;
 		panel.add(chckbxVerified, gbc_chckbxVerified);
 
+		
+		/*
 		MetadataNode page1 = new MetadataNode("First name", "First element name", "First question", "answer");
 		MetadataNode page2 = new MetadataNode("Second name", "Second element name", "Second question", "answer");
 		MetadataNode page3 = new MetadataNode("Third name", "Third element name", "Third question", "answer");
@@ -226,6 +229,7 @@ public class MainView
 		questionLabel.setText(currentNode.getQuestion());
 		String elements[] = new String[] { page1.getElement(), page2.getElement(), page3.getElement() };
 		list.setListData(elements);
+		*/
 
 		JButton prevButton = new JButton("Previous");
 		prevButton.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -252,7 +256,7 @@ public class MainView
 				}
 				else
 				{
-					
+
 				}
 			}
 
@@ -325,14 +329,15 @@ public class MainView
 								@Override
 								public void windowClosed(WindowEvent e)
 								{
-									if ( SharedData.isTemplateSet() == true )
+									if (SharedData.isTemplateSet() == true)
 									{
 										System.out.println("NewSession result: file was set");
-										
-										// call to create a document object model
+
+										// call to create a document object
+										// model
 										// uses the XmlSessionManager class
 										System.out.println("Creating a document object model...");
-										doc1 = session1.fileToDOM( SharedData.templateFile );
+										doc1 = session1.fileToDOM(SharedData.templateFile);
 									}
 									else
 										System.out.println("NewSession result: file was NOT set");
@@ -346,7 +351,7 @@ public class MainView
 						}
 					}
 				});
-				
+
 			} // end new menu action performed
 		});
 		menuFile.add(menuItemNew);
@@ -364,21 +369,24 @@ public class MainView
 				// if file is an XML, run Preview method
 				if (extension.contains(".xml"))
 				{
-					try {
+					try
+					{
 						Desktop.getDesktop().open(file);
-					} catch (IOException e) {
+					}
+					catch (IOException e)
+					{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
-				
+
 				// else if file is an xsm, run openSession method
 				else if (extension.contains(".xsm"))
 				{
 					rootMNode = session1.openSession(file, currentNode, templates);
-				}	
-				
-				else 
+				}
+
+				else
 				{
 					System.err.println("Not a session file");
 				}
@@ -578,12 +586,35 @@ public class MainView
 			}
 		});
 		menuHelp.add(menuAbout);
+		
+		treeLength = 0;
+		MetadataNode tempNode1 = currentNode;
+		while((tempNode1 != null) && (tempNode1.hasChild()))
+		{
+			treeLength++;
+			tempNode1 = tempNode1.getChild();
+		}
+		if(treeLength == 0)
+		{
+			list.setVisible(false);
+			elementLabel.setVisible(false);
+			questionLabel.setVisible(false);
+			txtrEnterTextHere.setVisible(false);
+			navLabel.setVisible(false);
+			chckbxVerified.setVisible(false);
+			prevButton.setVisible(false);
+			nextButton.setVisible(false);
+			saveButton.setVisible(false);
+		}
 	}
 
 	public static void setCurrentNode(MetadataNode m)
 	{
 		currentNode = m;
 	}
-	
-	
+
+	public static void createPages()
+	{
+		
+	}
 }
