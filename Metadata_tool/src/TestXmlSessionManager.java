@@ -70,26 +70,19 @@ public class TestXmlSessionManager
 		mNode.print(0); // print terminates
 		// code works find up to this point... <SJohnston 2:51am 4/22/2018> //
 		
-		// ** TEST ADD DOM TO TREE ** input a Node and the root of a
-		// MetadataNode tree, output an updated MetadataNode root with
-		// dissimilar nodes added //
-		mNode = parse.addDOMToTree(doc1[0].getParentNode(), mNode);
-
 		// ** TEST DOM PRINT ** input a Node, output to console the contents of
 		// the Node tree //
-		parse.printDOM(doc1[0].getParentNode());
-
-		// ** TEST METADATA TREE PRINT ** input a MetadataNode, output to
-		// console contents of the MetadataNode tree //
-		parse.printMetadataTree(mNode);
-
+		nNode = nList.item(0);
+		parse.printDOM(nNode);
+		// code works find up to this point... <SJohnston 10:12Pm 4/23/2018> //		
+		
 		// ** TEST SAVE SESSION ** //
 		// open saved file in default text editor, check for formatting //
 		inputFile = parse.saveSession(mNode, mNode, templates);
-		BufferedWriter writer = null;
+		FileWriter writer = null;
 		try
 		{
-		    writer = new BufferedWriter( new FileWriter("test.xsm"));
+		    writer = new FileWriter("test.txt");
 		    writer.write(inputFile);
 		}
 		catch ( IOException e)
@@ -106,7 +99,7 @@ public class TestXmlSessionManager
 		    {
 		    }
 		}
-		inputFile = "\test.xsm";
+		inputFile = ".\\test.txt";
 		file = new File (inputFile);
 		
 		try {
@@ -115,21 +108,37 @@ public class TestXmlSessionManager
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		// code works find up to this point... <SJohnston 10:12Pm 4/23/2018> //
+		
+		// ** TEST ADD DOM TO TREE ** input a Node and the root of a
+		// MetadataNode tree, output an updated MetadataNode root with
+		// dissimilar nodes added //
+		// mNode = parse.addDOMToTree(doc1[0].getParentNode(), mNode);
+		
+
+		// ** TEST PRINT METADATA TREE  ** input a MetadataNode, output to
+		// console contents of the MetadataNode tree //
+		parse.printMetadataTree(mNode);				// !!! NOT WORKING !!! MetadataNode cannot be cast to org.w3c.dom.NodeList
+		
 		
 		// ** TEST OPEN SESSION ** //
 		
 
 		// ** TEST METADATA TREE TO STRING ** input MetadataNode, output
 		// indented String of the MetadataNode tree //
+		// The method saveSession calls metadataTreeToString and already works //
 
 		// ** TEST DOM TREE TO STRING ** input Node, output indented String of
 		// the Node tree //
+		// The method printDOM calls domTreeToString and already works //
 
 		System.out.println("End of tree");
+		printNode(mNode);
+		
 		scan.close();
 	}
 
-	public void printNode(MetadataNode<?> mNode)
+	public static void printNode(MetadataNode<?> mNode)
 	{
 		System.out.println("Element: " + mNode.getElement());
 		System.out.println("Element Name: " + mNode.getElementName());

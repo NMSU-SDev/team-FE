@@ -98,10 +98,17 @@ public class XmlSessionManager {
 			if (node.hasChildNodes())
 			{
 				child = node.getFirstChild();
-				if (child.getNodeValue() == "\n")
-					root.setAnswer("");
-				else
-					root.setAnswer(child.getNodeValue());
+				root.setAnswer(child.getNodeValue());
+				if (root.getAnswer().contains("\n"))
+				{
+					int escapeSequence = root.getAnswer().indexOf("\n");
+					if (escapeSequence > 0)
+					{
+						root.setAnswer(root.getAnswer().substring(0, root.getAnswer().indexOf("\n")));
+					}
+					else
+						root.setAnswer("");
+				}				
 			}
 			retrieveNodeDescription(node, root);
 			//System.out.println(" My name is: " + root.getElementName() + " My description is: " + root.getQuestion());
@@ -148,8 +155,7 @@ public class XmlSessionManager {
 				whoseYourDaddy(root.getChild());
 			}
 			else
-				root.addChild(null);
-			
+				root.addChild(null);			
 			
 		} // end importDOMToMetadataNode
 		// mini report
@@ -165,7 +171,7 @@ public class XmlSessionManager {
 	 * The whoseYourDaddy method is a band-aid fix for setting the parent to a MetadataNode.
 	 * @param root
 	 */
-	private void whoseYourDaddy(MetadataNode root) 
+	private void whoseYourDaddy(MetadataNode <?> root) 
 	{
 		MetadataNode adopted = root;
 		if (root.getSibling() != null)
@@ -188,7 +194,7 @@ public class XmlSessionManager {
 	 * @param root the MetadataNode to store the ElementName and Question
 	 * @return and integer value, index, that represents the number of nodes skipped to get to the next ELEMENT_NODE
 	 */
-private void retrieveNodeDescription(Node node, MetadataNode root) 
+private void retrieveNodeDescription(Node node, MetadataNode <?> root) 
 	{
 		// Hello node. We see you have a name. Let's see if you have any comments associated with you.
 		// to do this, we cycle through the next few nodes associated with you until we find:
@@ -201,8 +207,8 @@ private void retrieveNodeDescription(Node node, MetadataNode root)
 		dashIndex = dotIndex = colonIndex = delimiter = 0;
 		NodeList nList = node.getChildNodes();		
 		Node child = nList.item(0);
-		Node sibling = node;
-		int attributeFlag = 0;
+		Node sibling = node;	
+		int found = 0;
 		
 		if (node.getFirstChild() != null) // the description is a child
 		{			
@@ -231,16 +237,18 @@ private void retrieveNodeDescription(Node node, MetadataNode root)
 					{
 						root.setElementName(child.getNodeValue().substring(0, delimiter));
 						root.setQuestion(child.getNodeValue().substring((delimiter + 1), child.getNodeValue().length()));
+						found = 1;
 					}
 					else 
 					{
 						root.setQuestion(child.getNodeValue().substring(delimiter, child.getNodeValue().length()));
+						found = 0;
 					}
 					
 				} // end if child is a comment		 			
 			} // end for looping through siblings in a list.
 		}
-		else // the description is a sibling
+		if (found == 0) // the description is a sibling
 		{			
 			sibling = sibling.getNextSibling();
 			while ((sibling != null) && (sibling.getNodeType() != Node.ELEMENT_NODE))
@@ -532,9 +540,9 @@ private void retrieveNodeDescription(Node node, MetadataNode root)
 		// File sessionFile;
 
 		xMlSessionSave += metadataTreeToString(root);
-		xMlSessionSave += "Current Node: " + currentNode.getElement() + "\n";
+		xMlSessionSave += "\n!EndTree!\nCurrent Node: " + currentNode.getElement() + "\n!EndCurrentNode!";
 		for (int index = 0; index < templates.length; index++) {
-			xMlSessionSave += templates[index] + "\n";
+			xMlSessionSave += templates[index] + "\n!EndTemplatesList!";
 		}
 
 		return xMlSessionSave;
@@ -564,26 +572,31 @@ private void retrieveNodeDescription(Node node, MetadataNode root)
 
 		// print the node. This is where we do any operations to the current
 		// parameter node
-		metadataTreeString += root.getElement() + " ";
+		
+		System.out.print(root.getElement() + ((numElementNode == 0) ? "\n" : " "));
+		metadataTreeString += root.getElement() + ((numElementNode == 0) ? "\n" : " ");
+		
 
-		// iterate through the nodeList
-		NodeList nodeList = (NodeList) root.getChild();
-		for (int i = 0; i < nodeList.getLength(); i++) {
-			MetadataNode<?> currentNode = (MetadataNode<?>) nodeList.item(i);
-
-			// if the node is a leaf, save node attributes to a formatted string
-			if (currentNode.isLeaf()) {
-				metadataTreeString += " : " + currentNode.getElementName() + " : " + currentNode.getQuestion() + " : "
-						+ currentNode.getAnswer() + " : " + ((currentNode.getVerified()) ? "V" : "U") + "\n";
-			}
-
-			if (!currentNode.isLeaf()) {
-				// calls this method for all the children which is Element
+		// iterate through the tree, child first, then sibling
+		// add this node's tag, name, question, answer and verified state to string
+		if (numElementNode != 0)
+		{
+			System.out.println(" ElementName: " + root.getElementName() + " Question: " + root.getQuestion() + " Answer: " + root.getAnswer() + " Verified: " + ((root.getVerified()? "Y" : "N")));			
+			metadataTreeString += (" ElementName: " + root.getElementName() + " Question: " + root.getQuestion() + " Answer: " + root.getAnswer() + " Verified: " + ((root.getVerified()? "Y" : "N")) + "\n");			
+		}		
+		
+			// if the node has a child, call child
+			if (root.getChild() != null)
+			{
 				numElementNode++;
-				metadataTreeString += metadataTreeToString(currentNode);
+				metadataTreeString += metadataTreeToString(root.getChild());
 				numElementNode--;
-			} // end if
-		} // end for
+			} // end if has a child
+			// if the node has a sibling, call sibling
+			if (root.getSibling() != null)
+			{
+				metadataTreeString += metadataTreeToString(root.getSibling());
+			} // end if has a sibling		 
 
 		return metadataTreeString;
 	}
@@ -619,8 +632,9 @@ private void retrieveNodeDescription(Node node, MetadataNode root)
 
 		// print the node. This is where we do any operations to the current
 		// parameter node
-		System.out.print(node.getNodeName() + " "); // !!! GET NULL POINTER EXCEPTION !!!//
-		domTreeString += node.getNodeName() + " ";
+		
+		System.out.print(node.getNodeName() + ((numElementNode == 0) ? "\n" : " "));
+		domTreeString += node.getNodeName() + ((numElementNode == 0) ? "\n" : " ");
 
 		// iterate through the nodeList
 		NodeList nodeList = node.getChildNodes();
@@ -632,7 +646,7 @@ private void retrieveNodeDescription(Node node, MetadataNode root)
 				System.out.println(currentNode.getNodeValue());
 				domTreeString += currentNode.getNodeValue() + "\n";
 			}
-
+			
 			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
 				// calls this method for all the children which is Element
 				numElementNode++;
