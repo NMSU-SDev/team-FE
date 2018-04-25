@@ -152,7 +152,7 @@ public class XmlSessionManager {
 			{
 				root.addChild(importDOMToMetadata(child));
 				root.getChild().setParent(root);
-				whoseYourDaddy(root.getChild());
+				connectParent(root.getChild());
 			}
 			else
 				root.addChild(null);			
@@ -171,7 +171,7 @@ public class XmlSessionManager {
 	 * The whoseYourDaddy method is a band-aid fix for setting the parent to a MetadataNode.
 	 * @param root
 	 */
-	private void whoseYourDaddy(MetadataNode <?> root) 
+	private void connectParent(MetadataNode <?> root) 
 	{
 		MetadataNode adopted = root;
 		if (root.getSibling() != null)
@@ -298,50 +298,25 @@ private void retrieveNodeDescription(Node node, MetadataNode <?> root)
 	 * @precondition the Document files are NOT the templates originally used at
 	 *               the beginning of the session but are copies of the
 	 *               templates.
-	 * @param mNode
+	 * @param metaNode
 	 *            is the root of the MetadataNode tree
-	 * @param udpateFileList
+	 * @param domNode
 	 *            is an array of the Document objects that are being updated as
 	 *            the session progresses.
 	 * @postcondition Document files are updated with changes from the
 	 *                MetadataNode tree and are in a state that can readily be
 	 *                exported to valid XML metadata files
 	 */
-	public void saveMetadataToDOM(MetadataNode<?> mNode, Document document) {
-		// Loop find matching elements that should contain comments (leaves in
-		// both trees)
-		// ensure matched element is really for the current data type and not
-		// for a different data type
-		// update Document COMMENT for that ELEMENT
-		// get next Document object
-		MetadataNode<?> currentNode = mNode;
-		NodeList currentDoc = document.getElementsByTagName("metadta");
-		Node node = currentDoc.item(0);
-		while (!currentNode.equals(mNode.getLastChild())) {
-			currentDoc = document.getElementsByTagName(currentNode.getElement());
-			for (int index = 0; index < currentDoc.getLength(); index++) {
-				node = currentDoc.item(index);
-				node.setNodeValue(currentNode.getAnswer());
-			}
-			if (!(currentNode.getChild() == null)) // has child
-			{
-				currentNode = currentNode.getChild();
-			} else if (!(currentNode.getSibling() == null)) // not a child but
-															// has a sibling
-			{
-				currentNode = currentNode.getSibling();
-			} else // last child
-			{
-				do // loop: go up one
-				{
-					currentNode.getParent();
-				} while (currentNode.getSibling() == null); // find next
-															// sibling. if no
-															// sibling, go up
-															// one again
-				currentNode.getSibling(); // get next sibling
-			}
-		}
+	public void saveMetadataToDOM(MetadataNode<?> metaNode, Node domNode) {
+		// metaNode is not, necessarily, the root of the MetadataNode tree
+		// domNode is not necessarily the root of the Node tree
+		// find the first element match, then update the Node text
+		// recursive case: has child or has sibling:
+			// call this method again with next MetadataNode and next Node.
+		// base case: reach node or metaNode with no child and no sibling 
+		MetadataNode<?> nextMeta = metaNode;		
+		Node nextNode = domNode;
+		
 		return;
 	}
 

@@ -1,12 +1,14 @@
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 
 /**
  * @author Sanford Johnston
- * @version 1.0 Invariant of the MetadataNode<M> class: 1. Each node has one
+ * @version 2.0 Invariant of the MetadataNode<M> class: 1. Each node has one
  *          reference to an M Object, stored in the instance variable element.
  *          2. The instance variables child and sibling are references to the
  *          node's first child and next sibling.
  */
-public class MetadataNode<M>
+public class MetadataNode<M> extends DefaultMutableTreeNode
 {
 
 	private String element;
@@ -16,7 +18,6 @@ public class MetadataNode<M>
 	private String answer;
 	private String question;
 	private boolean verified;
-	private boolean hasChild = false;
 
 	/**
 	 * Initialize a <CODE>BTNode</CODE> with a specified initial element and
@@ -46,8 +47,6 @@ public class MetadataNode<M>
 		answer = "";
 		verified = false;
 		parent = null;
-		if(child != null)
-			hasChild = true;
 	}
 
 	/**
@@ -81,8 +80,6 @@ public class MetadataNode<M>
 		answer = "";
 		verified = false;
 		parent = null;
-		if(child != null)
-			hasChild = true;
 	}
 
 	/**
@@ -118,8 +115,6 @@ public class MetadataNode<M>
 		answer = answ;
 		verified = false;
 		parent = null;
-		if(child != null)
-			hasChild = true;
 	}
 
 	/**
@@ -157,8 +152,6 @@ public class MetadataNode<M>
 		answer = initialAnswer;
 		verified = initialVerified;
 		parent = null;
-		if(child != null)
-			hasChild = true;
 	}
 
 	public MetadataNode(String initialElement, String initialElementName, String initialQuestion, String initialAnswer)
@@ -171,10 +164,7 @@ public class MetadataNode<M>
 		answer = null;
 		verified = false;
 		parent = null;
-		if(child != null)
-			hasChild = true;
 	}
-
 	/**
 	 * Accessor method to get the element from this node.
 	 * 
@@ -278,7 +268,7 @@ public class MetadataNode<M>
 	{
 		return sibling;
 	}
-
+	
 	public MetadataNode<?> getParent()
 	{
 		return parent;
@@ -431,7 +421,7 @@ public class MetadataNode<M>
 	public void addChild(MetadataNode<?> metadataNode)
 	{
 		child = (MetadataNode<M>) metadataNode;
-		hasChild = true;
+		
 	}
 
 	/**
@@ -450,17 +440,13 @@ public class MetadataNode<M>
 	{
 		sibling = metadataNode;
 	}
-
+	
 	public void setParent(MetadataNode<M> newParent)
 	{
 		parent = newParent;
-
+		
 	}
 
-	public boolean hasChild()
-	{
-		return hasChild();
-	}
 	/**
 	 * edit from here down...
 	 */
@@ -600,20 +586,28 @@ public class MetadataNode<M>
 		System.out.println(element + " : " + elementName + " : " + question + " : " + answer + " : "
 				+ ((verified) ? "verified" : "not verified"));
 
-		// Print the children first
+		// Print the children first		
 		if (child != null)
 			child.print(depth + 1);
 		/*
-		 * else if (sibling != null) { for (i = 1; i <= depth+1; i++)
-		 * System.out.print("    "); System.out.println("--"); }
-		 */
+		else if (sibling != null)
+		{
+			for (i = 1; i <= depth+1; i++)
+				System.out.print("    ");
+			System.out.println("--");
+		}
+		*/
 		// Print the siblings second
 		if (sibling != null)
 			sibling.print(depth);
 		/*
-		 * else if (child != null) { for (i = 1; i <= depth + 1; i++)
-		 * System.out.print("    "); System.out.println("--"); }
-		 */
+		else if (child != null)
+		{
+			for (i = 1; i <= depth + 1; i++)
+				System.out.print("    ");
+			System.out.println("--");
+		}
+		*/
 	}
 
 	/**
