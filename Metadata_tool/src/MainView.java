@@ -74,11 +74,6 @@ public class MainView
 	private Node rootDOM = null;
 	private MetadataNode rootMNode = null;
 	/*
-	 * <<<<<<< Updated upstream private static MetadataNode currentNode = null;
-	 * private XmlSessionManager parse = new XmlSessionManager(); Clipboard
-	 * clipboard = Toolkit.getDefaultToolkit().getSystemClipboard(); //=======
-	 * private XmlSessionManager parse = new XmlSessionManager(); >>>>>>>
-	 * Stashed changes
 	 */
 	Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 	private static MetadataNode currentNode = null;
@@ -194,6 +189,7 @@ public class MainView
 		panel.add(list, gbc_list);
 
 		JTextArea txtrEnterTextHere = new JTextArea();
+		txtrEnterTextHere.setEnabled(false);
 		txtrEnterTextHere.setBorder(new EtchedBorder(EtchedBorder.LOWERED, Color.GRAY, null));
 		txtrEnterTextHere.setFont(new Font("Monospaced", Font.PLAIN, 12));
 		GridBagConstraints gbc_txtrEnterTextHere = new GridBagConstraints();
@@ -238,7 +234,7 @@ public class MainView
 		gbc_prevButton.insets = new Insets(0, 0, 5, 5);
 		gbc_prevButton.gridx = 3;
 		gbc_prevButton.gridy = 9;
-		panel.add(prevButton, gbc_prevButton);
+		panel.add(prevButton, gbc_prevButton); 
 		prevButton.addActionListener(new ActionListener()
 		{
 
@@ -263,6 +259,7 @@ public class MainView
 		});
 
 		JButton saveButton = new JButton("Save");
+		saveButton.setFont(new Font("Tahoma", Font.BOLD, 11));
 		GridBagConstraints gbc_saveButton = new GridBagConstraints();
 		gbc_saveButton.insets = new Insets(0, 0, 5, 5);
 		gbc_saveButton.gridx = 4;
@@ -275,7 +272,7 @@ public class MainView
 		gbc_nextButton.insets = new Insets(0, 0, 5, 5);
 		gbc_nextButton.gridx = 5;
 		gbc_nextButton.gridy = 9;
-		panel.add(nextButton, gbc_nextButton);
+		panel.add(nextButton, gbc_nextButton); 
 		nextButton.addActionListener(new ActionListener()
 		{
 
@@ -297,7 +294,7 @@ public class MainView
 				}
 			}
 
-		});
+		}); 
 		
 		/***** MENU BAR and new menu option *****/
 
@@ -361,11 +358,16 @@ public class MainView
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
+				String extension = "";
 				// call the open code from FileOps1
 				System.out.println("Open menu option clicked");
 				// load metadata or session file into 'file'
 				file = fileOperations.openFile(frameTeamFeMetadata);
-				String extension = file.getName();
+				
+				/* Must check to make sure the user selected a file */
+				if ( file != null ) 
+					extension = file.getName();
+				
 				// if file is an XML, run Preview method
 				if (extension.contains(".xml"))
 				{
@@ -578,15 +580,17 @@ public class MainView
 			public void actionPerformed(ActionEvent arg0)
 			{
 				JOptionPane.showMessageDialog(null,
-						"Metadata Software tool - version alpha 3.3"
-								+ "\n2018 April 13 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
+						"Metadata Software tool - version alpha 3.6"
+								+ "\n2018 April 24 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
 								+ "Jacob Espinoza, Isaias Gerena, Lucas Herrman\n"
 								+ "(Not for external distribution - Work in Progress)",
 						"About", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		menuHelp.add(menuAbout);
-		
+		/* ***** THIS CODE SHOULD NOT BE HERE!!!!!
+		 * Uncommenting this will cause a blank window to be displayed
+		 * Please create another method for all of this code
 		treeLength = 0;
 		MetadataNode tempNode1 = currentNode;
 		while((tempNode1 != null) && (tempNode1.hasChild()))
@@ -605,7 +609,7 @@ public class MainView
 			prevButton.setVisible(false);
 			nextButton.setVisible(false);
 			saveButton.setVisible(false);
-		}
+		} */
 	}
 
 	public static void setCurrentNode(MetadataNode m)

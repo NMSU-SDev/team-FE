@@ -178,6 +178,6 @@ public class NewSession extends JFrame
 								.addContainerGap(71, Short.MAX_VALUE)));
 		getContentPane().setLayout(groupLayout);
 
-		Demo2.setCurrentNode(null);
+		MainView.setCurrentNode(null);
 	}
 }
