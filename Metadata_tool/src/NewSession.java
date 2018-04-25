@@ -176,8 +176,6 @@ public class NewSession extends JFrame
 										.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 118,
 												GroupLayout.PREFERRED_SIZE))
 								.addContainerGap(71, Short.MAX_VALUE)));
-		getContentPane().setLayout(groupLayout);
-
-		MainView.setCurrentNode(null);
+		getContentPane().setLayout(groupLayout);		
 	}
 }

@@ -59,24 +59,31 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeSelectionModel;
+import javax.swing.JScrollPane;
 
 @SuppressWarnings({ "unused", "rawtypes" })
 public class MainView
 {
 
 	private JFrame frameTeamFeMetadata;
+	private JTree tree;
+	JScrollPane treeView;
 	private File file;
 	private String[] templates;
 	private String inputFile = "";
 	private NodeList nList = null;
 	private Node rootDOM = null;
-	private MetadataNode rootMNode = null;
+	private MetadataNode rootMNode = new MetadataNode ("root", "empty", (MetadataNode) null, (MetadataNode) null);
 	/*
 	 */
 	Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-	private static MetadataNode currentNode = null;
+	private MetadataNode currentNode = new MetadataNode ("TOC", "Table of Contents", rootMNode, (MetadataNode)null);
 	private FileOps1 fileOperations = new FileOps1();
 	private XmlSessionManager session1 = new XmlSessionManager();
 	private NewSession newSession;
@@ -139,10 +146,10 @@ public class MainView
 		JPanel panel = new JPanel();
 		frameTeamFeMetadata.getContentPane().add(panel, "name_1876606686560390");
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[] { 120, 50, 80, 0, 50, 0, 90, 25, 0 };
+		gbl_panel.columnWidths = new int[] { 0, 120, 50, 80, 0, 50, 0, 90, 25, 0 };
 		gbl_panel.rowHeights = new int[] { 33, 20, 0, 0, 0, 0, 0, 0, 0, 0, 15, 0 };
-		gbl_panel.columnWeights = new double[] { 4.0, 0.0, 0.0, 0.0, 20.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panel.columnWeights = new double[] { 1.0, 1.0, 0.0, 0.0, 0.0, 20.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panel.rowWeights = new double[] { 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
 
 		JLabel navLabel = new JLabel("Navigation");
@@ -152,11 +159,11 @@ public class MainView
 		gbc_navLabel.ipadx = 20;
 		gbc_navLabel.anchor = GridBagConstraints.SOUTH;
 		gbc_navLabel.insets = new Insets(0, 35, 5, 5);
-		gbc_navLabel.gridx = 0;
+		gbc_navLabel.gridx = 1;
 		gbc_navLabel.gridy = 0;
 		panel.add(navLabel, gbc_navLabel);
 
-		JLabel elementLabel = new JLabel("Element names goes here:");
+		JLabel elementLabel = new JLabel(currentNode.getElementName());
 		elementLabel.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 		elementLabel.setBounds(new Rectangle(0, 5, 0, 0));
 		elementLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -164,29 +171,50 @@ public class MainView
 		gbc_elementLabel.gridwidth = 4;
 		gbc_elementLabel.anchor = GridBagConstraints.SOUTHWEST;
 		gbc_elementLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_elementLabel.gridx = 2;
+		gbc_elementLabel.gridx = 3;
 		gbc_elementLabel.gridy = 0;
 		panel.add(elementLabel, gbc_elementLabel);
+		
+		//Create the nodes.
+        DefaultMutableTreeNode top = new DefaultMutableTreeNode("Table of Contents");
+        createNodes(top, rootMNode);
+        
+		tree = new JTree(top);		
+		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        //Listen for when the selection changes.
+        //tree.addTreeSelectionListener(null);		
+		GridBagConstraints gbc_tree = new GridBagConstraints();
+		gbc_tree.gridwidth = 2;
+		gbc_tree.gridheight = 9;
+		gbc_tree.insets = new Insets(0, 0, 5, 5);
+		gbc_tree.fill = GridBagConstraints.BOTH;
+		gbc_tree.gridx = 0;
+		gbc_tree.gridy = 1;
+		panel.add(tree, gbc_tree);
+		
+		//Create the scroll pane and add the tree to it. 
+		treeView = new JScrollPane();
+		// JScrollPane scrollPane = new JScrollPane();
+		GridBagConstraints gbc_treeView = new GridBagConstraints();
+		gbc_treeView.gridwidth = 2;
+		gbc_treeView.gridheight = 9;
+		gbc_treeView.insets = new Insets(0, 0, 5, 5);
+		gbc_treeView.fill = GridBagConstraints.BOTH;
+		gbc_treeView.gridx = 0;
+		gbc_treeView.gridy = 1;
+		panel.add(treeView, gbc_treeView);
+		//treeView.setViewportView(tree);
+		// scrollPane.setViewportView(tree);
 
-		JLabel questionLabel = new JLabel("Question goes here:");
+		JLabel questionLabel = new JLabel(currentNode.getQuestion());
 		questionLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		GridBagConstraints gbc_questionLabel = new GridBagConstraints();
 		gbc_questionLabel.anchor = GridBagConstraints.WEST;
 		gbc_questionLabel.gridwidth = 4;
 		gbc_questionLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_questionLabel.gridx = 2;
+		gbc_questionLabel.gridx = 3;
 		gbc_questionLabel.gridy = 2;
 		panel.add(questionLabel, gbc_questionLabel);
-
-		JList list = new JList();
-		list.setBorder(new EtchedBorder(EtchedBorder.LOWERED, Color.GRAY, null));
-		GridBagConstraints gbc_list = new GridBagConstraints();
-		gbc_list.gridheight = 8;
-		gbc_list.insets = new Insets(0, 10, 5, 5);
-		gbc_list.fill = GridBagConstraints.BOTH;
-		gbc_list.gridx = 0;
-		gbc_list.gridy = 1;
-		panel.add(list, gbc_list);
 
 		JTextArea txtrEnterTextHere = new JTextArea();
 		txtrEnterTextHere.setEnabled(false);
@@ -197,17 +225,17 @@ public class MainView
 		gbc_txtrEnterTextHere.gridwidth = 5;
 		gbc_txtrEnterTextHere.insets = new Insets(0, 0, 5, 5);
 		gbc_txtrEnterTextHere.fill = GridBagConstraints.BOTH;
-		gbc_txtrEnterTextHere.gridx = 2;
+		gbc_txtrEnterTextHere.gridx = 3;
 		gbc_txtrEnterTextHere.gridy = 4;
 		panel.add(txtrEnterTextHere, gbc_txtrEnterTextHere);
 
 		JCheckBox chckbxVerified = new JCheckBox("Verified");
-		chckbxVerified.setEnabled(false);
+		chckbxVerified.setEnabled(currentNode.getVerified());
 		chckbxVerified.setFocusable(false);
 		GridBagConstraints gbc_chckbxVerified = new GridBagConstraints();
 		gbc_chckbxVerified.gridwidth = 5;
 		gbc_chckbxVerified.insets = new Insets(0, 0, 5, 5);
-		gbc_chckbxVerified.gridx = 2;
+		gbc_chckbxVerified.gridx = 3;
 		gbc_chckbxVerified.gridy = 8;
 		panel.add(chckbxVerified, gbc_chckbxVerified);
 
@@ -232,7 +260,7 @@ public class MainView
 		GridBagConstraints gbc_prevButton = new GridBagConstraints();
 		gbc_prevButton.anchor = GridBagConstraints.EAST;
 		gbc_prevButton.insets = new Insets(0, 0, 5, 5);
-		gbc_prevButton.gridx = 3;
+		gbc_prevButton.gridx = 4;
 		gbc_prevButton.gridy = 9;
 		panel.add(prevButton, gbc_prevButton); 
 		prevButton.addActionListener(new ActionListener()
@@ -252,7 +280,7 @@ public class MainView
 				}
 				else
 				{
-
+					// do nothing
 				}
 			}
 
@@ -262,7 +290,7 @@ public class MainView
 		saveButton.setFont(new Font("Tahoma", Font.BOLD, 11));
 		GridBagConstraints gbc_saveButton = new GridBagConstraints();
 		gbc_saveButton.insets = new Insets(0, 0, 5, 5);
-		gbc_saveButton.gridx = 4;
+		gbc_saveButton.gridx = 5;
 		gbc_saveButton.gridy = 9;
 		panel.add(saveButton, gbc_saveButton);
 
@@ -270,7 +298,7 @@ public class MainView
 		GridBagConstraints gbc_nextButton = new GridBagConstraints();
 		gbc_nextButton.anchor = GridBagConstraints.NORTHWEST;
 		gbc_nextButton.insets = new Insets(0, 0, 5, 5);
-		gbc_nextButton.gridx = 5;
+		gbc_nextButton.gridx = 6;
 		gbc_nextButton.gridy = 9;
 		panel.add(nextButton, gbc_nextButton); 
 		nextButton.addActionListener(new ActionListener()
@@ -284,13 +312,22 @@ public class MainView
 				tempNode = currentNode.getChild();
 				if (tempNode != null)
 				{
-					currentNode = currentNode.getChild();
+					// need to save changes in MetadataNode to DOM first
+					session1.saveMetadataToDOM(rootMNode, doc1);
+					
+					currentNode = tempNode;
 					elementLabel.setText(currentNode.getElementName());
-					questionLabel.setText(currentNode.getQuestion());
+					questionLabel.setText(currentNode.getQuestion());					
 				}
-				else
+				else 
 				{
-
+					tempNode = currentNode.getSibling();
+					if (tempNode != null)
+					{
+						currentNode = tempNode;
+						elementLabel.setText(currentNode.getElementName());
+						questionLabel.setText(currentNode.getQuestion());
+					}
 				}
 			}
 
@@ -429,7 +466,18 @@ public class MainView
 				importF = importFileChoose.getSelectedFile();
 				if (importF != null)
 				{
-					System.out.printf("File to be imported is %s\n", importF.toString());
+					doc1 = session1.fileToDOM(importF);
+					NodeList nList = null;
+					Node nNode = null;
+					nList = doc1.getElementsByTagName("metadata");
+					nNode = nList.item(0);
+					rootMNode = session1.importDOMToMetadata(nNode);
+					currentNode = rootMNode;
+					elementLabel.setText(currentNode.getElementName());
+					questionLabel.setText(currentNode.getQuestion());					
+					createNodes(top, rootMNode);	// how do we get the JTree to be updated with the imported MetadataNode?		        
+					tree = new JTree(top);			// these three calls are my guessing.
+					treeView.setViewportView(tree); // Yeah, i really have no idea how to update the GUI with the new tree
 				}
 				else
 					System.out.println("No file was selected.");
@@ -588,37 +636,78 @@ public class MainView
 			}
 		});
 		menuHelp.add(menuAbout);
-		/* ***** THIS CODE SHOULD NOT BE HERE!!!!!
-		 * Uncommenting this will cause a blank window to be displayed
-		 * Please create another method for all of this code
-		treeLength = 0;
-		MetadataNode tempNode1 = currentNode;
-		while((tempNode1 != null) && (tempNode1.hasChild()))
-		{
-			treeLength++;
-			tempNode1 = tempNode1.getChild();
-		}
-		if(treeLength == 0)
-		{
-			list.setVisible(false);
-			elementLabel.setVisible(false);
-			questionLabel.setVisible(false);
-			txtrEnterTextHere.setVisible(false);
-			navLabel.setVisible(false);
-			chckbxVerified.setVisible(false);
-			prevButton.setVisible(false);
-			nextButton.setVisible(false);
-			saveButton.setVisible(false);
-		} */
+		
 	}
 
-	public static void setCurrentNode(MetadataNode m)
+	public void setCurrentNode(MetadataNode m)
 	{
 		currentNode = m;
 	}
+	
+	private void createNodes(DefaultMutableTreeNode top, MetadataNode mNode) {
+		DefaultMutableTreeNode node = null;
 
-	public static void createPages()
-	{
-		
+		//base case for leaves
+		if (mNode == null)
+			return;
+
+		//set the DefaultMutableTreeNode to the MetadataNode and add it
+		node = new DefaultMutableTreeNode(mNode.getElement());
+		top.add(node);
+
+		//recursive call to populate sibling
+		if (mNode.getSibling() != null)
+			createNodes(top, mNode.getSibling());
+
+		//recursive call to populate children
+		if (mNode.getChild() != null)
+			createNodes(node, mNode.getChild());
 	}
+
+	/** Required by TreeSelectionListener interface.
+	 *  This is where we can make changes when a tree entry is 
+	 *  selected 
+	 *  */
+	public void valueChanged(TreeSelectionEvent e) {
+
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+				tree.getLastSelectedPathComponent();
+
+		if (node == null) return;
+
+		/* Code from tutorial - not sure if useful
+		 * 
+
+	        Object nodeInfo = node.getUserObject();
+
+	        if (node.isLeaf()) {
+	            //NodeInfo node = (NodeInfo)nodeInfo;
+
+	        }
+		 */
+
+	}//end valueChanged
 }
+
+/* !!!!! DEPRECATED !!!!!
+ * Uncommenting this will cause a blank window to be displayed
+ * Please create another method for all of this code
+treeLength = 0;
+MetadataNode tempNode1 = currentNode;
+while((tempNode1 != null) && (tempNode1.hasChild()))
+{
+	treeLength++;
+	tempNode1 = tempNode1.getChild();
+}
+if(treeLength == 0)
+{
+	list.setVisible(false);
+	elementLabel.setVisible(false);
+	questionLabel.setVisible(false);
+	txtrEnterTextHere.setVisible(false);
+	navLabel.setVisible(false);
+	chckbxVerified.setVisible(false);
+	prevButton.setVisible(false);
+	nextButton.setVisible(false);
+	saveButton.setVisible(false);
+} */
