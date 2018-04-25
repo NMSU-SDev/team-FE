@@ -1,12 +1,17 @@
+import java.util.Enumeration;
+
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeNode;
 
 /**
  * @author Sanford Johnston
- * @version 1.0 Invariant of the MetadataNode<M> class: 1. Each node has one
+ * @version 2.0 Invariant of the MetadataNode<M> class: 1. Each node has one
  *          reference to an M Object, stored in the instance variable element.
  *          2. The instance variables child and sibling are references to the
  *          node's first child and next sibling.
  */
-public class MetadataNode<M>
+public class MetadataNode<M> extends Object implements MutableTreeNode
 {
 
 	private String element;
@@ -68,8 +73,8 @@ public class MetadataNode<M>
 	 *            <dd>This node contains the specified element and links to its
 	 *            children.
 	 **/
-	public MetadataNode(String initialElement, String quest, MetadataNode<M> initialChild,
-			MetadataNode<M> initialSibling)
+	public MetadataNode(String initialElement, String quest, MetadataNode<?> initialChild,
+			MetadataNode<?> initialSibling)
 	{
 		element = initialElement;
 		child = initialChild;
@@ -103,8 +108,8 @@ public class MetadataNode<M>
 	 *            <dd>This node contains the specified element and links to its
 	 *            children.
 	 **/
-	public MetadataNode(String initialElement, String quest, String answ, MetadataNode<M> initialChild,
-			MetadataNode<M> initialSibling)
+	public MetadataNode(String initialElement, String quest, String answ, MetadataNode<?> initialChild,
+			MetadataNode<?> initialSibling)
 	{
 		element = initialElement;
 		child = initialChild;
@@ -141,7 +146,7 @@ public class MetadataNode<M>
 	 *            children.
 	 **/
 	public MetadataNode(String initialElement, String initialQuestion, String initialAnswer, boolean initialVerified,
-			MetadataNode<M> initialChild, MetadataNode<M> initialSibling)
+			MetadataNode<?> initialChild, MetadataNode<?> initialSibling)
 	{
 		element = initialElement;
 		child = initialChild;
@@ -570,7 +575,7 @@ public class MetadataNode<M>
 	 *            <dd><CODE>depth</CODE> is the depth of this node.
 	 *            <dt><b>Postcondition:</b>
 	 *            <dd>The element of this node and all its descendants have been
-	 *            writeen by <CODE>System.out.println( )</CODE> using an inorder
+	 *            writen by <CODE>System.out.println( )</CODE> using an inorder
 	 *            traversal. The indentation of each line of element is four
 	 *            times its depth in the tree. A dash "--" is printed at any
 	 *            place where a child has no sibling.
@@ -578,34 +583,34 @@ public class MetadataNode<M>
 	public void print(int depth)
 	{
 		int i;
-
 		// Print the indentation and the contents from the current node:
 		for (i = 1; i <= depth; i++)
 			System.out.print("    ");
 		System.out.println(element + " : " + elementName + " : " + question + " : " + answer + " : "
 				+ ((verified) ? "verified" : "not verified"));
 
-		// Print the left subtree (or a dash if there is a right child and no
-		// left child)
+		// Print the children first		
 		if (child != null)
 			child.print(depth + 1);
+		/*
 		else if (sibling != null)
 		{
-			for (i = 1; i <= depth + 1; i++)
+			for (i = 1; i <= depth+1; i++)
 				System.out.print("    ");
 			System.out.println("--");
 		}
-
-		// Print the right subtree (or a dash if there is a left child and no
-		// left child)
+		*/
+		// Print the siblings second
 		if (sibling != null)
-			sibling.print(depth + 1);
+			sibling.print(depth);
+		/*
 		else if (child != null)
 		{
 			for (i = 1; i <= depth + 1; i++)
 				System.out.print("    ");
 			System.out.println("--");
 		}
+		*/
 	}
 
 	/**
@@ -629,6 +634,72 @@ public class MetadataNode<M>
 			sibling.printLeaves(); // call right node second
 		}
 		return;
+	}
+
+	@Override
+	public Enumeration children() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean getAllowsChildren() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public TreeNode getChildAt(int arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getChildCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getIndex(TreeNode arg0) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void insert(MutableTreeNode arg0, int arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void remove(int arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void remove(MutableTreeNode arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeFromParent() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setParent(MutableTreeNode arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setUserObject(Object arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

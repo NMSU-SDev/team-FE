@@ -9,24 +9,29 @@ import java.io.File;
  * 
  * */
 
-public class SharedData {
+public class SharedData
+{
 	public static File templateFile;
 	public static boolean templateStatus;
 	public static File sessionFile;
-	
-	public static void setTemplateFile( File fInput ) {
+
+	public static void setTemplateFile(File fInput)
+	{
 		SharedData.templateFile = fInput;
 	}
-	
-	public static File getTemplateFile ( ) {
+
+	public static File getTemplateFile()
+	{
 		return SharedData.templateFile;
 	}
-	
-	public static void changeTemplateSet( boolean result ) {
+
+	public static void changeTemplateSet(boolean result)
+	{
 		SharedData.templateStatus = result;
 	}
-	
-	public static boolean isTemplateSet ( ) {
+
+	public static boolean isTemplateSet()
+	{
 		return templateStatus;
 	}
 

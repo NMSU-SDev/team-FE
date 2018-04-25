@@ -66,7 +66,7 @@ public class XmlSessionManager {
 	}
 
 	/**
-	 * Import DOM Tree method takes in a Document Object Model tree at its root
+	 * The importDOMToMetadata method takes in a node and returns a MetadataNode.
 	 * and returns the root of a tree of MetadataNode objects. A MetadataNode
 	 * object maps a DOM Element into the MetadataNode element, a DOM Content
 	 * into the MetadataNode question and and sets the Metadata answer and
@@ -79,155 +79,215 @@ public class XmlSessionManager {
 	 * @return root, the root of the entire MetadataNode tree
 	 */
 	public MetadataNode<?> importDOMToMetadata(Node node) {
-		MetadataNode<?> root = new MetadataNode<Object>(null, null, null);
-		int dashIndex = 0;
-
-		// Print out *s for indentation place holders based on loop variable
-		// numElementNode
-		for (int i = 0; i < numElementNode; i++) {
-			System.out.print("*");
-		}
-
-		// Get the node. This is where we do any operations to the current
-		// parameter node
-		root.setElement(node.getNodeName()); // root is now the parent
-		System.out.print(root.getElement() + " ");
-
-		// iterate through the nodeList
-		NodeList nodeList = node.getChildNodes();
-		System.out.print(" Node List Length : " + nodeList.getLength());
-		int index = 0;
-
-		while (index < nodeList.getLength()) {
-			Node childNode = nodeList.item(index);
-			if (childNode.getNodeType() == Node.COMMENT_NODE) {
-				// the following assumes that the comment node belongs to the
-				// parent
-				dashIndex = childNode.getNodeValue().indexOf('-');
-				if (dashIndex < 0)
+		// starting over:
+		Node sibling, child;
+		MetadataNode root = new MetadataNode("root", null, null);
+		int attributeFlag = 0;
+		// Incoming node: what is it?
+		// Hello node. what type are you? Element, Comment, Attribute?
+		// if you are an element, I will create a Metadata node with your name on it
+			
+			
+			// then, if you have children, we will connect you to your first child.
+		// if you are not an element, well, then we don't know what to do with you. 
+		// First, let us make some code to see what type of node is the root that is given to us		
+		if (node.getNodeType() == Node.ELEMENT_NODE)
+		{
+			root.setElement(node.getNodeName());
+			//System.out.print("I am an element. My tag is: " + root.getElement()); 
+			if (node.hasChildNodes())
+			{
+				child = node.getFirstChild();
+				root.setAnswer(child.getNodeValue());
+				if (root.getAnswer().contains("\n"))
 				{
-					dashIndex = 0;
-				}
-				
-				root.setElementName(childNode.getNodeValue().substring(0, dashIndex));
-				root.setQuestion(
-						childNode.getNodeValue().substring((dashIndex + 1), childNode.getNodeValue().length()));
-				// root.setElement(node.getNodeName());
-				// System.out.print(root.getElement() + " ");
-				System.out.print(root.getElementName() + " - " + root.getQuestion());
-			} else if (childNode.getNodeType() == Node.ELEMENT_NODE && childNode.hasChildNodes()) {
-				
-				System.out.println();
-				if (root.getChild() != null) {
-					// add a sibling to root, assume another branch (recursive call)					
-					root.addSibling(importDOMToMetadata(childNode));					
-				} else {
-					// add a child to root, then go down to next child (recursive call)
-					numElementNode++;
-					root.addChild(importDOMToMetadata(childNode)); 																					
-				}
-			} else if (childNode.getNodeType() == Node.ELEMENT_NODE && !(childNode.hasChildNodes())) {
-				System.out.println();
-				MetadataNode currentNode = new MetadataNode<Object>(childNode.getNodeName(), null, null);
-				numElementNode++;
-				root.addChild(currentNode);
-				root = currentNode;	
-				root.addSibling(importDOMToMetadata(childNode));
-				numElementNode--;				
-				/* assume the rest are leaves
-				index++;
-				while (index < nodeList.getLength()) {
-					
-					if (siblingNode.getNodeType() == Node.COMMENT_NODE) {
-						// the following assumes that the comment node belongs
-						// to the parent
-						dashIndex = siblingNode.getNodeValue().indexOf('-');
-						currentNode.setElementName(siblingNode.getNodeValue().substring(0, dashIndex));
-						currentNode.setQuestion(siblingNode.getNodeValue().substring((dashIndex + 1),
-								siblingNode.getNodeValue().length()));
-						// root.setElement(node.getNodeName());
-						System.out.print(currentNode.getElementName() + " - " + currentNode.getQuestion());
-					} // end if sibling is a Comment
-					if (siblingNode.getNodeType() == Node.ELEMENT_NODE) {
-						System.out.println();
-						MetadataNode newSibling = new MetadataNode<Object>(siblingNode.getNodeName(), null, null);
-						// add a sibling to root, then go down to next child (recursive call
-						currentNode.addSibling(newSibling); 
-						currentNode = newSibling;
-					} // end if sibling is an Element
-					if (siblingNode.hasChildNodes())
+					int escapeSequence = root.getAnswer().indexOf("\n");
+					if (escapeSequence > 0)
 					{
-						break;
+						root.setAnswer(root.getAnswer().substring(0, root.getAnswer().indexOf("\n")));
 					}
-					index++;
-				} // end while there are more leaves
-				*/
-			} else {
-				// skip the junk
+					else
+						root.setAnswer("");
+				}				
 			}
-			index++;
-		} // end while node has children
-		/*
-		 * for (int i = 0; i < nodeList.getLength(); i++) { Node childNode =
-		 * nodeList.item(i); // current node is a child of root // if the node
-		 * is a comment node, print out the value if (childNode.getNodeType() ==
-		 * Node.COMMENT_NODE) { if (root.getChild() != null) { MetadataNode
-		 * nextChildNode = root.getChild(); do { if (nextChildNode.getElement()
-		 * == childNode.getNodeName()) { // the following assumes that the
-		 * comment node belongs to one of the children dashIndex =
-		 * childNode.getNodeValue().indexOf('-');
-		 * nextChildNode.setElementName(childNode.getNodeValue().substring(0,
-		 * dashIndex));
-		 * nextChildNode.setQuestion(childNode.getNodeValue().substring((
-		 * dashIndex+1), childNode.getNodeValue().length()));
-		 * //childNode.setElement(node.getNodeName());
-		 * System.out.print(nextChildNode.getElementName() + " - " +
-		 * nextChildNode.getQuestion()); } if (nextChildNode.getSibling() !=
-		 * null) nextChildNode = nextChildNode.getSibling(); } while
-		 * (nextChildNode.getSibling() != null); } else { // the following
-		 * assumes that the comment node belongs to the parent dashIndex =
-		 * childNode.getNodeValue().indexOf('-');
-		 * root.setElementName(childNode.getNodeValue().substring(0,dashIndex));
-		 * root.setQuestion(childNode.getNodeValue().substring((dashIndex+1),
-		 * childNode.getNodeValue().length())); //
-		 * root.setElement(node.getNodeName()); //
-		 * System.out.print(root.getElement() + " ");
-		 * System.out.print(root.getElementName() + " - " + root.getQuestion());
-		 * // else loop - find root.getChild().getElement() ==
-		 * currentNode.getNodeName() } }
-		 * 
-		 * if (childNode.getNodeType() == Node.ELEMENT_NODE) { if
-		 * (childNode.hasChildNodes()) { // calls this method for all the
-		 * children which is Element numElementNode++; System.out.println();
-		 * root.addChild(importDOMToMetadata(childNode)); // add a child to
-		 * mNode and go down to next child (recursive call) numElementNode--; //
-		 * go up to parent } else // then it is an element node that has a
-		 * sibling for a comment { // loop to get past trash Node parent =
-		 * childNode.getParentNode(); NodeList parentList =
-		 * parent.getChildNodes(); int p = i+1; while (p <
-		 * parentList.getLength()) { Node siblingNode = parentList.item(p); if
-		 * (siblingNode.getNodeType() == Node.COMMENT_NODE) { // the following
-		 * assumes that the comment node belongs to one of the children
-		 * dashIndex = siblingNode.getNodeValue().indexOf('-');
-		 * root.setElementName(siblingNode.getNodeValue().substring(0,dashIndex)
-		 * );
-		 * root.setQuestion(siblingNode.getNodeValue().substring((dashIndex+1),
-		 * siblingNode.getNodeValue().length()));
-		 * //childNode.setElement(node.getNodeName());
-		 * System.out.print(root.getElementName() + " - " + root.getQuestion());
-		 * }
-		 * 
-		 * if (siblingNode.getNodeType() != Node.ELEMENT_NODE) {
-		 * System.out.println();
-		 * root.addSibling(importDOMToMetadata(siblingNode)); } p ++; } }
-		 * 
-		 * } // end if
-		 * 
-		 * } // end for
-		 */
-		numElementNode--;
-		return root;
+			retrieveNodeDescription(node, root);
+			//System.out.println(" My name is: " + root.getElementName() + " My description is: " + root.getQuestion());
+		}
+		
+		// now that we have you named, do you have siblings?
+		if (node.getNextSibling() != null)
+		{
+			sibling = node.getNextSibling();
+			// we need to find the next Element sibling
+			while (!(sibling == null) && (sibling.getNodeType() != Node.ELEMENT_NODE))
+			{
+				sibling = sibling.getNextSibling();
+			}
+			// then we use that to add a sibling for you.
+			if (sibling != null)
+			{			
+				root.addSibling(importDOMToMetadata(sibling));				
+			} 
+			else
+				root.addSibling(null);
+		}
+		
+		if (node.hasChildNodes())
+		{
+			child = node.getFirstChild();
+			// first we need to find the next element in your children. 
+			while ((child != null) && (child.getNodeType() != Node.ELEMENT_NODE))
+			{
+				if (child.getFirstChild() != null)
+					{
+						child = child.getFirstChild();
+					}
+				else
+				{
+					child = child.getNextSibling();
+				}		
+			}
+			// then, we use that to add a child for you
+			if (child != null)
+			{
+				root.addChild(importDOMToMetadata(child));
+				root.getChild().setParent(root);
+				connectParent(root.getChild());
+			}
+			else
+				root.addChild(null);			
+			
+		} // end importDOMToMetadataNode
+		// mini report
+		System.out.print("Tag: " + root.getElement() + " Name: " + root.getElementName());		
+		System.out.print(" Question: " + root.getQuestion() + " Answer: " + root.getAnswer());
+		System.out.println(" Verified: " + ((root.getVerified() ? "True" : "False")));
+		
+		// Hello Element Node. Let's build your family tree.
+		// send node to method that looks for an associated comment to this node (usually the next sibling or child node)		
+		return root;		
 	}
+	/**
+	 * The whoseYourDaddy method is a band-aid fix for setting the parent to a MetadataNode.
+	 * @param root
+	 */
+	private void connectParent(MetadataNode <?> root) 
+	{
+		MetadataNode adopted = root;
+		if (root.getSibling() != null)
+		{
+			adopted = root.getSibling();		
+			while (adopted != null)
+			{
+				adopted.setParent(root.getParent());
+				adopted = adopted.getSibling();
+			}
+		}		
+		return;
+	}
+
+	/**
+	 * The retrieveNodeDescription method receives a node and a MetadataNode and 
+	 * applies the description of the node Element as the ElementName and Question 
+	 * for the MetadataNode.
+	 * @param node the ELEMENT_NODE used to find a description
+	 * @param root the MetadataNode to store the ElementName and Question
+	 * @return and integer value, index, that represents the number of nodes skipped to get to the next ELEMENT_NODE
+	 */
+private void retrieveNodeDescription(Node node, MetadataNode <?> root) 
+	{
+		// Hello node. We see you have a name. Let's see if you have any comments associated with you.
+		// to do this, we cycle through the next few nodes associated with you until we find:
+			// 1. the next element node.
+			// 2. the end of the list.
+		// if we find an description, we assign it to you.
+		// if we find an element, we send back to our boss the number of nodes we encountered between you and the next element
+		// first, we find out if you have any siblings. If not, then we look for children.			
+		int dashIndex, dotIndex, colonIndex, delimiter;
+		dashIndex = dotIndex = colonIndex = delimiter = 0;
+		NodeList nList = node.getChildNodes();		
+		Node child = nList.item(0);
+		Node sibling = node;	
+		int found = 0;
+		
+		if (node.getFirstChild() != null) // the description is a child
+		{			
+			for (int c = 0; (child.getNodeType() != Node.ELEMENT_NODE) && (c < nList.getLength()); c++ )
+			{				
+				child = nList.item(c);
+				// if a comment node is not encountered, then this method ends.
+				if (child.getNodeType() == Node.COMMENT_NODE)
+				{					
+					dashIndex = child.getNodeValue().indexOf('-');
+					dotIndex = child.getNodeValue().indexOf('.');
+					colonIndex = child.getNodeValue().indexOf(':');
+					if ( dashIndex > 0 )
+					{
+						delimiter = dashIndex;
+					}
+					else if ( dotIndex > 0 )
+					{								
+						delimiter = dotIndex;
+					}	
+					else if ( colonIndex > 0 )
+					{						
+						delimiter = colonIndex;
+					}
+					if ( delimiter > 0 )
+					{
+						root.setElementName(child.getNodeValue().substring(0, delimiter));
+						root.setQuestion(child.getNodeValue().substring((delimiter + 1), child.getNodeValue().length()));
+						found = 1;
+					}
+					else 
+					{
+						root.setQuestion(child.getNodeValue().substring(delimiter, child.getNodeValue().length()));
+						found = 0;
+					}
+					
+				} // end if child is a comment		 			
+			} // end for looping through siblings in a list.
+		}
+		if (found == 0) // the description is a sibling
+		{			
+			sibling = sibling.getNextSibling();
+			while ((sibling != null) && (sibling.getNodeType() != Node.ELEMENT_NODE))
+			{							
+				// if a comment node is not encountered, then this method ends.
+				if (sibling.getNodeType() == Node.COMMENT_NODE)
+				{					
+					dashIndex = sibling.getNodeValue().indexOf('-');
+					dotIndex = sibling.getNodeValue().indexOf('.');
+					colonIndex = sibling.getNodeValue().indexOf(':');
+					if ( dashIndex > 0 )
+					{
+						delimiter = dashIndex;
+					}
+					else if ( dotIndex > 0 )
+					{							
+						delimiter = dotIndex;
+					}
+					else if ( dotIndex > 0 )
+					{
+						delimiter = colonIndex;
+					}
+					if ( delimiter > 0 )
+					{
+						root.setElementName(sibling.getNodeValue().substring(0, delimiter));
+						root.setQuestion(sibling.getNodeValue().substring((delimiter + 1), sibling.getNodeValue().length()));
+					}
+					else
+					{
+						root.setQuestion(sibling.getNodeValue().substring(delimiter, sibling.getNodeValue().length()));
+					}
+					
+				} // end if sibling is a comment					
+				sibling = sibling.getNextSibling();	
+			} // end while sibling is not an element nor null
+		} // end else incoming node is a leaf
+		return;
+	}
+
 
 	/**
 	 * The saveMetadataToDOM method takes a MetadataNode at its root and an
@@ -238,50 +298,25 @@ public class XmlSessionManager {
 	 * @precondition the Document files are NOT the templates originally used at
 	 *               the beginning of the session but are copies of the
 	 *               templates.
-	 * @param mNode
+	 * @param metaNode
 	 *            is the root of the MetadataNode tree
-	 * @param udpateFileList
+	 * @param domNode
 	 *            is an array of the Document objects that are being updated as
 	 *            the session progresses.
 	 * @postcondition Document files are updated with changes from the
 	 *                MetadataNode tree and are in a state that can readily be
 	 *                exported to valid XML metadata files
 	 */
-	public void saveMetadataToDOM(MetadataNode<?> mNode, Document document) {
-		// Loop find matching elements that should contain comments (leaves in
-		// both trees)
-		// ensure matched element is really for the current data type and not
-		// for a different data type
-		// update Document COMMENT for that ELEMENT
-		// get next Document object
-		MetadataNode<?> currentNode = mNode;
-		NodeList currentDoc = document.getElementsByTagName("metadta");
-		Node node = currentDoc.item(0);
-		while (!currentNode.equals(mNode.getLastChild())) {
-			currentDoc = document.getElementsByTagName(currentNode.getElement());
-			for (int index = 0; index < currentDoc.getLength(); index++) {
-				node = currentDoc.item(index);
-				node.setNodeValue(currentNode.getAnswer());
-			}
-			if (!(currentNode.getChild() == null)) // has child
-			{
-				currentNode = currentNode.getChild();
-			} else if (!(currentNode.getSibling() == null)) // not a child but
-															// has a sibling
-			{
-				currentNode = currentNode.getSibling();
-			} else // last child
-			{
-				do // loop: go up one
-				{
-					currentNode.getParent();
-				} while (currentNode.getSibling() == null); // find next
-															// sibling. if no
-															// sibling, go up
-															// one again
-				currentNode.getSibling(); // get next sibling
-			}
-		}
+	public void saveMetadataToDOM(MetadataNode<?> metaNode, Node domNode) {
+		// metaNode is not, necessarily, the root of the MetadataNode tree
+		// domNode is not necessarily the root of the Node tree
+		// find the first element match, then update the Node text
+		// recursive case: has child or has sibling:
+			// call this method again with next MetadataNode and next Node.
+		// base case: reach node or metaNode with no child and no sibling 
+		MetadataNode<?> nextMeta = metaNode;		
+		Node nextNode = domNode;
+		
 		return;
 	}
 
@@ -480,9 +515,9 @@ public class XmlSessionManager {
 		// File sessionFile;
 
 		xMlSessionSave += metadataTreeToString(root);
-		xMlSessionSave += "Current Node: " + currentNode.getElement() + "\n";
+		xMlSessionSave += "\n!EndTree!\nCurrent Node: " + currentNode.getElement() + "\n!EndCurrentNode!";
 		for (int index = 0; index < templates.length; index++) {
-			xMlSessionSave += templates[index] + "\n";
+			xMlSessionSave += templates[index] + "\n!EndTemplatesList!";
 		}
 
 		return xMlSessionSave;
@@ -512,26 +547,31 @@ public class XmlSessionManager {
 
 		// print the node. This is where we do any operations to the current
 		// parameter node
-		metadataTreeString += root.getElement() + " ";
+		
+		System.out.print(root.getElement() + ((numElementNode == 0) ? "\n" : " "));
+		metadataTreeString += root.getElement() + ((numElementNode == 0) ? "\n" : " ");
+		
 
-		// iterate through the nodeList
-		NodeList nodeList = (NodeList) root.getChild();
-		for (int i = 0; i < nodeList.getLength(); i++) {
-			MetadataNode<?> currentNode = (MetadataNode<?>) nodeList.item(i);
-
-			// if the node is a leaf, save node attributes to a formatted string
-			if (currentNode.isLeaf()) {
-				metadataTreeString += " : " + currentNode.getElementName() + " : " + currentNode.getQuestion() + " : "
-						+ currentNode.getAnswer() + " : " + ((currentNode.getVerified()) ? "V" : "U") + "\n";
-			}
-
-			if (!currentNode.isLeaf()) {
-				// calls this method for all the children which is Element
+		// iterate through the tree, child first, then sibling
+		// add this node's tag, name, question, answer and verified state to string
+		if (numElementNode != 0)
+		{
+			System.out.println(" ElementName: " + root.getElementName() + " Question: " + root.getQuestion() + " Answer: " + root.getAnswer() + " Verified: " + ((root.getVerified()? "Y" : "N")));			
+			metadataTreeString += (" ElementName: " + root.getElementName() + " Question: " + root.getQuestion() + " Answer: " + root.getAnswer() + " Verified: " + ((root.getVerified()? "Y" : "N")) + "\n");			
+		}		
+		
+			// if the node has a child, call child
+			if (root.getChild() != null)
+			{
 				numElementNode++;
-				metadataTreeString += metadataTreeToString(currentNode);
+				metadataTreeString += metadataTreeToString(root.getChild());
 				numElementNode--;
-			} // end if
-		} // end for
+			} // end if has a child
+			// if the node has a sibling, call sibling
+			if (root.getSibling() != null)
+			{
+				metadataTreeString += metadataTreeToString(root.getSibling());
+			} // end if has a sibling		 
 
 		return metadataTreeString;
 	}
@@ -567,8 +607,9 @@ public class XmlSessionManager {
 
 		// print the node. This is where we do any operations to the current
 		// parameter node
-		System.out.print(node.getNodeName() + " ");
-		domTreeString += node.getNodeName() + " ";
+		
+		System.out.print(node.getNodeName() + ((numElementNode == 0) ? "\n" : " "));
+		domTreeString += node.getNodeName() + ((numElementNode == 0) ? "\n" : " ");
 
 		// iterate through the nodeList
 		NodeList nodeList = node.getChildNodes();
@@ -580,7 +621,7 @@ public class XmlSessionManager {
 				System.out.println(currentNode.getNodeValue());
 				domTreeString += currentNode.getNodeValue() + "\n";
 			}
-
+			
 			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
 				// calls this method for all the children which is Element
 				numElementNode++;
