@@ -176,10 +176,10 @@ public class MainView
 		panel.add(elementLabel, gbc_elementLabel);
 		
 		//Create the nodes.
-        DefaultMutableTreeNode top = new DefaultMutableTreeNode("Table of Contents");
-        createNodes(top, rootMNode);
+        // DefaultMutableTreeNode top = new DefaultMutableTreeNode("Table of Contents");
+        // createNodes(top, rootMNode);
         
-		tree = new JTree(top);		
+		tree = new JTree(rootMNode);		
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         //Listen for when the selection changes.
         //tree.addTreeSelectionListener(null);		
@@ -475,8 +475,8 @@ public class MainView
 					currentNode = rootMNode;
 					elementLabel.setText(currentNode.getElementName());
 					questionLabel.setText(currentNode.getQuestion());					
-					createNodes(top, rootMNode);	// how do we get the JTree to be updated with the imported MetadataNode?		        
-					tree = new JTree(top);			// these three calls are my guessing.
+					//createNodes(top, rootMNode);	// how do we get the JTree to be updated with the imported MetadataNode?		        
+					tree = new JTree(rootMNode);			// these three calls are my guessing.
 					treeView.setViewportView(tree); // Yeah, i really have no idea how to update the GUI with the new tree
 				}
 				else
