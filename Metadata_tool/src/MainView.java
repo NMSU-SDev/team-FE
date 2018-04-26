@@ -79,11 +79,11 @@ public class MainView
 	private String inputFile = "";
 	private NodeList nList = null;
 	private Node rootDOM = null;
-	private MetadataNode rootMNode = new MetadataNode ("root", "empty", (MetadataNode) null, (MetadataNode) null);
+	private MetadataNode rootMNode = new MetadataNode("root", "empty", (MetadataNode) null, (MetadataNode) null);
 	/*
 	 */
 	Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-	private MetadataNode currentNode = new MetadataNode ("TOC", "Table of Contents", rootMNode, (MetadataNode)null);
+	private MetadataNode currentNode = new MetadataNode("TOC", "Table of Contents", rootMNode, (MetadataNode) null);
 	private FileOps1 fileOperations = new FileOps1();
 	private XmlSessionManager session1 = new XmlSessionManager();
 	private NewSession newSession;
@@ -174,15 +174,16 @@ public class MainView
 		gbc_elementLabel.gridx = 3;
 		gbc_elementLabel.gridy = 0;
 		panel.add(elementLabel, gbc_elementLabel);
-		
-		//Create the nodes.
-        // DefaultMutableTreeNode top = new DefaultMutableTreeNode("Table of Contents");
-        // createNodes(top, rootMNode);
-        
-		tree = new JTree(rootMNode);		
+
+		// Create the nodes.
+		// DefaultMutableTreeNode top = new DefaultMutableTreeNode("Table of
+		// Contents");
+		// createNodes(top, rootMNode);
+
+		tree = new JTree(rootMNode);
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-        //Listen for when the selection changes.
-        //tree.addTreeSelectionListener(null);		
+		// Listen for when the selection changes.
+		// tree.addTreeSelectionListener(null);
 		GridBagConstraints gbc_tree = new GridBagConstraints();
 		gbc_tree.gridwidth = 2;
 		gbc_tree.gridheight = 9;
@@ -191,8 +192,8 @@ public class MainView
 		gbc_tree.gridx = 0;
 		gbc_tree.gridy = 1;
 		panel.add(tree, gbc_tree);
-		
-		//Create the scroll pane and add the tree to it. 
+
+		// Create the scroll pane and add the tree to it.
 		treeView = new JScrollPane();
 		// JScrollPane scrollPane = new JScrollPane();
 		GridBagConstraints gbc_treeView = new GridBagConstraints();
@@ -203,7 +204,7 @@ public class MainView
 		gbc_treeView.gridx = 0;
 		gbc_treeView.gridy = 1;
 		panel.add(treeView, gbc_treeView);
-		//treeView.setViewportView(tree);
+		// treeView.setViewportView(tree);
 		// scrollPane.setViewportView(tree);
 
 		JLabel questionLabel = new JLabel(currentNode.getQuestion());
@@ -239,21 +240,19 @@ public class MainView
 		gbc_chckbxVerified.gridy = 8;
 		panel.add(chckbxVerified, gbc_chckbxVerified);
 
-		
 		/*
-		MetadataNode page1 = new MetadataNode("First name", "First element name", "First question", "answer");
-		MetadataNode page2 = new MetadataNode("Second name", "Second element name", "Second question", "answer");
-		MetadataNode page3 = new MetadataNode("Third name", "Third element name", "Third question", "answer");
-		page1.addChild(page2);
-		page2.addChild(page3);
-		page2.setParent(page1);
-		page3.setParent(page2);
-		currentNode = page1;
-		elementLabel.setText(currentNode.getElementName());
-		questionLabel.setText(currentNode.getQuestion());
-		String elements[] = new String[] { page1.getElement(), page2.getElement(), page3.getElement() };
-		list.setListData(elements);
-		*/
+		 * MetadataNode page1 = new MetadataNode("First name",
+		 * "First element name", "First question", "answer"); MetadataNode page2
+		 * = new MetadataNode("Second name", "Second element name",
+		 * "Second question", "answer"); MetadataNode page3 = new MetadataNode(
+		 * "Third name", "Third element name", "Third question", "answer");
+		 * page1.addChild(page2); page2.addChild(page3); page2.setParent(page1);
+		 * page3.setParent(page2); currentNode = page1;
+		 * elementLabel.setText(currentNode.getElementName());
+		 * questionLabel.setText(currentNode.getQuestion()); String elements[] =
+		 * new String[] { page1.getElement(), page2.getElement(),
+		 * page3.getElement() }; list.setListData(elements);
+		 */
 
 		JButton prevButton = new JButton("Previous");
 		prevButton.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -262,7 +261,7 @@ public class MainView
 		gbc_prevButton.insets = new Insets(0, 0, 5, 5);
 		gbc_prevButton.gridx = 4;
 		gbc_prevButton.gridy = 9;
-		panel.add(prevButton, gbc_prevButton); 
+		panel.add(prevButton, gbc_prevButton);
 		prevButton.addActionListener(new ActionListener()
 		{
 
@@ -300,7 +299,7 @@ public class MainView
 		gbc_nextButton.insets = new Insets(0, 0, 5, 5);
 		gbc_nextButton.gridx = 6;
 		gbc_nextButton.gridy = 9;
-		panel.add(nextButton, gbc_nextButton); 
+		panel.add(nextButton, gbc_nextButton);
 		nextButton.addActionListener(new ActionListener()
 		{
 
@@ -314,12 +313,12 @@ public class MainView
 				{
 					// need to save changes in MetadataNode to DOM first
 					session1.saveMetadataToDOM(rootMNode, doc1);
-					
+
 					currentNode = tempNode;
 					elementLabel.setText(currentNode.getElementName());
-					questionLabel.setText(currentNode.getQuestion());					
+					questionLabel.setText(currentNode.getQuestion());
 				}
-				else 
+				else
 				{
 					tempNode = currentNode.getSibling();
 					if (tempNode != null)
@@ -331,8 +330,8 @@ public class MainView
 				}
 			}
 
-		}); 
-		
+		});
+
 		/***** MENU BAR and new menu option *****/
 
 		JMenuBar menuBar = new JMenuBar();
@@ -400,11 +399,11 @@ public class MainView
 				System.out.println("Open menu option clicked");
 				// load metadata or session file into 'file'
 				file = fileOperations.openFile(frameTeamFeMetadata);
-				
+
 				/* Must check to make sure the user selected a file */
-				if ( file != null ) 
+				if (file != null)
 					extension = file.getName();
-				
+
 				// if file is an XML, run Preview method
 				if (extension.contains(".xml"))
 				{
@@ -474,10 +473,14 @@ public class MainView
 					rootMNode = session1.importDOMToMetadata(nNode);
 					currentNode = rootMNode;
 					elementLabel.setText(currentNode.getElementName());
-					questionLabel.setText(currentNode.getQuestion());					
-					//createNodes(top, rootMNode);	// how do we get the JTree to be updated with the imported MetadataNode?		        
-					tree = new JTree(rootMNode);			// these three calls are my guessing.
-					treeView.setViewportView(tree); // Yeah, i really have no idea how to update the GUI with the new tree
+					questionLabel.setText(currentNode.getQuestion());
+					// createNodes(top, rootMNode); // how do we get the JTree
+					// to be updated with the imported MetadataNode?
+					tree = new JTree(rootMNode); // these three calls are my
+													// guessing.
+					treeView.setViewportView(tree); // Yeah, i really have no
+													// idea how to update the
+													// GUI with the new tree
 				}
 				else
 					System.out.println("No file was selected.");
@@ -636,78 +639,101 @@ public class MainView
 			}
 		});
 		menuHelp.add(menuAbout);
-		
+
+		// This block below is in development, it will never run
+		// Please do not remove it or comment it out
+		if (false)
+		{
+			treeLength = 0;
+			MetadataNode tempNode1 = currentNode;
+			while ((tempNode1 != null) && (tempNode1.hasChild()))
+			{
+				treeLength++;
+				tempNode1 = tempNode1.getChild();
+			}
+			if (treeLength == 0)
+			{
+				// list.setVisible(false);
+				elementLabel.setVisible(false);
+				questionLabel.setVisible(false);
+				txtrEnterTextHere.setVisible(false);
+				navLabel.setVisible(false);
+				chckbxVerified.setVisible(false);
+				prevButton.setVisible(false);
+				nextButton.setVisible(false);
+				saveButton.setVisible(false);
+			}
+			else
+			{
+				tempNode1 = currentNode;
+				String elementNames[] = new String[treeLength];
+
+				for (int i = 0; i < treeLength; i++)
+				{
+					elementNames[i] = tempNode1.getElement();
+				}
+				// list.setVisible(true);
+				elementLabel.setVisible(true);
+				questionLabel.setVisible(true);
+				txtrEnterTextHere.setVisible(true);
+				navLabel.setVisible(true);
+				chckbxVerified.setVisible(true);
+				prevButton.setVisible(true);
+				nextButton.setVisible(true);
+				saveButton.setVisible(true);
+
+				// list.setVisibleRowCount(treeLength);
+				// list.setListData(elementNames);
+				elementLabel.setText(currentNode.getElement());
+				questionLabel.setText(currentNode.getQuestion());
+			}
+		}
 	}
 
 	public void setCurrentNode(MetadataNode m)
 	{
 		currentNode = m;
 	}
-	
-	private void createNodes(DefaultMutableTreeNode top, MetadataNode mNode) {
+
+	private void createNodes(DefaultMutableTreeNode top, MetadataNode mNode)
+	{
 		DefaultMutableTreeNode node = null;
 
-		//base case for leaves
+		// base case for leaves
 		if (mNode == null)
 			return;
 
-		//set the DefaultMutableTreeNode to the MetadataNode and add it
+		// set the DefaultMutableTreeNode to the MetadataNode and add it
 		node = new DefaultMutableTreeNode(mNode.getElement());
 		top.add(node);
 
-		//recursive call to populate sibling
+		// recursive call to populate sibling
 		if (mNode.getSibling() != null)
 			createNodes(top, mNode.getSibling());
 
-		//recursive call to populate children
+		// recursive call to populate children
 		if (mNode.getChild() != null)
 			createNodes(node, mNode.getChild());
 	}
 
-	/** Required by TreeSelectionListener interface.
-	 *  This is where we can make changes when a tree entry is 
-	 *  selected 
-	 *  */
-	public void valueChanged(TreeSelectionEvent e) {
+	/**
+	 * Required by TreeSelectionListener interface. This is where we can make
+	 * changes when a tree entry is selected
+	 */
+	public void valueChanged(TreeSelectionEvent e)
+	{
 
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode)
-				tree.getLastSelectedPathComponent();
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 
-		if (node == null) return;
+		if (node == null)
+			return;
 
-		/* Code from tutorial - not sure if useful
+		/*
+		 * Code from tutorial - not sure if useful
 		 * 
-
-	        Object nodeInfo = node.getUserObject();
-
-	        if (node.isLeaf()) {
-	            //NodeInfo node = (NodeInfo)nodeInfo;
-
-	        }
+		 * Object nodeInfo = node.getUserObject(); if (node.isLeaf()) {
+		 * //NodeInfo node = (NodeInfo)nodeInfo; }
 		 */
 
-	}//end valueChanged
+	}// end valueChanged
 }
-
-/* !!!!! DEPRECATED !!!!!
- * Uncommenting this will cause a blank window to be displayed
- * Please create another method for all of this code
-treeLength = 0;
-MetadataNode tempNode1 = currentNode;
-while((tempNode1 != null) && (tempNode1.hasChild()))
-{
-	treeLength++;
-	tempNode1 = tempNode1.getChild();
-}
-if(treeLength == 0)
-{
-	list.setVisible(false);
-	elementLabel.setVisible(false);
-	questionLabel.setVisible(false);
-	txtrEnterTextHere.setVisible(false);
-	navLabel.setVisible(false);
-	chckbxVerified.setVisible(false);
-	prevButton.setVisible(false);
-	nextButton.setVisible(false);
-	saveButton.setVisible(false);
-} */
