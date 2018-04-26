@@ -72,7 +72,7 @@ public class MainView
 {
 
 	private JFrame frameTeamFeMetadata;
-	private JTree tree;
+	private MyTree tree;
 	JScrollPane treeView;
 	private File file;
 	private String[] templates;
@@ -174,16 +174,11 @@ public class MainView
 		gbc_elementLabel.gridx = 3;
 		gbc_elementLabel.gridy = 0;
 		panel.add(elementLabel, gbc_elementLabel);
-
-		// Create the nodes.
-		// DefaultMutableTreeNode top = new DefaultMutableTreeNode("Table of
-		// Contents");
-		// createNodes(top, rootMNode);
-
-		tree = new JTree(rootMNode);
-		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-		// Listen for when the selection changes.
-		// tree.addTreeSelectionListener(null);
+		
+		/* Moved creation of the TOC to import behavior - Lucas
+		 * 
+		tree = new MyTree(rootMNode);
+		
 		GridBagConstraints gbc_tree = new GridBagConstraints();
 		gbc_tree.gridwidth = 2;
 		gbc_tree.gridheight = 9;
@@ -206,7 +201,7 @@ public class MainView
 		panel.add(treeView, gbc_treeView);
 		// treeView.setViewportView(tree);
 		// scrollPane.setViewportView(tree);
-
+	*/
 		JLabel questionLabel = new JLabel(currentNode.getQuestion());
 		questionLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		GridBagConstraints gbc_questionLabel = new GridBagConstraints();
@@ -474,13 +469,34 @@ public class MainView
 					currentNode = rootMNode;
 					elementLabel.setText(currentNode.getElementName());
 					questionLabel.setText(currentNode.getQuestion());
-					// createNodes(top, rootMNode); // how do we get the JTree
-					// to be updated with the imported MetadataNode?
-					tree = new JTree(rootMNode); // these three calls are my
-													// guessing.
-					treeView.setViewportView(tree); // Yeah, i really have no
-													// idea how to update the
-													// GUI with the new tree
+					
+					// Moved creation of the table of contents to create on import
+					// instead of on program start
+					tree = new MyTree(rootMNode);
+					
+					GridBagConstraints gbc_tree = new GridBagConstraints();
+					gbc_tree.gridwidth = 2;
+					gbc_tree.gridheight = 9;
+					gbc_tree.insets = new Insets(0, 0, 5, 5);
+					gbc_tree.fill = GridBagConstraints.BOTH;
+					gbc_tree.gridx = 0;
+					gbc_tree.gridy = 1;
+					panel.add(tree, gbc_tree);
+					
+					// Create the scroll pane and add the tree to it.
+					treeView = new JScrollPane();
+					
+					GridBagConstraints gbc_treeView = new GridBagConstraints();
+					gbc_treeView.gridwidth = 2;
+					gbc_treeView.gridheight = 9;
+					gbc_treeView.insets = new Insets(0, 0, 5, 5);
+					gbc_treeView.fill = GridBagConstraints.BOTH;
+					gbc_treeView.gridx = 0;
+					gbc_treeView.gridy = 1;
+					panel.add(treeView, gbc_treeView);
+
+					
+					
 				}
 				else
 					System.out.println("No file was selected.");
@@ -695,45 +711,5 @@ public class MainView
 		currentNode = m;
 	}
 
-	private void createNodes(DefaultMutableTreeNode top, MetadataNode mNode)
-	{
-		DefaultMutableTreeNode node = null;
-
-		// base case for leaves
-		if (mNode == null)
-			return;
-
-		// set the DefaultMutableTreeNode to the MetadataNode and add it
-		node = new DefaultMutableTreeNode(mNode.getElement());
-		top.add(node);
-
-		// recursive call to populate sibling
-		if (mNode.getSibling() != null)
-			createNodes(top, mNode.getSibling());
-
-		// recursive call to populate children
-		if (mNode.getChild() != null)
-			createNodes(node, mNode.getChild());
-	}
-
-	/**
-	 * Required by TreeSelectionListener interface. This is where we can make
-	 * changes when a tree entry is selected
-	 */
-	public void valueChanged(TreeSelectionEvent e)
-	{
-
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-
-		if (node == null)
-			return;
-
-		/*
-		 * Code from tutorial - not sure if useful
-		 * 
-		 * Object nodeInfo = node.getUserObject(); if (node.isLeaf()) {
-		 * //NodeInfo node = (NodeInfo)nodeInfo; }
-		 */
-
-	}// end valueChanged
+	
 }
