@@ -4,7 +4,6 @@ import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.UIManager;
 import javax.swing.event.TreeSelectionEvent;
@@ -26,13 +25,14 @@ public class MyTree extends JPanel implements TreeSelectionListener {
     private static boolean useSystemLookAndFeel = true;
     
     //constructor
-    public MyTree(MetadataNode<String> root) {
+    public MyTree(MetadataNode<?> root) {
     
         super(new GridLayout(1,0));        
         
         //Create the nodes.
         DefaultMutableTreeNode top =
             new DefaultMutableTreeNode("Table of Contents");
+        
         createNodes(top,root);
 
         //Create a tree that allows one selection at a time.
@@ -51,18 +51,12 @@ public class MyTree extends JPanel implements TreeSelectionListener {
         //Create the scroll pane and add the tree to it. 
         JScrollPane treeView = new JScrollPane(tree);
 
-        //Add the scroll panes to a split pane.
-        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-        splitPane.setTopComponent(treeView);
-
-        Dimension minimumSize = new Dimension(100, 50);
+        Dimension minimumSize = new Dimension(100, 100);
         
         treeView.setMinimumSize(minimumSize);
-        splitPane.setDividerLocation(100); 
-        splitPane.setPreferredSize(new Dimension(500, 300));
-
+        
         //Add the split pane to this panel.
-        add(splitPane);
+        add(treeView);
         
     }//end MyTree constructor
    
@@ -92,19 +86,19 @@ public class MyTree extends JPanel implements TreeSelectionListener {
     /* NodeInfo class. This is where the attributes of the MetadataNode are assigned
      * to the JTree nodes.
      */
-    @SuppressWarnings({ "unused"})
+    @SuppressWarnings({"unused"})
     private class NodeInfo {
     
         public String element;
         public String elementName;
         public String question;
-        public MetadataNode<String> sibling;
-        public MetadataNode<String> child;
+        public MetadataNode<?> sibling;
+        public MetadataNode<?> child;
         public String answer;
         public boolean isVerified;
-        public MetadataNode<String> parent;
+        public MetadataNode<?> parent;
         
-        public NodeInfo(MetadataNode<String> mNode) {
+        public NodeInfo(MetadataNode<?> mNode) {
         	
         	element = mNode.getElement();
         	elementName = mNode.getElementName();
@@ -132,7 +126,7 @@ public class MyTree extends JPanel implements TreeSelectionListener {
      /* createNodes creates the structure of the JTree based on children and siblings
       * of the MetadataNode root sent to it.
       */
-     private void createNodes(DefaultMutableTreeNode top, MetadataNode<String> mNode) {
+     private void createNodes(DefaultMutableTreeNode top, MetadataNode<?> mNode) {
      
     	 DefaultMutableTreeNode node = null;
      
@@ -176,8 +170,8 @@ public class MyTree extends JPanel implements TreeSelectionListener {
      * this method should be invoked from the
      * event dispatch thread.
      */
-    private static void createAndShowJTree(MetadataNode<String> root) {
-    
+    private static void createAndShowJTree(MetadataNode<?> root) {
+    	
         if (useSystemLookAndFeel) {
             try {
                 UIManager.setLookAndFeel(
@@ -190,26 +184,32 @@ public class MyTree extends JPanel implements TreeSelectionListener {
         //Create and set up the window.
         JFrame frame = new JFrame("MyTree");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //Add content to the window.
-        frame.add(new MyTree(root));
-
+        
+        MyTree tree1 = new MyTree(root);
+        JPanel panel = new JPanel();
+        JScrollPane sPane = new JScrollPane(tree1);
+        
+        //add the scrollPane to the panel, and the panel to the frame
+        panel.add(sPane);
+        frame.add(panel);
+        
         //Display the window.
         frame.pack();
         frame.setVisible(true);
         
     }//end createAndShowJTree();
     
+    @SuppressWarnings ({"rawtypes"})
     public static void main(String[] args) {
         //Schedule a job for the event dispatch thread:
         //creating and showing this application's GUI.
     	
     	//test mNodes
-        MetadataNode<String> rootGrandChildSibling = new MetadataNode<String>("Root Grandchild Sibling",null,null);
-        MetadataNode<String> rootGrandChild = new MetadataNode<String>("Root Grandchild", null, rootGrandChildSibling);
-        MetadataNode<String> rootChildSibling = new MetadataNode<String>("Root Child Sibling", null, null);
-        MetadataNode<String> rootChild = new MetadataNode<String>("Root child", rootGrandChild, rootChildSibling);
-        MetadataNode<String> root = new MetadataNode<String>("Root", rootChild, null);
+        MetadataNode rootGrandChildSibling = new MetadataNode("Root Grandchild Sibling",null,null);
+        MetadataNode rootGrandChild = new MetadataNode("Root Grandchild", null, rootGrandChildSibling);
+        MetadataNode rootChildSibling = new MetadataNode("Root Child Sibling", null, null);
+        MetadataNode rootChild = new MetadataNode("Root child", rootGrandChild, rootChildSibling);
+        MetadataNode root = new MetadataNode("Root", rootChild, null);
         
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
