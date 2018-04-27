@@ -638,7 +638,7 @@ public class MainView
 						"xml");
 
 				exportFileChoose.setFileFilter(xmlFilter);
-				exportFileChoose.setDialogTitle("Selection location for export...");
+				exportFileChoose.setDialogTitle("Select location for export...");
 
 				int exportChooseReturnVal;
 				File exportF = null;
@@ -775,7 +775,7 @@ public class MainView
 			public void actionPerformed(ActionEvent arg0)
 			{
 				JOptionPane.showMessageDialog(null,
-						"Metadata Software tool - version alpha 4.0"
+						"Metadata Software tool - version alpha 4.1"
 								+ "\n2018 April 27 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
 								+ "Jacob Espinoza, Isaias Gerena, Lucas Herrman\n"
 								+ "(Not for external distribution - Work in Progress)",
