@@ -66,6 +66,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 
 @SuppressWarnings({ "unused", "rawtypes" })
 public class MainView
@@ -93,6 +94,8 @@ public class MainView
 	private Document doc1 = null;
 	private Document doc2 = null;
 	Scanner scan = new Scanner(System.in);
+	private boolean verifyCurrentNode = false;
+	private JTextField textField;
 
 	/**
 	 * Launch the application.
@@ -148,9 +151,24 @@ public class MainView
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[] { 0, 120, 50, 80, 0, 50, 0, 90, 25, 0 };
 		gbl_panel.rowHeights = new int[] { 33, 20, 0, 0, 0, 0, 0, 0, 0, 0, 15, 0 };
-		gbl_panel.columnWeights = new double[] { 1.0, 1.0, 0.0, 0.0, 0.0, 20.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panel.columnWeights = new double[] { 1.0, 1.0, 0.0, 1.0, 0.0, 20.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		gbl_panel.rowWeights = new double[] { 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
+		
+		JTextArea openingScreen = new JTextArea();
+		openingScreen.setEditable(false);
+		GridBagConstraints gbc_openingScreen = new GridBagConstraints();
+		gbc_openingScreen.gridheight = 2;
+		gbc_openingScreen.gridwidth = 5;
+		openingScreen.setLineWrap(true);
+		openingScreen.setWrapStyleWord(true);
+		gbc_openingScreen.insets = new Insets(0, 0, 5, 5);
+		gbc_openingScreen.fill = GridBagConstraints.BOTH;
+		gbc_openingScreen.gridx = 3;
+		gbc_openingScreen.gridy = 2;
+		panel.add(openingScreen, gbc_openingScreen);
+		openingScreen.setColumns(10);
+		openingScreen.setText("Create new session, open previous session, or import template to proceed");
 
 		JLabel navLabel = new JLabel("Navigation");
 		navLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -174,48 +192,44 @@ public class MainView
 		gbc_elementLabel.gridx = 3;
 		gbc_elementLabel.gridy = 0;
 		panel.add(elementLabel, gbc_elementLabel);
-		
-		/* Moved creation of the TOC to import behavior - Lucas
-		 * 
-		tree = new MyTree(rootMNode);
-		
-		GridBagConstraints gbc_tree = new GridBagConstraints();
-		gbc_tree.gridwidth = 2;
-		gbc_tree.gridheight = 9;
-		gbc_tree.insets = new Insets(0, 0, 5, 5);
-		gbc_tree.fill = GridBagConstraints.BOTH;
-		gbc_tree.gridx = 0;
-		gbc_tree.gridy = 1;
-		panel.add(tree, gbc_tree);
 
-		// Create the scroll pane and add the tree to it.
-		treeView = new JScrollPane();
-		// JScrollPane scrollPane = new JScrollPane();
-		GridBagConstraints gbc_treeView = new GridBagConstraints();
-		gbc_treeView.gridwidth = 2;
-		gbc_treeView.gridheight = 9;
-		gbc_treeView.insets = new Insets(0, 0, 5, 5);
-		gbc_treeView.fill = GridBagConstraints.BOTH;
-		gbc_treeView.gridx = 0;
-		gbc_treeView.gridy = 1;
-		panel.add(treeView, gbc_treeView);
-		// treeView.setViewportView(tree);
-		// scrollPane.setViewportView(tree);
-	*/
-		JLabel questionLabel = new JLabel(currentNode.getQuestion());
+		/*
+		 * Moved creation of the TOC to import behavior - Lucas
+		 * 
+		 * tree = new MyTree(rootMNode);
+		 * 
+		 * GridBagConstraints gbc_tree = new GridBagConstraints();
+		 * gbc_tree.gridwidth = 2; gbc_tree.gridheight = 9; gbc_tree.insets =
+		 * new Insets(0, 0, 5, 5); gbc_tree.fill = GridBagConstraints.BOTH;
+		 * gbc_tree.gridx = 0; gbc_tree.gridy = 1; panel.add(tree, gbc_tree); //
+		 * Create the scroll pane and add the tree to it. treeView = new
+		 * JScrollPane(); // JScrollPane scrollPane = new JScrollPane();
+		 * GridBagConstraints gbc_treeView = new GridBagConstraints();
+		 * gbc_treeView.gridwidth = 2; gbc_treeView.gridheight = 9;
+		 * gbc_treeView.insets = new Insets(0, 0, 5, 5); gbc_treeView.fill =
+		 * GridBagConstraints.BOTH; gbc_treeView.gridx = 0; gbc_treeView.gridy =
+		 * 1; panel.add(treeView, gbc_treeView); //
+		 * treeView.setViewportView(tree); // scrollPane.setViewportView(tree);
+		 */
+		JTextArea questionLabel = new JTextArea(currentNode.getQuestion());
+		questionLabel.setEditable(false);
 		questionLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		GridBagConstraints gbc_questionLabel = new GridBagConstraints();
+		questionLabel.setLineWrap(true);
+		questionLabel.setWrapStyleWord(true);
 		gbc_questionLabel.anchor = GridBagConstraints.WEST;
-		gbc_questionLabel.gridwidth = 4;
+		gbc_questionLabel.gridwidth = 5;
 		gbc_questionLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_questionLabel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_questionLabel.gridx = 3;
-		gbc_questionLabel.gridy = 2;
+		gbc_questionLabel.gridy = 1;
 		panel.add(questionLabel, gbc_questionLabel);
-
+		
 		JTextArea txtrEnterTextHere = new JTextArea();
-		txtrEnterTextHere.setEnabled(false);
+		txtrEnterTextHere.setLineWrap(true);
 		txtrEnterTextHere.setBorder(new EtchedBorder(EtchedBorder.LOWERED, Color.GRAY, null));
 		txtrEnterTextHere.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		txtrEnterTextHere.setEnabled(false);
 		GridBagConstraints gbc_txtrEnterTextHere = new GridBagConstraints();
 		gbc_txtrEnterTextHere.gridheight = 4;
 		gbc_txtrEnterTextHere.gridwidth = 5;
@@ -226,14 +240,26 @@ public class MainView
 		panel.add(txtrEnterTextHere, gbc_txtrEnterTextHere);
 
 		JCheckBox chckbxVerified = new JCheckBox("Verified");
-		chckbxVerified.setEnabled(currentNode.getVerified());
 		chckbxVerified.setFocusable(false);
+		chckbxVerified.setEnabled(false);
 		GridBagConstraints gbc_chckbxVerified = new GridBagConstraints();
 		gbc_chckbxVerified.gridwidth = 5;
 		gbc_chckbxVerified.insets = new Insets(0, 0, 5, 5);
 		gbc_chckbxVerified.gridx = 3;
 		gbc_chckbxVerified.gridy = 8;
 		panel.add(chckbxVerified, gbc_chckbxVerified);
+		
+		chckbxVerified.addActionListener(new ActionListener()
+				{
+
+					@Override
+					public void actionPerformed(ActionEvent arg0)
+					{
+						// TODO Auto-generated method stub
+						verifyCurrentNode = true;
+					}
+			
+				});
 
 		/*
 		 * MetadataNode page1 = new MetadataNode("First name",
@@ -268,6 +294,14 @@ public class MainView
 				tempNode = currentNode.getParent();
 				if (tempNode != null)
 				{
+					currentNode.setVerified(verifyCurrentNode);
+					currentNode.setAnswer(txtrEnterTextHere.getText());
+					txtrEnterTextHere.setText("");
+					chckbxVerified.setSelected(false);
+					System.out.println(currentNode.getAnswer());
+					System.out.println(currentNode.getVerified());
+					//These test the two lines above
+					
 					currentNode = currentNode.getParent();
 					elementLabel.setText(currentNode.getElementName());
 					questionLabel.setText(currentNode.getQuestion());
@@ -287,6 +321,22 @@ public class MainView
 		gbc_saveButton.gridx = 5;
 		gbc_saveButton.gridy = 9;
 		panel.add(saveButton, gbc_saveButton);
+		
+		saveButton.addActionListener(new ActionListener()
+				{
+
+					@Override
+					public void actionPerformed(ActionEvent e)
+					{
+						// TODO Auto-generated method stub
+						currentNode.setVerified(verifyCurrentNode);
+						currentNode.setAnswer(txtrEnterTextHere.getText());
+						System.out.println(currentNode.getAnswer());
+						System.out.println(currentNode.getVerified());
+						//These test the two lines above
+					}
+			
+				});
 
 		JButton nextButton = new JButton("Next");
 		GridBagConstraints gbc_nextButton = new GridBagConstraints();
@@ -309,6 +359,14 @@ public class MainView
 					// need to save changes in MetadataNode to DOM first
 					session1.saveMetadataToDOM(rootMNode, doc1);
 
+					currentNode.setVerified(verifyCurrentNode);
+					currentNode.setAnswer(txtrEnterTextHere.getText());
+					txtrEnterTextHere.setText("");
+					chckbxVerified.setSelected(false);
+					System.out.println(currentNode.getAnswer());
+					System.out.println(currentNode.getVerified());
+					//These test the two lines above
+					
 					currentNode = tempNode;
 					elementLabel.setText(currentNode.getElementName());
 					questionLabel.setText(currentNode.getQuestion());
@@ -318,6 +376,14 @@ public class MainView
 					tempNode = currentNode.getSibling();
 					if (tempNode != null)
 					{
+						currentNode.setVerified(verifyCurrentNode);
+						currentNode.setAnswer(txtrEnterTextHere.getText());
+						txtrEnterTextHere.setText("");
+						chckbxVerified.setSelected(false);
+						System.out.println(currentNode.getAnswer());
+						System.out.println(currentNode.getVerified());
+						//These test the two lines above
+						
 						currentNode = tempNode;
 						elementLabel.setText(currentNode.getElementName());
 						questionLabel.setText(currentNode.getQuestion());
@@ -326,6 +392,16 @@ public class MainView
 			}
 
 		});
+		
+		elementLabel.setVisible(false);
+		questionLabel.setVisible(false);
+		txtrEnterTextHere.setVisible(false);
+		navLabel.setVisible(false);
+		chckbxVerified.setVisible(false);
+		prevButton.setVisible(false);
+		nextButton.setVisible(false);
+		saveButton.setVisible(false);
+		
 
 		/***** MENU BAR and new menu option *****/
 
@@ -469,11 +545,12 @@ public class MainView
 					currentNode = rootMNode;
 					elementLabel.setText(currentNode.getElementName());
 					questionLabel.setText(currentNode.getQuestion());
-					
-					// Moved creation of the table of contents to create on import
+
+					// Moved creation of the table of contents to create on
+					// import
 					// instead of on program start
 					tree = new MyTree(rootMNode);
-					
+
 					GridBagConstraints gbc_tree = new GridBagConstraints();
 					gbc_tree.gridwidth = 2;
 					gbc_tree.gridheight = 9;
@@ -482,10 +559,10 @@ public class MainView
 					gbc_tree.gridx = 0;
 					gbc_tree.gridy = 1;
 					panel.add(tree, gbc_tree);
-					
+
 					// Create the scroll pane and add the tree to it.
 					treeView = new JScrollPane();
-					
+
 					GridBagConstraints gbc_treeView = new GridBagConstraints();
 					gbc_treeView.gridwidth = 2;
 					gbc_treeView.gridheight = 9;
@@ -494,9 +571,18 @@ public class MainView
 					gbc_treeView.gridx = 0;
 					gbc_treeView.gridy = 1;
 					panel.add(treeView, gbc_treeView);
-
 					
-					
+					elementLabel.setVisible(true);
+					questionLabel.setVisible(true);
+					txtrEnterTextHere.setVisible(true);
+					navLabel.setVisible(true);
+					chckbxVerified.setVisible(true);
+					prevButton.setVisible(true);
+					nextButton.setVisible(true);
+					saveButton.setVisible(true);
+					txtrEnterTextHere.setEnabled(true);
+					chckbxVerified.setEnabled(true);
+					openingScreen.setVisible(false);
 				}
 				else
 					System.out.println("No file was selected.");
@@ -711,5 +797,4 @@ public class MainView
 		currentNode = m;
 	}
 
-	
 }
