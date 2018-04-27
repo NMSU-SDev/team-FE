@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE metadata SYSTEM "http://www.fgdc.gov/metadata/fgdc-std-001-1998.dtd">
+
+<metadata>
+  <idinfo>
+    <citation>
+      <citeinfo>
+        <origin>Cook County Board of Commissioners</origin>
+        <pubdate>201711</pubdate>
+        <title>Cook County 2017 Aerial Imagery Project (Contract No. 1590-14847), Digital Elevation Model "DEM" for Cook County, Illinois, Version 1.0, Published November 2017.</title>
+        <edition>1.0</edition>
+        <geoform>model</geoform>
+        <pubinfo>
+          <pubplace>Chicago, Illinois</pubplace>
+          <publish>Cook County Board of Commissioners</publish>
+        </pubinfo>
+      </citeinfo>
+    </citation>
+    <descript>
+      <abstract>This dataset is a digital, geospatial ArcGIS 10.3 feature class that depicts ground elevation points used for the ortho rectification process. This feature class includes coverage for the following counties: Cook County.
+
+A new ten foot (10') DEM was created in 2017 using autocorrelation techniques. This new DEM replaces entirely the current existing (outdated) DEM.
+
+Autocorrelation is a cost-effective and accurate method for collecting grid points in areas that are generally void of buildings and dense vegetation. This project was well suited for utilizing automated DEM extraction techniques.
+
+Leica Geosystems Automatic Terrain Extraction (ATE) was used to collect grid points directly from a series of stereo-pair images that have been controlled using the Leica XPro aerial triangulation procedure.  In the grid development process, the software determines elevations by measuring x-shifts (x parallax) in the rectified images. It begins with a small scale minification level image and sparse post spacing and increases the post density for each minification level until the 1:1 minification level is reached. The height and accuracy of every elevation post is stored in the DEM file. Additionally, the ATE algorithm will also eliminate, to a certain degree, elevations on "undesired" height objects (buildings, square feet, trees, etc.).
+
+Using the National Standard for Spatial Data Accuracy, the final DEM met or exceeded 0.67056000 meters (2.2 feet) horizontal accuracy at the 95 percent confidence level (Accuracy = RMSEr x 1.7308), and 0.18288000 meters (0.6 feet) vertical accuracy at the 95 percent confidence level in open terrain (Accuracy = RMSEr x 1.9600)
+
+This dataset is projected using the Transverse Mercator map projection. The grid coordinate system used is the Illinois State Plane Coordinate System, East Zone (Zone Number Zone 3776, FIPS 1201), NAD 83 NSRS2007 (horizontal datum), NAVD88 (vertical datum), with ground coordinates expressed in U.S. Survey Feet to 3 decimal places.</abstract>
+      <purpose>This data set was created to serve as part of a standard database for virtually all geospatial applications in Cook County, and is intended to support general location, planning, and cartography projects, as well as general inventory and asset management, Census analysis and mapping, and geocoding by address.</purpose>
+      <supplinf>The National Geodetic Survey (NGS), part of the National Oceanic and Atmospheric Administration (NOAA), provides funding to states through the federal Height Modernization program to improve the quality of elevation data using global positioning satellites (GPS) technology in conjunction with traditional leveling, gravity, and modern remote sensing. Illinois became part of the NGS Height Modernization Program in 2008. The ILHMP project aims to partner with NGS, USGS, and other Illinois state agencies to upgrade the statewide network of survey benchmarks and acquire high-resolution elevation data for Illinois.</supplinf>
+    </descript>
+    <timeperd>
+      <timeinfo>
+        <rngdates>
+          <begdate>20170423</begdate>
+          <begtime>unknown</begtime>
+          <enddate>20170424</enddate>
+          <endtime>unknown</endtime>
+        </rngdates>
+      </timeinfo>
+      <current>ground condition</current>
+    </timeperd>
+    <status>
+      <progress>Complete</progress>
+      <update>Unknown</update>
+    </status>
+    <spdom>
+      <bounding>
+        <westbc>-88.294124</westbc>
+        <eastbc>-87.491292</eastbc>
+        <northbc>42.178117</northbc>
+        <southbc>41.441012</southbc>
+      </bounding>
+    </spdom>
+    <keywords>
+      <theme>
+        <themekt>None</themekt>
+        <themekey>digital elevation model</themekey>
+        <themekey>DEM</themekey>
+        <themekey>bare earth surface</themekey>
+        <themekey>TIN</themekey>
+        <themekey>mass points</themekey>
+        <themekey>model key points</themekey>
+      </theme>
+      <theme>
+        <themekt>None</themekt>
+        <themekey>Light Detection and Ranging</themekey>
+        <themekey>LiDAR</themekey>
+      </theme>
+      <theme>
+        <themekt>Metadata Service Theme Categories</themekt>
+        <themekey>Elevation and derived products</themekey>
+        <themekey>Offline data</themekey>
+      </theme>
+      <place>
+        <placekt>U.S. Department of Commerce, 1987, Codes for the Identification of the States, the District of Columbia and the Outlying Areas of The United States, and Associated Areas (FIPS 5-2): Washington, DC, National Institute of Standards and Technology.</placekt>
+        <placekey>Illinois</placekey>
+      </place>
+      <place>
+        <placekt>Illinois Compiled Statutes, 70 ILCS 1705, State of Illinois, 1994</placekt>
+        <placekey>Cook County</placekey>
+      </place>
+      <place>
+        <placekt>"Geographic Identification Code Scheme (PHC80-R5)." 1980 Census of Population and Housing, Bureau of the Census, U.S. Department of Commerce, April 1983.</placekt>
+        <placekey>Cook County</placekey>
+      </place>
+      <place>
+        <placekt>None</placekt>
+        <placekey>Chicago</placekey>
+      </place>
+      <temporal>
+        <tempkt>none</tempkt>
+        <tempkey>2017</tempkey>
+      </temporal>
+    </keywords>
+    <accconst>Access to this feature dataset is available to county and municipal agencies. Editing privileges are restricted to authorized GIS staff members or its designees.</accconst>
+    <useconst>Under no circumstances may the data be redistributed or made available over a network without explicit permission from the Cook County Bureau of Technology.
+
+It is required that the Cook County Board of Commissioners be cited in any products generated from the data. The following source citation must be included: "Source: Cook County 2017 Aerial Imagery Project (Contract No. 1590-14847), Digital Elevation Model "DEM" for Cook County, Illinois, Version 1.0, Published November 2017."</useconst>
+    <ptcontac>
+      <cntinfo>
+        <cntperp>
+          <cntper>Michael J. Hammer</cntper>
+          <cntorg>Cook County Bureau of Technology</cntorg>
+        </cntperp>
+        <cntpos>GIS Coordinator</cntpos>
+        <cntaddr>
+          <addrtype>mailing and physical address</addrtype>
+          <address>69 W. Washington Street</address>
+          <address>Room 2430</address>
+          <city>Chicago</city>
+          <state>Illinois</state>
+          <postal>60602</postal>
+          <country>USA</country>
+        </cntaddr>
+        <cntvoice>312-603-1766</cntvoice>
+        <cntemail>Michael.Hammer@cookcountyil.gov</cntemail>
+        <hours>09:00 - 17:00, Central Time Zone, Monday - Friday, except holidays</hours>
+        <cntinst>Please contact during normal business hours.</cntinst>
+      </cntinfo>
+    </ptcontac>
+    <datacred>Merrick &amp; Company</datacred>
+    <native>This dataset was originally captured in Binary Data Format and later post-processed using Merrick Airborne Remote Sensing (MARS) version 1.30. The operating system in use was Microsoft Windows Professional 2000 running on Dell workstations.</native>
+  </idinfo>
+  <dataqual>
+    <attracc>
+      <attraccr>Due to repeated inspection, the accuracy of the attributes in this dataset is assessed to be excellent.</attraccr>
+    </attracc>
+    <logic>There is no topological relationship between the points and lines.</logic>
+    <complete>This Digital Elevation Model (DEM) offers complete coverage of Cook County. This DEM depicts ground elevation points used for the orthorectification process.</complete>
+    <posacc>
+      <horizpa>
+        <horizpar>The final DEM met or exceeded 0.67056000 meters (2.2 feet) horizontal accuracy at the 95 percent confidence level (Accuracy = RMSEr x 1.7308)</horizpar>
+        <qhorizpa>
+          <horizpav>0.67056000</horizpav>
+          <horizpae>National Standard for Spatial Data Accuracy</horizpae>
+        </qhorizpa>
+      </horizpa>
+      <vertacc>
+        <vertaccr>The final DEM met or exceeded 0.18288000 meters (0.6 feet) vertical accuracy at the 95 percent confidence level in open terrain (Accuracy = RMSEr x 1.9600)</vertaccr>
+        <qvertpa>
+          <vertaccv>0.18288000</vertaccv>
+          <vertacce>National Standard for Spatial Data Accuracy</vertacce>
+        </qvertpa>
+      </vertacc>
+    </posacc>
+    <lineage>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Merrick &amp; Company</origin>
+            <pubdate>201711</pubdate>
+            <title>Cook_County_DEM_2017</title>
+            <geoform>raster digital data</geoform>
+            <pubinfo>
+              <pubplace>Greenwood Village, Co</pubplace>
+              <publish>Merrick &amp; Company</publish>
+            </pubinfo>
+          </citeinfo>
+        </srccite>
+        <srcscale>1200</srcscale>
+        <typesrc>online</typesrc>
+        <srctime>
+          <timeinfo>
+            <rngdates>
+              <begdate>20170423</begdate>
+              <begtime>unknown</begtime>
+              <enddate>20170424</enddate>
+              <endtime>unknown</endtime>
+            </rngdates>
+          </timeinfo>
+          <srccurr>ground condition</srccurr>
+        </srctime>
+        <srccitea>Cook_County_LIDAR_2017</srccitea>
+        <srccontr>Geographical area of Cook County, Illinois for which LiDAR data was captured and used to update the larger dataset</srccontr>
+      </srcinfo>
+      <procstep>
+        <procdesc>Using MARS Software a ten-foot (10') ground elevation raster is created. This raster is then exported to a 3D ESRI point shape file. The shape files are then imported into the ESRI version 10.3 geodatabase.</procdesc>
+        <srcused>Cook_County_DEM_2017</srcused>
+        <procdate>201711</procdate>
+        <srcprod>Cook_County_DEM_2017</srcprod>
+        <proccont>
+          <cntinfo>
+            <cntperp>
+              <cntper>Doug Jacoby</cntper>
+              <cntorg>Merrick &amp; Company</cntorg>
+            </cntperp>
+            <cntpos>Project Manager</cntpos>
+            <cntaddr>
+              <addrtype>mailing and physical address</addrtype>
+              <address>5970 Greenwood Plaza Blvd</address>
+              <city>Greenwood Village</city>
+              <state>Co</state>
+              <postal>80111</postal>
+              <country>USA</country>
+            </cntaddr>
+            <cntvoice>303-353-3903</cntvoice>
+            <cntemail>doug.jacoby@merrick.com</cntemail>
+            <hours>08:00-17:00, Mountain Standard Time</hours>
+          </cntinfo>
+        </proccont>
+      </procstep>
+    </lineage>
+    <cloud>0</cloud>
+  </dataqual>
+  <spdoinfo>
+    <indspref>northeastern Illinois</indspref>
+    <direct>Vector</direct>
+    <ptvctinf>
+      <sdtsterm>
+        <sdtstype>Point</sdtstype>
+        <ptvctcnt>1</ptvctcnt>
+      </sdtsterm>
+    </ptvctinf>
+  </spdoinfo>
+  <spref>
+    <horizsys>
+      <planar>
+        <mapproj>
+          <mapprojn>NAD_1983_NSRS2007_StatePlane_Illinois_East_FIPS_1201_Ft_US</mapprojn>
+          <transmer>
+            <sfctrmer>0.999975</sfctrmer>
+            <longcm>-88.333333</longcm>
+            <latprjo>36.666667</latprjo>
+            <feast>984250.000000</feast>
+            <fnorth>0.000000</fnorth>
+          </transmer>
+        </mapproj>
+        <planci>
+          <plance>coordinate pair</plance>
+          <coordrep>
+            <absres>0.01</absres>
+            <ordres>0.01</ordres>
+          </coordrep>
+          <plandu>survey feet</plandu>
+        </planci>
+      </planar>
+      <geodetic>
+        <horizdn>North American Datum of 1983 (NSRS2007)</horizdn>
+        <ellips>GEOID99</ellips>
+        <semiaxis>6378137.000000</semiaxis>
+        <denflat>298.257222</denflat>
+      </geodetic>
+    </horizsys>
+    <vertdef>
+      <altsys>
+        <altdatum>North American Vertical Datum of 1988</altdatum>
+        <altres>.001</altres>
+        <altunits>feet</altunits>
+        <altenc>Explicit elevation coordinate included with horizontal coordinates</altenc>
+      </altsys>
+    </vertdef>
+  </spref>
+  <eainfo>
+    <overview>
+      <eaover>This feature dataset contains a 3d point feature class. The point feature class depicts ground elevation points used for the orthorectification process.</eaover>
+      <eadetcit>Cook County 2017 Aerial Imagery Project (Contract No. 1590-14847), Digital Elevation Model "DEM" for Cook County, Illinois, Version 1.0, Published November 2017.</eadetcit>
+    </overview>
+  </eainfo>
+  <distinfo>
+    <distrib>
+      <cntinfo>
+        <cntperp>
+          <cntper>Michael J. Hammer</cntper>
+          <cntorg>Cook County Bureau of Technology</cntorg>
+        </cntperp>
+        <cntpos>GIS Coordinator</cntpos>
+        <cntaddr>
+          <addrtype>mailing and physical address</addrtype>
+          <address>69 W. Washington Street</address>
+          <address>Room 2430</address>
+          <city>Chicago</city>
+          <state>Illinois</state>
+          <postal>60602</postal>
+          <country>USA</country>
+        </cntaddr>
+        <cntvoice>312-603-1776</cntvoice>
+        <cntemail>Michael.Hammer@cookcountyil.gov</cntemail>
+        <hours>09:00 - 17:00, Central Time Zone, Monday - Friday, except holidays</hours>
+        <cntinst>Please contact during normal business hours.</cntinst>
+      </cntinfo>
+    </distrib>
+    <resdesc>Cook County 2017 Aerial Imagery Project (Contract No. 1590-14847), Digital Elevation Model "DEM" for Cook County, Illinois, Version 1.0, Published November 2017.</resdesc>
+    <distliab>Cook County Government Department of Geographic Information Systems GIS Maps/Data Disclaimer:
+
+All Cook County Government (Cook County) geospatial data and maps are copyrighted. By providing you with a copy of Cook County generated maps and geospatial data, via hardcopy, electronic media or online access, you are not entitled to repackage, resell or distribute this information without the written permission of the Cook County Board of Commissioners. While efforts have been made to be as accurate as possible, Cook County provides the data for your personal use "as is". The data is not guaranteed to be accurate, correct, or complete. Information provided should not be used as a substitute for legal, business, tax, or other professional advice. The viewer should contact appropriate regulating agencies to determine accuracy or suitability of the data for a particular use. Cook County, nor its staff, assume no liability whatsoever for any losses that might occur from the use, misuse, or inability to use its geospatial data, metadata, maps or websites. By making this information available, Cook County assumes no obligation to assist the user in interpreting, browsing or using the data, metadata, maps or any application. All material appearing on the web site, any form of electronic transmission and printed hardcopy is provided and transmitted without warranty of any kind and are subject to the terms on this disclaimer.</distliab>
+    <stdorder>
+      <digform>
+        <digtinfo>
+          <formname>ArcGIS</formname>
+          <formvern>10.3</formvern>
+          <formspec>ESRI 3D Point Feature Class</formspec>
+          <formcont>There are five-thousand three-hundred and forty-seven (5347) feature classes within the geodatabase "Cook2017_DEM.gdb."</formcont>
+          <filedec>None</filedec>
+          <transize>1</transize>
+        </digtinfo>
+        <digtopt>
+          <offoptn>
+            <offmedia>DVD-ROM</offmedia>
+            <reccap>
+              <recden>4.7</recden>
+              <recdenu>Gigabytes</recdenu>
+            </reccap>
+            <recfmt>DOS-Copy</recfmt>
+            <compat>Accessible on any computer capable of reading a DVD-ROM.</compat>
+          </offoptn>
+        </digtopt>
+      </digform>
+      <fees>unknown</fees>
+      <turnarnd>Order dependent.</turnarnd>
+    </stdorder>
+    <custom>Call the individual listed as the Contact_Person in the Distribution_Information section of this metadata record to find out how to obtain this data set, the available formats, the available transfer media, compatibility, etc. This person will also be able to provide information about the fees associated with obtaining the data set.</custom>
+    <techpreq>Format compatibility is the user's responsibility.</techpreq>
+    <availabl>
+      <timeinfo>
+        <sngdate>
+          <caldate>201711</caldate>
+          <time>unknown</time>
+        </sngdate>
+      </timeinfo>
+    </availabl>
+  </distinfo>
+  <metainfo>
+    <metd>201711</metd>
+    <metc>
+      <cntinfo>
+        <cntperp>
+          <cntper>Doug Jacoby</cntper>
+          <cntorg>Merrick &amp; Company</cntorg>
+        </cntperp>
+        <cntpos>Project Manager</cntpos>
+        <cntaddr>
+          <addrtype>mailing and physical address</addrtype>
+          <address>5970 Greenwood Plaza Blvd.</address>
+          <city>Greenwood Village</city>
+          <state>CO</state>
+          <postal>80111</postal>
+          <country>USA</country>
+        </cntaddr>
+        <cntvoice>303-353-3903</cntvoice>
+        <cntemail>doug.jacoby@merrick.com</cntemail>
+        <hours>08:00 - 17:00, Mountain Time Zone, Monday-Friday, except holidays</hours>
+        <cntinst>Please contact during normal business hours</cntinst>
+      </cntinfo>
+    </metc>
+    <metstdn>FGDC Content Standards for Digital Geospatial Metadata</metstdn>
+    <metstdv>FGDC-STD-001-1998</metstdv>
+    <mettc>local time</mettc>
+    <metac>None</metac>
+    <metuc>This metadata file is intended to accompany the geospatial data set identified and received from Cook County. It is not to be altered or summarized. Cook County does not support secondary distribution. If this geospatial data set was received from anyone besides the Cook County Bureau of Technology, this metadata file and the geospatial data set it describes may lack integrity.</metuc>
+  </metainfo>
+</metadata>
+

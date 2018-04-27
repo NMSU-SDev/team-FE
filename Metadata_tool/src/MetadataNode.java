@@ -17,7 +17,7 @@ public class MetadataNode<M> extends Object implements MutableTreeNode
 	private String element;
 	private String elementName;
 	private MetadataNode<?> child, parent;
-	MetadataNode<?> sibling;
+	private MetadataNode<?> sibling;
 	private String answer;
 	private String question;
 	private boolean verified;

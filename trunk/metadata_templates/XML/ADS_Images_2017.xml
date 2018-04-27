@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE metadata SYSTEM "http://www.fgdc.gov/metadata/fgdc-std-001-1998.dtd">
+
+<metadata>
+  <idinfo>
+    <citation>
+      <citeinfo>
+        <origin>Cook County Board of Commissioners</origin>
+        <pubdate>201711</pubdate>
+        <title>Cook County 2017 Aerial Imagery Project (Contract 1590-14847), 1:6,350-Scale Tiled 4-band (R, G, B, NIR) "Unprocessed" ADS Images for Cook County, Illinois. Raster Digital Data, Version 1.0. Published November 2017.</title>
+        <edition>1.0</edition>
+        <geoform>raster digital data</geoform>
+        <pubinfo>
+          <pubplace>Chicago, Illinois</pubplace>
+          <publish>Cook County Board of Commissioners</publish>
+        </pubinfo>
+        <onlink>Not yet available online</onlink>
+      </citeinfo>
+    </citation>
+    <descript>
+      <abstract>This digital geospatial file consists of a series of raster digital unprocessed ADS images covering all of Cook County, Illinois.
+
+The images have a pixel resolution of 0.5 feet. The imagery for the "Countywide Flight" was collected between April 23, 2017 and April 24, 2017.
+
+The ADS100 sensor is a push broom sensor with 20 CCD lines with 20,000 pixels each.
+
+This dataset is not projected.
+
+Each tile consists of two files, a TIFF (Tagged Image File Format) (.tif), and an ASCII geo-referencing header file (.tfw). Each tile is approximately 100MB in size resulting in a total of 522GB for the region.</abstract>
+      <purpose>This data set was created to serve as part of a standard database for virtually all geospatial applications in Cook County, and is intended to support general location, planning, and cartography projects, as well as general inventory and asset management, Census analysis and mapping, and geocoding by address. The orthophotos were created as a control and foundation for planimetric and cadastral data sets and to provide a visual baseline for Cook County.</purpose>
+      <supplinf>The "unprocessed" ADS imagery for Cook County, is stored as an image layer in SDE and is displayable in ArcInfo and ArcView. This image layer is a collection of georeferenced images mosaicked into a logically contiguous image and is in an RDBMS table.</supplinf>
+    </descript>
+    <timeperd>
+      <timeinfo>
+        <rngdates>
+          <begdate>20170423</begdate>
+          <begtime>unknown</begtime>
+          <enddate>20170424</enddate>
+          <endtime>unknown</endtime>
+        </rngdates>
+      </timeinfo>
+      <current>ground condition</current>
+    </timeperd>
+    <status>
+      <progress>Complete</progress>
+      <update>Unknown</update>
+    </status>
+    <spdom>
+      <bounding>
+        <westbc>-88.294124</westbc>
+        <eastbc>-87.491292</eastbc>
+        <northbc>42.178117</northbc>
+        <southbc>41.441012</southbc>
+      </bounding>
+    </spdom>
+    <keywords>
+      <theme>
+        <themekt>None</themekt>
+        <themekey>digital photograph</themekey>
+        <themekey>digital image</themekey>
+        <themekey>Unprocessed ADS Imagery</themekey>
+        <themekey>4-band red, green, blue and near-infrared</themekey>
+        <themekey>4-band</themekey>
+        <themekey>four-band</themekey>
+      </theme>
+      <theme>
+        <themekt>Metadata Service Theme Categories</themekt>
+        <themekey>Imagery, base maps, and land cover</themekey>
+        <themekey>Offline data</themekey>
+      </theme>
+      <place>
+        <placekt>U.S. Department of Commerce, 1987, Codes for the Identification of the States, the District of Columbia and the Outlying Areas of The United States, and Associated Areas (FIPS 5-2): Washington, DC, National Institute of Standards and Technology.</placekt>
+        <placekey>Illinois</placekey>
+      </place>
+      <place>
+        <placekt>Illinois Compiled Statutes, 70 ILCS 1705, State of Illinois, 1994</placekt>
+        <placekey>northeastern Illinois</placekey>
+      </place>
+      <place>
+        <placekt>None</placekt>
+        <placekey>Chicago</placekey>
+      </place>
+      <place>
+        <placekt>"Geographic Identification Code Scheme (PHC80-R5)." 1980 Census of Population and Housing, Bureau of the Census, U.S. Department of Commerce, April 1983.</placekt>
+        <placekey>Cook County</placekey>
+      </place>
+      <temporal>
+        <tempkt>none</tempkt>
+        <tempkey>2017</tempkey>
+      </temporal>
+    </keywords>
+    <accconst>Access to this feature dataset is available to county and municipal agencies. Editing privileges are restricted to authorized GIS staff members or its designees.</accconst>
+    <useconst>Under no circumstances may the data be redistributed or made available over a network without explicit permission from the Cook County Bureau of Technology.
+
+It is required that the Cook County Board of Commissioners be cited in any products generated from the data. The following source citation must be included: "Source: Cook County 2017 Aerial Imagery Project (Contract No. 1590-14847), 1:6,350-Scale Tiled 4-band (R, G, B, NIR) "Unprocessed" Digital Mapping Camera Images for Cook County, Illinois. Raster Digital Data, Version 1.0. Published November 2017."</useconst>
+    <ptcontac>
+      <cntinfo>
+        <cntperp>
+          <cntper>Michael J. Hammer</cntper>
+          <cntorg>Cook County Bureau of Technology</cntorg>
+        </cntperp>
+        <cntpos>GIS Coordinator</cntpos>
+        <cntaddr>
+          <addrtype>mailing and physical address</addrtype>
+          <address>69 W. Washington Street</address>
+          <address>Room 2430</address>
+          <city>Chicago</city>
+          <state>Illinois</state>
+          <postal>60602</postal>
+          <country>USA</country>
+        </cntaddr>
+        <cntvoice>312-603-1776</cntvoice>
+        <cntemail>Michael.Hammer@cookcountyil.gov</cntemail>
+        <hours>09:00 - 17:00, Central Time Zone, Monday - Friday, except holidays</hours>
+        <cntinst>Please contact during normal business hours.</cntinst>
+      </cntinfo>
+    </ptcontac>
+    <datacred>ADS100 images were collected by Digital Aerial Solutions, LLC (DAS), Tampa, FL</datacred>
+    <native>GeoTIFF</native>
+  </idinfo>
+  <dataqual>
+    <attracc>
+      <attraccr>Not applicable.</attraccr>
+    </attracc>
+    <logic>Topology rules are not applied.</logic>
+    <complete>Each image was displayed onscreen (by Merrick), both individually and in conjunction with the surrounding mapsheet images to ensure completeness of coverage, edgematching, and tone matching. As part of that check, all panels or photo-id control points were compared to the measured coordinates during the survey to ensure meeting stated accuracy standards.
+
+When available, planimetry was overlaid with the image data to check specifically for correct fit, placement, and completeness of the data prior to the final formatting and delivery. Any discrepancies were noted and appropriate steps taken to correct any errors in placement or fit.</complete>
+    <posacc>
+      <horizpa>
+        <horizpar>Not applicable.</horizpar>
+      </horizpa>
+    </posacc>
+    <lineage>
+      <procstep>
+        <procdesc>All data was acquired using the Leica ADS100 (SH100) digital sensors, serial number 10532 . The maximum acquisition ground sampling distance was approximately 5.91" with the final deliverable pixels being produced at half-foot (0.5) GSD.
+
+The project area was separated into two different production blocks, from North to South (1 and 2).  Block designation was determined by flight plan, area size, and project specifications.  
+
+Every band for the required flight lines is added to the project applying the processed position and orientation data. This creates metadata files and an orientation data file for each band giving the imagery its raw position and orientation.
+
+The aerial triangulation process uses only the Level 1 panchromatic imagery bands PANB14, PANF27, and PANF02 which are created by XPro. The aerial triangulation process is similar to conventional operations, where the Level 1 panchromatic imagery is passed through Automatic Point Measurement, the resulting tie points and ground control is adjusted using XPro software. Blunders are removed, and the block is analyzed for weak network areas, and if required, manual points are added. The final adjustment output consists of orientation data files for each band, calibration parameters and metadata. The imagery is then rectified to the appropriate DEM which removes any relief displacement which may be present.  At this time, the final ortho specifications are applied to the project (GSD, 8-bit, raw tonal adjustments). The resulting ortho-rectified imagery is referred to as "Level 2" in the Leica ADS workflow.</procdesc>
+        <srcused>Not applicable.</srcused>
+        <procdate>201711</procdate>
+        <srcprod>RAW_IMAGES_2017</srcprod>
+        <proccont>
+          <cntinfo>
+            <cntperp>
+              <cntper>Doug Jacoby</cntper>
+              <cntorg>Merrick &amp; Company</cntorg>
+            </cntperp>
+            <cntpos>Project Manager</cntpos>
+            <cntaddr>
+              <addrtype>mailing and physical address</addrtype>
+              <address>5970 Greenwood Plaza Blvd</address>
+              <city>Greenwood Village</city>
+              <state>Co</state>
+              <postal>80111</postal>
+              <country>U.S.A.</country>
+            </cntaddr>
+            <cntvoice>303-353-3903</cntvoice>
+            <cntemail>doug.jacoby@merrick.com</cntemail>
+            <hours>08.00 to 17.00 Mountain Time</hours>
+            <cntinst>Business is conducted Monday through Friday, except on holidays.</cntinst>
+          </cntinfo>
+        </proccont>
+      </procstep>
+    </lineage>
+    <cloud>0</cloud>
+  </dataqual>
+  <spdoinfo>
+    <indspref>Cook County, Illinois.</indspref>
+    <direct>Raster</direct>
+    <rastinfo>
+      <rasttype>Pixel</rasttype>
+      <rowcount>5000</rowcount>
+      <colcount>5000</colcount>
+    </rastinfo>
+  </spdoinfo>
+  <distinfo>
+    <distrib>
+      <cntinfo>
+        <cntperp>
+          <cntper>Michael J. Hammer</cntper>
+          <cntorg>Cook County Bureau of Technology</cntorg>
+        </cntperp>
+        <cntpos>GIS Coordinator</cntpos>
+        <cntaddr>
+          <addrtype>mailing and physical address</addrtype>
+          <address>69 W. Washington Street</address>
+          <address>Room 2430</address>
+          <city>Chicago</city>
+          <state>Illinois</state>
+          <postal>60602</postal>
+          <country>USA</country>
+        </cntaddr>
+        <cntvoice>312-603-1776</cntvoice>
+        <cntemail>Michael.Hammer@cookcountyil.gov</cntemail>
+        <hours>09:00 - 17:00, Central Time Zone, Monday - Friday, except holidays</hours>
+        <cntinst>Please contact during normal business hours.</cntinst>
+      </cntinfo>
+    </distrib>
+    <resdesc>Cook County 2017 Aerial Imagery Project (Contract No. 1590-14847 ), 1:6,350-Scale Tiled 4-band (R, G, B, NIR) "Unprocessed" Digital Mapping Camera Images for Cook County, Illinois. Raster Digital Data, Version 1.0. Published November 2017.</resdesc>
+    <distliab>Cook County Government Department of Geographic Information Systems GIS Maps/Data Disclaimer:
+
+All Cook County Government (Cook County) geospatial data and maps are copyrighted. By providing you with a copy of Cook County generated maps and geospatial data, via hardcopy, electronic media or online access, you are not entitled to repackage, resell or distribute this information without the written permission of the Cook County Board of Commissioners. While efforts have been made to be as accurate as possible, Cook County provides the data for your personal use "as is". The data is not guaranteed to be accurate, correct, or complete. Information provided should not be used as a substitute for legal, business, tax, or other professional advice. The viewer should contact appropriate regulating agencies to determine accuracy or suitability of the data for a particular use. Cook County, nor its staff, assume no liability whatsoever for any losses that might occur from the use, misuse, or inability to use its geospatial data, metadata, maps or websites. By making this information available, Cook County assumes no obligation to assist the user in interpreting, browsing or using the data, metadata, maps or any application. All material appearing on the web site, any form of electronic transmission and printed hardcopy is provided and transmitted without warranty of any kind and are subject to the terms on this disclaimer.</distliab>
+    <stdorder>
+      <digform>
+        <digtinfo>
+          <formname>GeoTIFF</formname>
+          <formvern>1.0</formvern>
+          <formspec>GeoTIFF file</formspec>
+          <formcont>Up to 100 megabytes for each tile.</formcont>
+          <filedec>no compression applied</filedec>
+          <transize>522000</transize>
+        </digtinfo>
+        <digtopt>
+          <offoptn>
+            <offmedia>DVD-ROM</offmedia>
+            <reccap>
+              <recden>4.7</recden>
+              <recdenu>Gigabytes</recdenu>
+            </reccap>
+            <recfmt>DOS-Copy</recfmt>
+            <compat>Accessible on any computer capable of reading a DVD-ROM</compat>
+          </offoptn>
+        </digtopt>
+      </digform>
+      <fees>unknown</fees>
+      <turnarnd>Order dependent.</turnarnd>
+    </stdorder>
+    <custom>Call the individual listed as the Contact_Person in the Distribution_Information section of this metadata record to find out how to obtain this data set, the available formats, the available transfer media, compatibility, etc. This person will also be able to provide information about the fees associated with obtaining the data set.</custom>
+    <techpreq>Format compatibility is the user's responsibility.</techpreq>
+    <availabl>
+      <timeinfo>
+        <rngdates>
+          <begdate>201711</begdate>
+          <enddate>unknown</enddate>
+        </rngdates>
+      </timeinfo>
+    </availabl>
+  </distinfo>
+  <metainfo>
+    <metd>201711</metd>
+    <metc>
+      <cntinfo>
+        <cntperp>
+          <cntper>Doug Jacoby</cntper>
+          <cntorg>Merrick &amp; Company</cntorg>
+        </cntperp>
+        <cntpos>Project Manager</cntpos>
+        <cntaddr>
+          <addrtype>mailing and physical address</addrtype>
+          <address>5970 Greenwood Plaza Blvd.</address>
+          <city>Greenwood Village</city>
+          <state>Co</state>
+          <postal>80111</postal>
+          <country>USA</country>
+        </cntaddr>
+        <cntvoice>303-353-3903</cntvoice>
+        <cntemail>doug.jacoby@merrick.com</cntemail>
+        <hours>09:00 - 17:00, Central Time Zone, Monday-Friday, except holidays</hours>
+        <cntinst>Please contact during normal business hours</cntinst>
+      </cntinfo>
+    </metc>
+    <metstdn>FGDC Content Standards for Digital Geospatial Metadata</metstdn>
+    <metstdv>FGDC-STD-001-1998</metstdv>
+    <mettc>local time</mettc>
+    <metac>None</metac>
+    <metuc>This metadata file is intended to accompany the geospatial data set identified and received from Cook County. It is not to be altered or summarized. Cook County does not support secondary distribution. If this geospatial data set was received from anyone besides the Cook County Bureau of Technology, this metadata file and the geospatial data set it describes may lack integrity.</metuc>
+  </metainfo>
+</metadata>
+

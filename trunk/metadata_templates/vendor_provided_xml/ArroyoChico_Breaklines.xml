@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE metadata SYSTEM "http://thor-f5.er.usgs.gov/ngtoc/metadata/fgdc-std-001-1998.dtd">
+
+<metadata>
+  <idinfo>
+    <citation>
+      <!-- Citation - information to be used to reference the data set. Type: compound. -->
+      <citeinfo>
+        <!-- Citation Information - the recommended reference to be used for the data set. -->
+        <origin>Merrick-Surdex Joint Venture, LLP</origin>
+        <!-- Originator - the name of an organization or individual that developed the data set. Type: text. Domain: "Unknown" free text. -->
+        <pubdate>20180219</pubdate>
+        <!-- Publication Date - the date when the data set is published or otherwise made available for release. Type: date Domain: "Unknown" "Unpublished material" free date. -->
+        <title>Hydro Breaklines</title>
+        <!-- Title - the name by which the data set is known. Type: text. Domain: free text. -->
+        <geoform>vector digital data</geoform>
+        <!-- Geospatial Data Presentation Form. Type: text. Domain: "vector data" free text. -->
+      </citeinfo>
+    </citation>
+    <descript>
+      <!-- Description - a characterization of the data set, including its intended use and limitations. Type: compound. -->
+      <abstract>Hydro-flattened breaklines were compiled and followed the Quality Level Two (QL2) standards as outlined in the USGS-NGP Lidar Base Specifications, Techniques and Methods 11-B4, Version 1.2, November 2014 (TM11-B4). Rivers greater than 100 feet wide and waterbodies larger than 2 square acres.</abstract>
+      <!-- Abstract - a brief narrative descriptive summary of the data set. Type: text. Domain: free text. -->
+      <purpose>The New Mexico USDA-NRCS requires a high-resolution data set of lidar for four (4) distinct Areas of Interest (AOIs) totaling approximately 9,697 square miles located in New Mexico. The four AOIs are identified as Middle Rio Grande East (3,092 square miles), NM Upper Pecos (4,205 square miles), Arroyo Chico (1,207 square miules), and Rio Salado (1,193 square miles). This project will support the 3DEP mission and the Natural Resources Conservation Service (NRCS).</purpose>
+      <!-- Purpose - a summary of the intentions with which the data set was developed. Type: text. Domain: free text. -->
+      <supplinf>
+        <!-- -->
+        Breakline File Type = GDB
+       Breakline Elevation Units = Meters
+       Downhill Treatment Applied = Monotonic
+       Type of Hydro Treatment Required = Hydro-flattened
+      </supplinf>
+    </descript>
+    <timeperd>
+      <!-- Time Period of Content. Type: compound. -->
+      <timeinfo>
+        <!-- Time Period Information - information about the date and time of an event. Type: compound. -->
+        <rngdates>
+          <!-- Range of Dates/Times. Type: compound. -->
+          <begdate>20171217</begdate>
+          <!-- Beginning Date - the first year (and optionally month, or month and day) of the collection. Type: date. Domain: "Unknown" free date. -->
+          <enddate>20171222</enddate>
+          <!-- Ending Date - the last year (and optionally month, or month and day) for the collection. Type: date. Domain: "Unknown" free date. -->
+        </rngdates>
+      </timeinfo>
+      <current>ground condition</current>
+      <!-- Currentness Reference. Type: text. Domain: "ground condition"  free text. -->
+    </timeperd>
+    <status>
+      <!-- Status - the state of the maintenance information for the data set. Type: compound. -->
+      <progress>Complete</progress>
+      <!-- Progress - the state of the data set. Type: compound. Domain: "Complete" "In Work" "Planned" -->
+      <update>Unknown</update>
+      <!-- Maintenance and Update Frequency - the frequency with which changes and additions are made to the data set after the initial data set is completed. Type: text. Domain:  "Unknown" "As needed" "None planned" free text. -->
+    </status>
+    <spdom>
+      <!-- Spatial Domain - the geographic areal domain of the data set. Type: compound. -->
+      <bounding>
+        <!-- Bounding Coordinates - the limits of coverage of a data set expressed by latitude and longitude values in the order western-most, eastern-most, northern-most, and southern-most. Type: compound. -->
+        <westbc>-107.591857</westbc>
+        <!-- West Bounding Coordinate - western-most coordinate of the limit of coverage expressed in longitude. Type: real. Domain: -180.0 <= West Bounding Coordinate < 180.0 -->
+        <eastbc>-107.557941</eastbc>
+        <!-- East Bounding Coordinate - eastern-most coordinate of the limit of coverage expressed in longitude. Type: real. Domain: -180.0 <= East Bounding Coordinate <= 180.0 -->
+        <northbc>35.531511</northbc>
+        <!-- North Bounding Coordinate - northern-most coordinate of the limit of coverage expressed in latitude. Type:real. Domain: -90.0 <= North Bounding Coordinate <= 90.0 -->
+        <southbc>35.503782</southbc>
+        <!-- South Bounding Coordinate - southern-most coordinate of the limit of coverage expressed in latitude. Type: real. Domain: -90.0 <= South Bounding Coordinate <= 90.0 -->
+      </bounding>
+      <lbounding>
+        <leftbc>265000</leftbc>
+        <!-- Left (western-most) Bounding Coordinate for coverage of the dataset expressed in the Coordinate Reference System in which the data are delivered. -->
+        <rightbc>268000</rightbc>
+        <!-- Right (eastern-most) Bounding Coordinate for coverage of the dataset expressed in the Coordinate Reference System in which the data are delivered. -->
+        <topbc>3935000</topbc>
+        <!-- Top (northern-most) Bounding Coordinate for coverage of the dataset expressed in the Coordinate Reference System in which the data are delivered. -->
+        <bottombc>39320000</bottombc>
+        <!-- Bottom (southern-most) Bounding Coordinate for coverage of the dataset expressed in the Coordinate Reference System in which the data are delivered. -->
+      </lbounding>
+    </spdom>
+    <keywords>
+      <theme>
+        <!-- Theme - subjects covered by the data set. Type: compound. -->
+        <themekt>None</themekt>
+        <!-- Theme Keyword Thesaurus. Type: text. Domain: "None" free text. -->
+        <themekey>Breaklines</themekey>
+        <themekey>Elevation Data</themekey>
+        <themekey>Lidar</themekey>
+        <!-- Theme Keyword - common-use word or phrase used to describe the subject of the data set. Type: text. Domain: free text. -->
+      </theme>
+      <place>
+        <!-- Place - geographic locations characterized by the data set. Type: compound. -->
+        <placekt>None</placekt>
+        <!-- Place Keyword Thesaurus. Type: text. Domain: "None" free text. -->
+        <placekey>New Mexico</placekey>
+        <placekey>Arroyo Chico</placekey>
+        <!-- Place Keyword - the geographic name of a location(s) covered by a data set. Type: text. Domain: free text. -->
+      </place>
+    </keywords>
+    <accconst>No restrictions apply to these data.</accconst>
+    <useconst>None. However, users should be aware that temporal changes may have occurred since this dataset was collected and that some parts of these data may no longer represent actual surface conditions. Users should not use these data for critical applications without a full awareness of its limitations. Acknowledgement of the U.S. Geological Survey would be appreciated for products derived from these data.</useconst>
+  </idinfo>
+  <dataqual>
+    <logic>Data covers the entire area specified for this project. Hydro breaklines were collected in all inland ponds and lakes ~2 acres or greater. These features were flat and level water bodies at a single elevation for each vertex along the bank. The entire water surface edge is at or below the immediate surrounding terrain. Breaklines were collected for all streams and rivers ~100' nominal width or wider. These features are flat and level bank to bank, gradient will follow the surrounding terrain and the water surface will be at or below the surrounding terrain. Streams/river channels will break at culvert locations however not at elevated bridge locations. Depending on the situation some under bridge breaklines might be necessary so that water flows underneath these bridge locations.</logic>
+    <complete>The dataset was reviewed to ensure completeness and accuracy.</complete>
+    <lineage>
+      <procstep>
+        <!-- Process Step - information about a single processing step. Type: compound. -->
+        <procdesc>Using MARS software hydro-flattened breaklines (rivers greater than 100 feet wide and waterbodies greater than two square acres) were compiled. Some bridges could potentially need breaklines placed under them so that water will flow properly. Using intensity values and 3d elevations generates ESRI shape files which are then imported into an ESRI gdb for a project-wide delivery. Monotonicity checks where validated (water flowing downstream).</procdesc>
+        <!-- Process Description - an explanation of the the processing step and parameters used. Include Flight, Imagery development, Analysis. Type: text. Domain: free text-->
+        <procdate>20180219</procdate>
+        <!-- Process Date - the date when the processing step was completed. The field MUST be formatted YYYYMMDD. Type: text. Domain: "Unknown" "Not complete" free date. -->
+      </procstep>
+    </lineage>
+  </dataqual>
+  <spdoinfo>
+    <direct>Vector</direct>
+  </spdoinfo>
+  <spref>
+    <horizsys>
+      <planar>
+        <gridsys>
+          <gridsysn>Universal Transverse Mercator</gridsysn>
+          <utm>
+            <utmzone>13</utmzone>
+            <transmer>
+              <sfctrmer>0.9996</sfctrmer>
+              <longcm>-105.000000</longcm>
+              <latprjo>0.000000</latprjo>
+              <feast>500000</feast>
+              <fnorth>0</fnorth>
+            </transmer>
+          </utm>
+        </gridsys>
+        <planci>
+          <plance>coordinate pair</plance>
+          <coordrep>
+            <absres>0.001</absres>
+            <ordres>0.001</ordres>
+          </coordrep>
+          <plandu>meters</plandu>
+        </planci>
+      </planar>
+      <geodetic>
+        <horizdn>D_NAD_1983_2011</horizdn>
+        <ellips>Geodetic Reference System 80</ellips>
+        <semiaxis>6378137.000000</semiaxis>
+        <denflat>298.257222</denflat>
+      </geodetic>
+    </horizsys>
+    <vertdef>
+      <altsys>
+        <altdatum>North American Vertical Datum of 1988 Geoid12B</altdatum>
+        <altres>0.001</altres>
+        <altunits>meters</altunits>
+        <altenc>Explicit elevation coordinate included with horizontal coordinates</altenc>
+      </altsys>
+    </vertdef>
+  </spref>
+  <metainfo>
+    <metd>20180219</metd>
+    <metc>
+      <!-- Metadata Contact - the party responsible for the metadata information. Type: compound. -->
+      <cntinfo>
+        <!-- Contact Information - Identity of, and means to communicate with, person(s) and organization(s) associated with the data set.Type: compound. -->
+        <cntorgp>
+          <!-- Contact Organization Primary - the organization, and the member of the organization, associated with the data set. Type: compound. -->
+          <cntorg>Merrick-Surdex Joint Venture, LLP</cntorg>
+          <!-- Contact Organization - the name of the organization. Type: text. Domain: free text. -->
+        </cntorgp>
+        <cntaddr>
+          <!-- Contact Address - the address for the organization or individual. Type: compound. -->
+          <addrtype>mailing and physical address</addrtype>
+          <!-- Address Type. Type: text. Domain: "mailing" "physical" "mailing and physical", free text. -->
+          <address>5970 Greenwood Plaza Blvd</address>
+          <!-- Address - an address line for the address. Type: text. Domain: free text. -->
+          <city>Greenwood Village</city>
+          <!-- City - the city of the address. Type: text. Domain: free text. -->
+          <state>CO</state>
+          <!-- State or Province - the state or province of the address. Type: text. Domain: free text. -->
+          <postal>80111</postal>
+          <!-- Postal Code - the ZIP or other postal code of the address. Type: text. Domain: free text. -->
+          <country>USA</country>
+          <!-- Country - the country of the address. Type: text. Domain: free text. -->
+        </cntaddr>
+        <cntvoice>303-353-3903</cntvoice>
+        <!-- Contact Voice Telephone - the telephone number by which individuals can speak to the organization or individual. Type: text. Domain: free text. -->
+      </cntinfo>
+    </metc>
+    <metstdn>FGDC Content Standards for Digital Geospatial Metadata</metstdn>
+    <metstdv>FGDC-STD-001-1998</metstdv>
+  </metainfo>
+</metadata>
+

@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE metadata SYSTEM "http://thor-f5.er.usgs.gov/ngtoc/metadata/fgdc-std-001-1998.dtd">
+
+<metadata>
+  <idinfo>
+    <citation>
+      <citeinfo>
+        <!-- Citation Information - the recommended reference to be used for the data set. -->
+        <origin>Merrick-Surdex Joint Venture, LLP</origin>
+        <!-- Originator - the name of an organization or individual that developed the data set. Type: text. Domain: "Unknown" free text. -->
+        <pubdate>20180219</pubdate>
+        <!-- Publication Date - the date when the data set is published or otherwise made available for release. Type: date. Domain: "Unknown" "Unpublished material" free date-->
+        <title>Classified LAS 1.4 QL2</title>
+        <!-- Title - the name by which the data set is known. Type: text. Domain: free text. -->
+        <geoform>las data</geoform>
+        <!-- Geospatial Data Presentation Form. Type: text. Domain: "Lidar point cloud" free text. -->
+      </citeinfo>
+    </citation>
+    <descript>
+      <abstract>LIDAR-derived binary (.las) files containing classified points of all returns. We have seven (7) classifications Unclassified, Ground, Low Noise, Water, Ignore Ground, Bridge Decks and High Noise. The files are delivered in section formatted tiles. These files adhere to the National Enhanced Elevation Assessment (NEEA) Quality Level 2 standards, two points or greater per square meter. These files are delivered in tile format (1500x1500m).</abstract>
+      <purpose>The New Mexico USDA-NRCS requires a high-resolution data set of lidar for four (4) distinct Areas of Interest (AOIs) totaling approximately 9,697 square miles located in New Mexico. The four AOIs are identified as Middle Rio Grande East (3,092 square miles), NM Upper Pecos (4,205 square miles), Arroyo Chico (1,207 square miules), and Rio Salado (1,193 square miles). This project will support the 3DEP mission and the Natural Resources Conservation Service (NRCS).</purpose>
+      <supplinf>USGS Task Order NM_NRCS_Central_2017_D18 (USGS Task Order Number 140G0218F0026)</supplinf>
+      <lidar>
+        <ldrinfo>
+          <!-- Lidar Information - contains metadata about the sensor and collection conditions. When multiple instruments are used (e.g. two different instruments in a single plane), please use multiple <ldrinfo> tags to describe each individual instrument. If only one instrument was used, please delete this section. -->
+          <ldrspec>USGS-NGP Base Lidar Specification v1.2</ldrspec>
+          <!-- Lidar Base Specification applicable to the point cloud. -->
+          <ldrsens>Optech Galaxy Airborne Laser Terrain Mappers (ALTM) 12SEN314, SN5060380, and SN5060382</ldrsens>
+          <!-- Lidar Sensor make and model. -->
+          <ldrmaxnr>8</ldrmaxnr>
+          <!-- Lidar Maximum Number of Returns per pulse. -->
+          <ldrnps>0.71</ldrnps>
+          <!-- Lidar Nominal Pulse Spacing, in meters. -->
+          <ldrdens>2</ldrdens>
+          <!-- Lidar Nominal Pulse Density, in points per square meter. -->
+          <ldranps>0.71</ldranps>
+          <!-- Lidar Aggregate Nominal Pulse Spacing, in meters. -->
+          <ldradens>2</ldradens>
+          <!-- Lidar Aggregate Nominal Pulse Density, in points per square meter. -->
+          <ldrfltht>1900</ldrfltht>
+          <!-- Lidar Flight Height for the collection, in meters. -->
+          <ldrfltsp>170</ldrfltsp>
+          <!-- Lidar Nominal Flight Speed for the collection, in knots. -->
+          <ldrscana>40</ldrscana>
+          <!-- Lidar Sensor Scan Angle, total, in degrees. -->
+          <ldrscanr>64</ldrscanr>
+          <!-- Lidar Scan Frequency of the scanner, in hertz. -->
+          <ldrpulsr>300</ldrpulsr>
+          <!-- Lidar Pulse Rate of the scanner, in kilohertz. -->
+          <ldrpulsd>3.5</ldrpulsd>
+          <!-- Lidar Pulse Duration of the scanner, in nanoseconds. -->
+          <ldrpulsw>1.05</ldrpulsw>
+          <!-- Lidar Pulse Width of the scanner, in meters. -->
+          <ldrwavel>1064</ldrwavel>
+          <!-- Lidar Central Wavelength of the sensor laser, in nanometers. -->
+          <ldrmpia>1</ldrmpia>
+          <!-- Lidar Multiple Pulses In Air, 0 = No; 1 = Yes -->
+          <ldrbmdiv>0.25</ldrbmdiv>
+          <!-- Lidar Beam Divergence, in Milliradians. -->
+          <ldrswatw>1419</ldrswatw>
+          <!-- Lidar Swath Width on the ground, in meters. -->
+          <ldrswato>20</ldrswato>
+          <!-- Lidar Nominal Swath Overlap, as a percentage. -->
+          <ldrgeoid>National Geodetic Survey (NGS) Geoid12B</ldrgeoid>
+          <!-- Geoid used for vertical reference. -->
+        </ldrinfo>
+        <ldraccur>
+          <!-- Lidar Accuracy. Non-vegetated vertical accuracy values for the swath. ALL VALUES ARE REPORTED IN METERS. -->
+          <ldrchacc>0.2</ldrchacc>
+          <!-- Lidar Calculated Horizontal Accuracy of the point cloud data. -->
+          <rawnva>0.084</rawnva>
+          <!-- Raw Nonvegetated Vertical Accuracy of the raw point cloud data. -->
+          <rawnvan>26</rawnvan>
+          <!-- Raw Nonvegetated Vertical Accuracy Number of checkpoints used to calculate the reported nonvegetated vertical accuracy of the raw point cloud data. -->
+          <clsnva>0.091</clsnva>
+          <!-- Classified Non-vegetated Vertical Accuracy. The calculated nonvegetated vertical accuracy of the classified point cloud data (required if available). Type: decimal number. -->
+          <clsnvan>26</clsnvan>
+          <!-- Classified Non-vegetated Vertical Accuracy Number of checkpoints. The number of check points used to calculate the reported nonvegetated vertical accuracy of the classified point cloud data. Type: real number. -->
+          <clsvva>0.094</clsvva>
+          <!-- Classified Vegetated Vertical Accuracy. The calculated vegetated vertical accuracy of the classified point cloud data (required if available). Type: decimal number. -->
+          <clsvvan>19</clsvvan>
+          <!-- Classified Vegetated Vertical Accuracy Number of checkpoints. The number of check points used to calculate the vegetated vertical accuracy of the classified point cloud data. Type: real number. -->
+        </ldraccur>
+        <lasinfo>
+          <!-- LAS Information. Type: compound. -->
+          <lasver>1.4</lasver>
+          <!-- LAS Version -->
+          <lasprf>6</lasprf>
+          <!-- LAS Point Record Format. -->
+          <laswheld>Withheld (ignore) points were identified in these files using the standard LAS withheld bit.</laswheld>
+          <!-- Describe how withheld points are identified. -->
+          <lasolap>Swath "overage" points were identified in these files using the standard LAS overlap bit.</lasolap>
+          <!-- Describe how overage points are identified. -->
+          <lasintr>12</lasintr>
+          <!-- Specify the native radiometric resolution of intensity values, in Bits. -->
+          <lasclass>
+            <!-- LAS Classification. Type: compound. -->
+            <clascode>1</clascode>
+            <!-- Classification Code -->
+            <clasitem>Unclassified</clasitem>
+            <!-- Classification Item -->
+          </lasclass>
+          <lasclass>
+            <!-- LAS Classification. Type: compound. -->
+            <clascode>2</clascode>
+            <!-- Classification Code -->
+            <clasitem>Ground</clasitem>
+            <!-- Classification Item -->
+          </lasclass>
+          <lasclass>
+            <!-- LAS Classification. Type: compound. -->
+            <clascode>7</clascode>
+            <!-- Classification Code -->
+            <clasitem>Low Noise</clasitem>
+            <!-- Classification Item -->
+          </lasclass>
+          <lasclass>
+            <!-- LAS Classification. Type: compound. -->
+            <clascode>9</clascode>
+            <!-- Classification Code -->
+            <clasitem>Water</clasitem>
+            <!-- Classification Item -->
+          </lasclass>
+          <lasclass>
+            <!-- LAS Classification. Type: compound. -->
+            <clascode>10</clascode>
+            <!-- Classification Code -->
+            <clasitem>Ignore Breakline</clasitem>
+            <!-- Classification Item -->
+          </lasclass>
+          <lasclass>
+            <!-- LAS Classification. Type: compound. -->
+            <clascode>17</clascode>
+            <!-- Classification Code -->
+            <clasitem>Bridge</clasitem>
+            <!-- Classification Item -->
+          </lasclass>
+          <lasclass>
+            <!-- LAS Classification. Type: compound. -->
+            <clascode>18</clascode>
+            <!-- Classification Code -->
+            <clasitem>High Noise</clasitem>
+            <!-- Classification Item -->
+          </lasclass>
+        </lasinfo>
+      </lidar>
+    </descript>
+    <timeperd>
+      <timeinfo>
+        <!-- -->
+        <rngdates>
+          <begdate>20171217</begdate>
+          <enddate>20171222</enddate>
+        </rngdates>
+      </timeinfo>
+      <current>ground condition</current>
+    </timeperd>
+    <status>
+      <progress>Complete</progress>
+      <update>Unknown</update>
+    </status>
+    <spdom>
+      <bounding>
+        <westbc>-107.591857</westbc>
+        <eastbc>-107.557941</eastbc>
+        <northbc>35.531511</northbc>
+        <southbc>35.503782</southbc>
+      </bounding>
+      <lbounding>
+        <leftbc>265000</leftbc>
+        <rightbc>268000</rightbc>
+        <topbc>3935000</topbc>
+        <bottombc>39320000</bottombc>
+      </lbounding>
+    </spdom>
+    <keywords>
+      <theme>
+        <!-- Theme - subjects covered by the data set. Type: compound. -->
+        <themekt>None</themekt>
+        <!-- Theme Keyword Thesaurus. Type: text. Domain: "None" free text. -->
+        <themekey>Breaklines</themekey>
+        <themekey>Elevation Data</themekey>
+        <themekey>Lidar</themekey>
+        <!-- Theme Keyword - common-use word or phrase used to describe the subject of the data set. Type: text. Domain: free text. -->
+      </theme>
+      <place>
+        <!-- Place - geographic locations characterized by the data set. Type: compound. -->
+        <placekt>None</placekt>
+        <!-- Place Keyword Thesaurus. Type: text. Domain: "None" free text. -->
+        <placekey>New Mexico</placekey>
+        <placekey>Arroyo Chico</placekey>
+        <!-- Place Keyword - the geographic name of a location(s) covered by a data set. Type: text. Domain: free text. -->
+      </place>
+    </keywords>
+    <accconst>No restrictions apply to these data.</accconst>
+    <useconst>None. However, users should be aware that temporal changes may have occurred since this dataset was collected and that some parts of these data may no longer represent actual surface conditions. Users should not use these data for critical applications without a full awareness of its limitations. Acknowledgement of the U.S. Geological Survey would be appreciated for products derived from these data.</useconst>
+  </idinfo>
+  <dataqual>
+    <logic>Data covers the entire area specified for this project.</logic>
+    <complete>These LAS data files include all data points collected. No points have been removed or excluded. A visual qualitative assessment was performed to ensure data completeness. No void areas or missing data exist. The raw point cloud is of good quality and data passes Non-Vegetated Vertical Accuracy specifications.</complete>
+    <lineage>
+      <procstep>
+        <!-- Process Step - information about a single processing step. Type: compound.  Process Description - an explanation of the the processing step and parameters used. Include Flight, Imagery development, Analysis. Type: text. Domain: free text Process Date - the date when the processing step was completed. Date must be formatted YYYYMMDD. Type: text. Domain: "Unknown" "Not complete" free date. -->
+        <procdesc>Lidar data was collected using Optech Galaxy sensor.  The raw data was verified in MARS software for complete coverage of the project area, and boresighted to align the flightlines.  Raw data files were parsed into manageable client-specific tiles.  These tiles were then processed through automated filtering that separates the data into different classification groups: unclassified points, ground points, low noise, water, ignored ground, bridge decks and high noise.  The data was next taken into MARS to reclassify the erroneous points that may remain in the lidar point cloud after auto filter. Two points per square meter (QL2).</procdesc>
+        <procdate>20180219</procdate>
+      </procstep>
+    </lineage>
+  </dataqual>
+  <spdoinfo>
+    <direct>Point</direct>
+  </spdoinfo>
+  <spref>
+    <horizsys>
+      <planar>
+        <gridsys>
+          <gridsysn>Universal Transverse Mercator</gridsysn>
+          <utm>
+            <utmzone>13</utmzone>
+            <transmer>
+              <sfctrmer>0.9996</sfctrmer>
+              <longcm>-105.000000</longcm>
+              <latprjo>0.000000</latprjo>
+              <feast>500000</feast>
+              <fnorth>0</fnorth>
+            </transmer>
+          </utm>
+        </gridsys>
+        <planci>
+          <plance>coordinate pair</plance>
+          <coordrep>
+            <absres>0.001</absres>
+            <ordres>0.001</ordres>
+          </coordrep>
+          <plandu>meters</plandu>
+        </planci>
+      </planar>
+      <geodetic>
+        <horizdn>D_NAD_1983_2011</horizdn>
+        <ellips>Geodetic Reference System 80</ellips>
+        <semiaxis>6378137.000000</semiaxis>
+        <denflat>298.257222</denflat>
+      </geodetic>
+    </horizsys>
+    <vertdef>
+      <altsys>
+        <altdatum>North American Vertical Datum of 1988 Geoid12B</altdatum>
+        <altres>0.001</altres>
+        <altunits>meters</altunits>
+        <altenc>Explicit elevation coordinate included with horizontal coordinates</altenc>
+      </altsys>
+    </vertdef>
+  </spref>
+  <metainfo>
+    <metd>20180219</metd>
+    <metc>
+      <cntinfo>
+        <!-- Contact Information - Identity of, and means to communicate with, person(s) and organization(s) associated with the data set.Type: compound. -->
+        <cntorgp>
+          <!-- Contact Organization Primary - the organization, and the member of the organization, associated with the data set. Type: compound. -->
+          <cntorg>Merrick-Surdex Joint Venture, LLP</cntorg>
+          <!-- Contact Organization - the name of the organization. Type: text. Domain: free text. -->
+        </cntorgp>
+        <cntaddr>
+          <!-- Contact Address - the address for the organization or individual. Type: compound. -->
+          <addrtype>mailing and physical address</addrtype>
+          <!-- Address Type. Type: text. Domain: "mailing" "physical" "mailing and physical", free text. -->
+          <address>5970 Greenwood Plaza Blvd</address>
+          <!-- Address - an address line for the address. Type: text. Domain: free text. -->
+          <city>Greenwood Village</city>
+          <!-- City - the city of the address. Type: text. Domain: free text. -->
+          <state>CO</state>
+          <!-- State or Province - the state or province of the address. Type: text. Domain: free text. -->
+          <postal>80111</postal>
+          <!-- Postal Code - the ZIP or other postal code of the address. Type: text. Domain: free text. -->
+          <country>USA</country>
+          <!-- Country - the country of the address. Type: text. Domain: free text. -->
+        </cntaddr>
+        <cntvoice>303-353-3903</cntvoice>
+        <!-- Contact Voice Telephone - the telephone number by which individuals can speak to the organization or individual. Type: text. Domain: free text. -->
+      </cntinfo>
+    </metc>
+    <metstdn>FGDC Content Standards for Digital Geospatial Metadata</metstdn>
+    <metstdv>FGDC-STD-001-1998</metstdv>
+  </metainfo>
+</metadata>
+

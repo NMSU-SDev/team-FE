@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE metadata SYSTEM "http://www.fgdc.gov/metadata/fgdc-std-001-1998.dtd">
+
+<metadata>
+  <idinfo>
+    <citation>
+      <citeinfo>
+        <origin>Cook County Board of Commissioners</origin>
+        <pubdate>201711</pubdate>
+        <title>Cook County 2017 Aerial Imagery Project (Contract 1590-14847),  "Flight_Lines" for Cook County, Illinois. Vector Digital Data, Version 1.0. Published November 2017.</title>
+        <edition>1.0</edition>
+        <geoform>vector digital data</geoform>
+        <pubinfo>
+          <pubplace>Chicago, Illinois</pubplace>
+          <publish>Cook County Board of Commissioners</publish>
+        </pubinfo>
+      </citeinfo>
+    </citation>
+    <descript>
+      <abstract>This file is a digital geospatial Environmental Systems Research Institute (Esri) ArcGIS Version 10.3 polyline feature class that identifies flight lines for the digital aerial mission that was conducted for Cook County, Illinois, between April 23, 2017 and April 24, 2017        .
+
+The flight line map represents post-flight information, and was prepared in advance of the mission. There are a total of 49 flight lines running in a north to south direction and provide for coverage of Cook County. Flight lines generally travel parallel to one another.
+
+This dataset is projected using the Transverse Mercator map projection. The grid coordinate system used is the Illinois State Plane Coordinate System, East Zone (Zone Number Zone 3776, FIPS 1201), NAD 83 NSRS2007 (horizontal datum), with ground coordinates expressed in U.S. Survey Feet.</abstract>
+      <purpose>The flight line map served to ensure that certain flight line tolerances were satisfied. It was prepared prior to the digital aerial mission and delivered to Cook County for verification of proper project coverage.
+
+In addition, this data set was created to serve as part of a standard database for virtually all geospatial applications in Cook County, and is intended to support general location, planning, and cartography projects, as well as general inventory and asset management, Census analysis and mapping, and geocoding by address.</purpose>
+    </descript>
+    <timeperd>
+      <timeinfo>
+        <rngdates>
+          <begdate>20170423</begdate>
+          <begtime>unknown</begtime>
+          <enddate>20170424</enddate>
+          <endtime>unknown</endtime>
+        </rngdates>
+      </timeinfo>
+      <current>publication date</current>
+    </timeperd>
+    <status>
+      <progress>Complete</progress>
+      <update>Unknown</update>
+    </status>
+    <spdom>
+      <bounding>
+        <westbc>-88.294124</westbc>
+        <eastbc>-87.491292</eastbc>
+        <northbc>42.178117</northbc>
+        <southbc>41.441012</southbc>
+      </bounding>
+    </spdom>
+    <keywords>
+      <theme>
+        <themekt>None</themekt>
+        <themekey>flight lines</themekey>
+      </theme>
+      <theme>
+        <themekt>Metadata Service Theme Categories</themekt>
+        <themekey>Locations and geodetic networks</themekey>
+        <themekey>Offline data</themekey>
+      </theme>
+      <place>
+        <placekt>U.S. Department of Commerce, 1987, Codes for the Identification of the States, the District of Columbia and the Outlying Areas of The United States, and Associated Areas (FIPS 5-2): Washington, DC, National Institute of Standards and Technology.</placekt>
+        <placekey>Illinois</placekey>
+      </place>
+      <place>
+        <placekt>Illinois Compiled Statutes, 70 ILCS 1705, State of Illinois, 1994</placekt>
+        <placekey>northeastern Illinois</placekey>
+      </place>
+      <place>
+        <placekt>"Geographic Identification Code Scheme (PHC80-R5)." 1980 Census of Population and Housing, Bureau of the Census, U.S. Department of Commerce, April 1983.</placekt>
+        <placekey>Cook County</placekey>
+      </place>
+      <place>
+        <placekt>None</placekt>
+        <placekey>Chicago</placekey>
+      </place>
+      <temporal>
+        <tempkt>none</tempkt>
+        <tempkey>2017</tempkey>
+      </temporal>
+    </keywords>
+    <accconst>Access to this feature dataset is available to county and municipal agencies. Editing privileges are restricted to authorized GIS staff members or its designees.</accconst>
+    <useconst>Under no circumstances may the data be redistributed or made available over a network without explicit permission from the Cook County Bureau of Technology.
+
+It is required that the Cook County Board of Commissioners be cited in any products generated from the data. The following source citation must be included: "Source: Cook County 2017 Aerial Imagery Project (Contract No. 1590-14847), Flight Lines for Cook County, Illinois. Geodatabase Vector Digital Data, Version 1.0. Published November 2017."</useconst>
+    <ptcontac>
+      <cntinfo>
+        <cntperp>
+          <cntper>Michael J. Hammer</cntper>
+          <cntorg>Cook County Bureau of Technology</cntorg>
+        </cntperp>
+        <cntpos>GIS Coordinator</cntpos>
+        <cntaddr>
+          <addrtype>mailing and physical address</addrtype>
+          <address>69 W. Washington Street</address>
+          <address>Room 2430</address>
+          <city>Chicago</city>
+          <state>Illinois</state>
+          <postal>60602</postal>
+          <country>USA</country>
+        </cntaddr>
+        <cntvoice>312-603-1776</cntvoice>
+        <cntemail>Michael.Hammer@cookcountyil.gov</cntemail>
+        <hours>09:00 - 17:00, Central Time Zone, Monday - Friday, except holidays</hours>
+        <cntinst>Please contact during normal business hours.</cntinst>
+      </cntinfo>
+    </ptcontac>
+    <datacred>Merrick &amp; Company</datacred>
+    <native>Microsoft Windows Vista Version 6.1 (Build 7601) Service Pack 1; ESRI ArcCatalog 9.3.1.4095</native>
+  </idinfo>
+  <dataqual>
+    <attracc>
+      <attraccr>Strict procedures and methodologies were followed in the creation of the flight line map. In addition, automated processes of the vendor (Merrick &amp; Company), coupled with repeated usage and inspection of the data have produced results (attributes) that are assessed to be highly accurate.</attraccr>
+    </attracc>
+    <logic>Features are stored in high precision, using Esri ARCGIS 10.3 software with an SDE geodatabase. This GIS dataset does not have topology rules in effect.</logic>
+    <complete>This flight line map was created in March 2017, and was approved by the Cook County Board of Commissioners. This flight line map indicates all proposed flight lines for the purpose of collecting the 4-band (R, G, B, NIR) Digital Aerial Imagery in Cook County, Illinois.</complete>
+    <posacc>
+      <horizpa>
+        <horizpar>Actual flight lines vary from the proposed paths in the flight line map. The actual flight line does not exceed 30% sidelap (adjacent flight lines) horizontally.</horizpar>
+      </horizpa>
+    </posacc>
+    <lineage>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>National Geographic Society</origin>
+            <pubdate>Unknown</pubdate>
+            <title>TOPO! for ArcGIS, Multi-layer edition</title>
+            <edition>Version 1.0</edition>
+            <geoform>map</geoform>
+            <pubinfo>
+              <pubplace>Washington, D.C.</pubplace>
+              <publish>National Geographic Society</publish>
+            </pubinfo>
+            <othercit>TOPO! for ArcGIS, Multi-layer edition is a software extension that adds functionality to Esri ArcGIS products. The product allows Esri GIS users to import USGS topographic maps, hillshading, or digital elevation models (DEMs) into existing projects.</othercit>
+          </citeinfo>
+        </srccite>
+        <srcscale>24000 or 100000</srcscale>
+        <typesrc>CD-ROM</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>1996</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>ground condition</srccurr>
+        </srctime>
+        <srccitea>TOPO! _1996</srccitea>
+        <srccontr>Used as a backdrop during flight planning</srccontr>
+      </srcinfo>
+      <procstep>
+        <procdesc>The flight line plan was produced using a proprietary software interface that ran within Esri's ArcMap 10.3
+
+A variety of sources of information were used to prepare the flight line map.
+
+Using United States Geological Survey (USGS) digital elevation data (DEM) available in TOPO!, flight altitudes were calculated above mean sea level (MSL). The DEM data is also used to indicate flight line breaks to maintain scale along a single flight path.
+
+Other inputs into the flight planning software were the project boundary coordinates, airspeed, and the targeted photography scale which calculates endlap (EOL) and sidelap (SOL) and the above mean terrain (AMT) or height of the aircraft above the ground.
+
+With all relevant data input into the flight planning software, using a USGS Digital Raster Graphics (DRG) layer made available through TOPO!, proposed flight paths were generated within ArcMap.
+
+The proposed flight plan was then saved as an Esri shapefile, appropriately annotated and output in hardcopy format for approval by the Cook County Board of Commissioners.
+
+The shapefile of the flight plan was later saved to an Esri ArcGIS Version 10.3 geodatabase.</procdesc>
+        <srcused>TOPO! _1996</srcused>
+        <procdate>201711</procdate>
+        <srcprod>FLIGHT_PLAN_2017</srcprod>
+        <proccont>
+          <cntinfo>
+            <cntperp>
+              <cntper>Doug Jacoby</cntper>
+              <cntorg>Merrick &amp; Company</cntorg>
+            </cntperp>
+            <cntpos>Project Manager</cntpos>
+            <cntaddr>
+              <addrtype>mailing and physical address</addrtype>
+              <address>5970 Greenwood Plaza Boulevard</address>
+              <city>Greenwood Village</city>
+              <state>CO</state>
+              <postal>80111</postal>
+              <country>U.S.A.</country>
+            </cntaddr>
+            <cntvoice>303-353-3903</cntvoice>
+            <cntfax>303-751-2851</cntfax>
+            <cntemail>doug.jacoby@merrick.com</cntemail>
+            <hours>08:00 - 17.00 Mountain Time</hours>
+            <cntinst>Business is conducted Monday through Friday, except on holidays.</cntinst>
+          </cntinfo>
+        </proccont>
+      </procstep>
+    </lineage>
+    <cloud>0</cloud>
+  </dataqual>
+  <spdoinfo>
+    <indspref>Cook County, Illinois</indspref>
+    <direct>Vector</direct>
+    <ptvctinf>
+      <sdtsterm>
+        <sdtstype>String</sdtstype>
+        <ptvctcnt>305</ptvctcnt>
+      </sdtsterm>
+    </ptvctinf>
+  </spdoinfo>
+  <spref>
+    <horizsys>
+      <planar>
+        <mapproj>
+          <mapprojn>NAD_1983_NSRS2007_StatePlane_Illinois_East_FIPS_1201_Ft_US</mapprojn>
+          <transmer>
+            <sfctrmer>0.999975</sfctrmer>
+            <longcm>-88.333333</longcm>
+            <latprjo>36.666667</latprjo>
+            <feast>984250.000000</feast>
+            <fnorth>0.000000</fnorth>
+          </transmer>
+        </mapproj>
+        <planci>
+          <plance>coordinate pair</plance>
+          <coordrep>
+            <absres>0.000005</absres>
+            <ordres>0.000005</ordres>
+          </coordrep>
+          <plandu>survey feet</plandu>
+        </planci>
+      </planar>
+      <geodetic>
+        <horizdn>D_NAD_1983_NSRS2007</horizdn>
+        <ellips>Geodetic Reference System 80</ellips>
+        <semiaxis>6378137.000000</semiaxis>
+        <denflat>298.257222</denflat>
+      </geodetic>
+    </horizsys>
+    <vertdef>
+      <altsys>
+        <altdatum>North American Vertical Datum of 1988</altdatum>
+        <altres>0.000100</altres>
+        <altunits>feet</altunits>
+        <altenc>Explicit elevation coordinate included with horizontal coordinates</altenc>
+      </altsys>
+    </vertdef>
+  </spref>
+  <eainfo>
+    <detailed>
+      <enttyp>
+        <enttypl>Flight_Lines</enttypl>
+        <enttypd>FlightLines</enttypd>
+        <enttypds>Merrick &amp; Company</enttypds>
+      </enttyp>
+    </detailed>
+    <overview>
+      <eaover>This dataset contains a polyline feature class that represents the proposed flight lines for collecting 4-band (R, G, B, NIR) Digital Aerial Imagery within Cook County, Illinois. Key attributes within this dataset are the flight line number and the length of each flight line.</eaover>
+      <eadetcit>Cook County 2017 Aerial Imagery Project (Contract No.1590-14847), Flight Lines for Cook County, Illinois. Geodatabase Vector Digital Data, Version 1.0. Published November 2017.</eadetcit>
+    </overview>
+  </eainfo>
+  <distinfo>
+    <distrib>
+      <cntinfo>
+        <cntperp>
+          <cntper>Michael J. Hammer</cntper>
+          <cntorg>Cook County Bureau of Technology</cntorg>
+        </cntperp>
+        <cntpos>GIS Coordinator</cntpos>
+        <cntaddr>
+          <addrtype>mailing and physical address</addrtype>
+          <address>69 W. Washington Street</address>
+          <address>Room 2430</address>
+          <city>Chicago</city>
+          <state>Illinois</state>
+          <postal>60602</postal>
+          <country>USA</country>
+        </cntaddr>
+        <cntvoice>312-603-1776</cntvoice>
+        <cntemail>Michael.Hammer@cookcountyil.gov</cntemail>
+        <hours>09:00 - 17:00, Central Time Zone, Monday - Friday, except holidays</hours>
+        <cntinst>Please contact during normal business hours.</cntinst>
+      </cntinfo>
+    </distrib>
+    <resdesc>Cook County 2017 Aerial Imagery Project (Contract No. 1590-14847), Flight Lines for Cook County, Illinois. Geodatabase Vector Digital Data, Version 1.0. Published November 2017.</resdesc>
+    <distliab>Cook County Government Department of Geographic Information Systems GIS Maps/Data Disclaimer:
+
+All Cook County Government (Cook County) geospatial data and maps are copyrighted. By providing you with a copy of Cook County generated maps and geospatial data, via hardcopy, electronic media or online access, you are not entitled to repackage, resell or distribute this information without the written permission of the Cook County Board of Commissioners. While efforts have been made to be as accurate as possible, Cook County provides the data for your personal use "as is". The data is not guaranteed to be accurate, correct, or complete. Information provided should not be used as a substitute for legal, business, tax, or other professional advice. The viewer should contact appropriate regulating agencies to determine accuracy or suitability of the data for a particular use. Cook County, nor its staff, assume no liability whatsoever for any losses that might occur from the use, misuse, or inability to use its geospatial data, metadata, maps or websites. By making this information available, Cook County assumes no obligation to assist the user in interpreting, browsing or using the data, metadata, maps or any application. All material appearing on the web site, any form of electronic transmission and printed hardcopy is provided and transmitted without warranty of any kind and are subject to the terms on this disclaimer.</distliab>
+    <stdorder>
+      <digform>
+        <digtinfo>
+          <formname>ArcGIS</formname>
+          <formvern>10.2</formvern>
+          <formspec>Esri Polyline Feature Class</formspec>
+          <formcont>This Esri polyline feature class is one (1) of four (4) feature classes within the "Ortho" feature dataset of the geodatabase "Cook2017_Ortho.gdb."</formcont>
+          <filedec>No compression applied</filedec>
+        </digtinfo>
+        <digtopt>
+          <offoptn>
+            <offmedia>CD-ROM</offmedia>
+            <reccap>
+              <recden>750</recden>
+              <recdenu>Megabytes</recdenu>
+            </reccap>
+            <recfmt>DOS-Copy</recfmt>
+            <compat>Accessible on any computer capable of reading a CD-ROM</compat>
+          </offoptn>
+        </digtopt>
+      </digform>
+      <fees>unknown</fees>
+      <turnarnd>Order dependent.</turnarnd>
+    </stdorder>
+    <custom>Call the individual listed as the Contact_Person in the Distribution_Information section of this metadata record to find out how to obtain this data set, the available formats, the available transfer media, compatibility, etc. This person will also be able to provide information about the fees associated with obtaining the data set.</custom>
+    <techpreq>Format compatibility is the user's responsibility.</techpreq>
+    <availabl>
+      <timeinfo>
+        <rngdates>
+          <begdate>201711</begdate>
+          <enddate>unknown</enddate>
+        </rngdates>
+      </timeinfo>
+    </availabl>
+  </distinfo>
+  <metainfo>
+    <metd>201711</metd>
+    <metc>
+      <cntinfo>
+        <cntperp>
+          <cntper>Doug Jacoby</cntper>
+          <cntorg>Merrick &amp; Company</cntorg>
+        </cntperp>
+        <cntpos>Project Manager</cntpos>
+        <cntaddr>
+          <addrtype>mailing and physical address</addrtype>
+          <address>5970 Greenwood Plaza Blvd.</address>
+          <city>Greenwood Village</city>
+          <state>Co</state>
+          <postal>80111</postal>
+          <country>USA</country>
+        </cntaddr>
+        <cntvoice>303-353-3903</cntvoice>
+        <cntemail>doug.jacoby@merrick.com</cntemail>
+        <hours>09:00 - 17:00, Central Time Zone, Monday-Friday, except holidays</hours>
+        <cntinst>Please contact during normal business hours</cntinst>
+      </cntinfo>
+    </metc>
+    <metstdn>FGDC Content Standards for Digital Geospatial Metadata</metstdn>
+    <metstdv>FGDC-STD-001-1998</metstdv>
+    <mettc>local time</mettc>
+    <metac>None</metac>
+    <metuc>This metadata file is intended to accompany the geospatial data set identified and received from Cook County. It is not to be altered or summarized. Cook County does not support secondary distribution. If this geospatial data set was received from anyone besides the Cook County Bureau of Technology, this metadata file and the geospatial data set it describes may lack integrity.</metuc>
+    <metextns>
+      <onlink>http://www.esri.com/metadata/esriprof80.html</onlink>
+      <metprof>ESRI Metadata Profile</metprof>
+    </metextns>
+  </metainfo>
+</metadata>
+

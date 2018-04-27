@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE metadata SYSTEM "http://www.fgdc.gov/metadata/fgdc-std-001-1998.dtd">
+
+<metadata>
+  <idinfo>
+    <citation>
+      <citeinfo>
+        <origin>Cook County Board of Commissioners</origin>
+        <pubdate>201711</pubdate>
+        <title>Cook County 2017 Aerial Imagery Project (Contract 1590-14847), "Tiles" for Cook County, Illinois. Vector Digital Data, Version 1.0. Published November 2017.</title>
+        <edition>1.0</edition>
+        <geoform>vector digital data</geoform>
+        <pubinfo>
+          <pubplace>Chicago, Illinois</pubplace>
+          <publish>Cook County Board of Commissioners</publish>
+        </pubinfo>
+      </citeinfo>
+    </citation>
+    <descript>
+      <abstract>This file is a digital geospatial Environmental Systems Research Institute (Esri) ArcGIS polygon feature class of the tile index for Cook County, Illinois. Each tile is 2,500' on a side, and covers an area of 6,250,000 square feet or 143 acres. There are a total of 5,344 tiles, and each tile represents the boundary or extent of each ortho image.
+
+This dataset includes a coordinate based tile identification number, a delivery area number, and a project tile category. The delivery area numbers and project tile attributes are a proprietary classification that are unique to this project.
+
+This dataset is stored within an ArcGIS 10.3 geodatabase.
+
+This dataset is projected using the Transverse Mercator map projection. The grid coordinate system used is the Illinois State Plane Coordinate System, East Zone (Zone Number Zone 3776, FIPS 1201), NAD 83 NSRS2007 (horizontal datum), with ground coordinates expressed in U.S. Survey Feet.</abstract>
+      <purpose>This data set was created to serve as part of a standard database for virtually all geospatial applications in Cook County, and is intended to support general location, planning, and cartography projects, as well as general inventory and asset management, Census analysis and mapping, and geocoding by address. The intended purpose of this Tile Index is to aid in the location of the relevant ortho image that corresponds spatially with a particular polygon in the Tile Index.</purpose>
+    </descript>
+    <timeperd>
+      <timeinfo>
+        <sngdate>
+          <caldate>2017</caldate>
+          <time>unknown</time>
+        </sngdate>
+      </timeinfo>
+      <current>publication date</current>
+    </timeperd>
+    <status>
+      <progress>Complete</progress>
+      <update>Unknown</update>
+    </status>
+    <spdom>
+      <bounding>
+        <westbc>-88.294124</westbc>
+        <eastbc>-87.491292</eastbc>
+        <northbc>42.178117</northbc>
+        <southbc>41.441012</southbc>
+      </bounding>
+    </spdom>
+    <keywords>
+      <theme>
+        <themekt>None</themekt>
+        <themekey>Tile index</themekey>
+        <themekey>Grid</themekey>
+      </theme>
+      <theme>
+        <themekt>Metadata Service Theme Categories</themekt>
+        <themekey>Locations and geodetic networks</themekey>
+        <themekey>Offline data</themekey>
+      </theme>
+      <place>
+        <placekt>U.S. Department of Commerce, 1987, Codes for the Identification of the States, the District of Columbia and the Outlying Areas of The United States, and Associated Areas (FIPS 5-2): Washington, DC, National Institute of Standards and Technology.</placekt>
+        <placekey>Illinois</placekey>
+      </place>
+      <place>
+        <placekt>Illinois Compiled Statutes, 70 ILCS 1705, State of Illinois, 1994</placekt>
+        <placekey>northeastern Illinois</placekey>
+      </place>
+      <place>
+        <placekt>None</placekt>
+        <placekey>Chicago</placekey>
+      </place>
+      <place>
+        <placekt>"Geographic Identification Code Scheme (PHC80-R5)." 1980 Census of Population and Housing, Bureau of the Census, U.S. Department of Commerce, April 1983.</placekt>
+        <placekey>Cook County</placekey>
+      </place>
+      <temporal>
+        <tempkt>None</tempkt>
+        <tempkey>2017</tempkey>
+      </temporal>
+    </keywords>
+    <accconst>Access to this feature dataset is available to county and municipal agencies. Editing privileges are restricted to authorized GIS staff members or its designees.</accconst>
+    <useconst>Under no circumstances may the data be redistributed or made available over a network without explicit permission from the Cook County Bureau of Technology.
+
+It is required that the Cook County Board of Commissioners be cited in any products generated from the data. The following source citation must be included: "Source: Cook County 2017 Aerial Imagery Project (Contract No.1590-14847), Tile Index for Cook County, Illinois. Geodatabase Vector Digital Data, Version 1.0. Published November 2017."</useconst>
+    <ptcontac>
+      <cntinfo>
+        <cntperp>
+          <cntper>Michael J. Hammer</cntper>
+          <cntorg>Cook County Bureau of Technology</cntorg>
+        </cntperp>
+        <cntpos>GIS Coordinator</cntpos>
+        <cntaddr>
+          <addrtype>mailing and physical address</addrtype>
+          <address>69 W. Washington Street</address>
+          <address>Room 2430</address>
+          <city>Chicago</city>
+          <state>Illinois</state>
+          <postal>60602</postal>
+          <country>USA</country>
+        </cntaddr>
+        <cntvoice>312-603-1776</cntvoice>
+        <cntemail>Michael.Hammer@cookcountyil.gov</cntemail>
+        <hours>09:00 - 17:00, Central Time Zone, Monday - Friday, except holidays</hours>
+        <cntinst>Please contact during normal business hours.</cntinst>
+      </cntinfo>
+    </ptcontac>
+    <datacred>Merrick &amp; Company.</datacred>
+    <native>Microsoft Windows Vista Version 6.1 (Build 7601) Service Pack 1; ESRI ArcCatalog 9.3.1.4095</native>
+  </idinfo>
+  <dataqual>
+    <attracc>
+      <attraccr>Due to repeated inspection, the accuracy of the attributes in this dataset is assessed to be excellent.</attraccr>
+    </attracc>
+    <logic>Data are topologically correct using ArcGIS 10.3. All polygons are closed and lines intersect where intended.</logic>
+    <complete>This tile index provides 100 percent geographical coverage of Cook County, Illinois.</complete>
+    <lineage>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Cook County Board of Commissioners</origin>
+            <pubdate>201711</pubdate>
+            <title>Cook County 2017 Aerial Imagery (Contract No. 1590-14847), 1:1,200-Scale (1" = 100') Tiled 4-band (R, G, B, NIR) Digital Orthoimagery for Cook County, Illinois. Raster Digital Data, Version 1.0. Published November 2017.</title>
+            <edition>Version 1.0</edition>
+            <geoform>raster digital data</geoform>
+            <pubinfo>
+              <pubplace>Chicago, IL</pubplace>
+              <publish>Cook County Board of Commissioners</publish>
+            </pubinfo>
+          </citeinfo>
+        </srccite>
+        <srcscale>1200</srcscale>
+        <typesrc>disc</typesrc>
+        <srctime>
+          <timeinfo>
+            <rngdates>
+              <begdate>20170423</begdate>
+              <begtime>unknown</begtime>
+              <enddate>20170424</enddate>
+              <endtime>unknown</endtime>
+            </rngdates>
+          </timeinfo>
+          <srccurr>ground condition</srccurr>
+        </srctime>
+        <srccitea>ORTHOS_2017</srccitea>
+        <srccontr>Used in the development of the tile index.</srccontr>
+      </srcinfo>
+      <procstep>
+        <procdesc>The minimum and maximum easting (x) and northing (y) coordinates of the northeast Illinois region boundary were established and rounded to the nearest one thousandth. A grid array (2,500' x 2'500') was then generated using the minimum x and y coordinates, to fully cover the region. Any squares (tiles) that did not intersect or were not contained within the region were deleted. 5,344 tiles were established, and the tiles were named using a concatenation of the second through fourth digits of the X and Y coordinates of the southwestern most point of the tile, creating an eight digit string.</procdesc>
+        <srcused>ORTHOS_2017</srcused>
+        <procdate>201711</procdate>
+        <srcprod>TILE_INDEX_2017</srcprod>
+        <proccont>
+          <cntinfo>
+            <cntperp>
+              <cntper>Doug Jacoby</cntper>
+              <cntorg>Merrick &amp; Company</cntorg>
+            </cntperp>
+            <cntpos>Project Manager</cntpos>
+            <cntaddr>
+              <addrtype>mailing and physical address</addrtype>
+              <address>5970 Greenwood Plaza Boulevard</address>
+              <city>Greenwood Village</city>
+              <state>CO</state>
+              <postal>80111</postal>
+              <country>U.S.A.</country>
+            </cntaddr>
+            <cntvoice>303-353-3903</cntvoice>
+            <cntemail>doug.jacoby@merrick.com</cntemail>
+            <hours>09.00 - 17.00 Central Time</hours>
+            <cntinst>Business is conducted Monday through Friday, except on holidays.</cntinst>
+          </cntinfo>
+        </proccont>
+      </procstep>
+    </lineage>
+    <cloud>0</cloud>
+  </dataqual>
+  <spdoinfo>
+    <indspref>Cook County, Illinois</indspref>
+    <direct>Vector</direct>
+    <ptvctinf>
+      <sdtsterm>
+        <sdtstype>G-polygon</sdtstype>
+        <ptvctcnt>5344</ptvctcnt>
+      </sdtsterm>
+    </ptvctinf>
+  </spdoinfo>
+  <spref>
+    <horizsys>
+      <planar>
+        <mapproj>
+          <mapprojn>NAD_1983_NSRS2007_StatePlane_Illinois_East_FIPS_1201_Ft_US</mapprojn>
+          <transmer>
+            <sfctrmer>0.999975</sfctrmer>
+            <longcm>-88.333333</longcm>
+            <latprjo>36.666667</latprjo>
+            <feast>984250.000000</feast>
+            <fnorth>0.000000</fnorth>
+          </transmer>
+        </mapproj>
+        <planci>
+          <plance>coordinate pair</plance>
+          <coordrep>
+            <absres>0.000005</absres>
+            <ordres>0.000005</ordres>
+          </coordrep>
+          <plandu>survey feet</plandu>
+        </planci>
+      </planar>
+      <geodetic>
+        <horizdn>D_NAD_1983_NSRS2007</horizdn>
+        <ellips>Geodetic Reference System 80</ellips>
+        <semiaxis>6378137.000000</semiaxis>
+        <denflat>298.257222</denflat>
+      </geodetic>
+    </horizsys>
+    <vertdef>
+      <altsys>
+        <altdatum>North American Vertical Datum of 1988</altdatum>
+        <altres>.001</altres>
+        <altunits>feet</altunits>
+        <altenc>Explicit elevation coordinate included with horizontal coordinates</altenc>
+      </altsys>
+    </vertdef>
+  </spref>
+  <eainfo>
+    <detailed>
+      <enttyp>
+        <enttypl>Tiles</enttypl>
+        <enttypd>Tiles</enttypd>
+        <enttypds>Merrick &amp; Company</enttypds>
+      </enttyp>
+    </detailed>
+    <overview>
+      <eaover>This dataset contains a polygon feature type that represents a tile index for Cook Will County, Illinois. The attributes for each polygon include shape and area measurements.</eaover>
+      <eadetcit>Cook County 2017 Aerial Imagery Project (Contract No. 1590-14847), Tile Index for Cook Will County, Illinois. Geodatabase Vector Digital Data, Version 1.0. Published November 2017.</eadetcit>
+    </overview>
+  </eainfo>
+  <distinfo>
+    <distrib>
+      <cntinfo>
+        <cntperp>
+          <cntper>Michael J. Hammer</cntper>
+          <cntorg>Cook County Bureau of Technology</cntorg>
+        </cntperp>
+        <cntpos>GIS Coordinator</cntpos>
+        <cntaddr>
+          <addrtype>mailing and physical address</addrtype>
+          <address>69 W. Washington Street</address>
+          <address>Room 2430</address>
+          <city>Chicago</city>
+          <state>Illinois</state>
+          <postal>60602</postal>
+          <country>USA</country>
+        </cntaddr>
+        <cntvoice>312-603-1776</cntvoice>
+        <cntemail>Michael.Hammer@cookcountyil.gov</cntemail>
+        <hours>09:00 - 17:00, Central Time Zone, Monday - Friday, except holidays</hours>
+        <cntinst>Please contact during normal business hours.</cntinst>
+      </cntinfo>
+    </distrib>
+    <resdesc>Cook County 2017 Aerial Imagery Project (Contract No.1590-14847), Tile Index for Cook County, Illinois. Geodatabase Vector Digital Data, Version 1.0. Published November 2017.</resdesc>
+    <distliab>Cook County Government Department of Geographic Information Systems GIS Maps/Data Disclaimer:
+
+All Cook County Government (Cook County) geospatial data and maps are copyrighted. By providing you with a copy of Cook County generated maps and geospatial data, via hardcopy, electronic media or online access, you are not entitled to repackage, resell or distribute this information without the written permission of the Cook County Board of Commissioners. While efforts have been made to be as accurate as possible, Cook County provides the data for your personal use "as is". The data is not guaranteed to be accurate, correct, or complete. Information provided should not be used as a substitute for legal, business, tax, or other professional advice. The viewer should contact appropriate regulating agencies to determine accuracy or suitability of the data for a particular use. Cook County, nor its staff, assume no liability whatsoever for any losses that might occur from the use, misuse, or inability to use its geospatial data, metadata, maps or websites. By making this information available, Cook County assumes no obligation to assist the user in interpreting, browsing or using the data, metadata, maps or any application. All material appearing on the web site, any form of electronic transmission and printed hardcopy is provided and transmitted without warranty of any kind and are subject to the terms on this disclaimer.</distliab>
+    <stdorder>
+      <digform>
+        <digtinfo>
+          <formname>ArcGIS</formname>
+          <formvern>10.2</formvern>
+          <formspec>Esri Polygon Feature Class</formspec>
+          <formcont>This Esri polygon feature class is one (1) of four (4) feature classes within the "Ortho" feature dataset of the geodatabase "Cook2017_Ortho.mdb."</formcont>
+          <filedec>No compression applied</filedec>
+        </digtinfo>
+        <digtopt>
+          <offoptn>
+            <offmedia>CD-ROM</offmedia>
+            <reccap>
+              <recden>750</recden>
+              <recdenu>Megabytes</recdenu>
+            </reccap>
+            <recfmt>DOS-Copy</recfmt>
+            <compat>Accessible on any computer capable of reading a CD-ROM</compat>
+          </offoptn>
+        </digtopt>
+      </digform>
+      <fees>unknown</fees>
+      <turnarnd>Order dependent.</turnarnd>
+    </stdorder>
+    <custom>Call the individual listed as the Contact_Person in the Distribution_Information section of this metadata record to find out how to obtain this data set, the available formats, the available transfer media, compatibility, etc. This person will also be able to provide information about the fees associated with obtaining the data set.</custom>
+    <techpreq>Format compatibility is the user's responsibility.</techpreq>
+    <availabl>
+      <timeinfo>
+        <rngdates>
+          <begdate>201711</begdate>
+          <enddate>unknown</enddate>
+        </rngdates>
+      </timeinfo>
+    </availabl>
+  </distinfo>
+  <metainfo>
+    <metd>201711</metd>
+    <metc>
+      <cntinfo>
+        <cntperp>
+          <cntper>Doug Jacoby</cntper>
+          <cntorg>Merrick &amp; Company</cntorg>
+        </cntperp>
+        <cntpos>Project Manager</cntpos>
+        <cntaddr>
+          <addrtype>mailing and physical address</addrtype>
+          <address>5970 Greenwood Plaza Blvd.</address>
+          <city>Greenwood Village</city>
+          <state>CO</state>
+          <postal>80111</postal>
+          <country>USA</country>
+        </cntaddr>
+        <cntvoice>303-353-3903</cntvoice>
+        <cntemail>doug.jacoby@merrick.com</cntemail>
+        <hours>08:00 - 17:00, Mountain Time Zone, Monday-Friday, except holidays</hours>
+        <cntinst>Please contact during normal business hours</cntinst>
+      </cntinfo>
+    </metc>
+    <metstdn>FGDC Content Standards for Digital Geospatial Metadata</metstdn>
+    <metstdv>FGDC-STD-001-1998</metstdv>
+    <mettc>local time</mettc>
+    <metac>None</metac>
+    <metuc>This metadata file is intended to accompany the geospatial data set identified and received from Cook County. It is not to be altered or summarized. Cook County does not support secondary distribution. If this geospatial data set was received from anyone besides the Cook County Bureau of Technology, this metadata file and the geospatial data set it describes may lack integrity.</metuc>
+    <metextns>
+      <onlink>http://www.esri.com/metadata/esriprof80.html</onlink>
+      <metprof>ESRI Metadata Profile</metprof>
+    </metextns>
+  </metainfo>
+</metadata>
+
