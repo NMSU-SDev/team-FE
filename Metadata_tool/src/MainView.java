@@ -20,6 +20,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
@@ -45,6 +46,7 @@ import java.awt.Button;
 import javax.swing.JInternalFrame;
 import javax.swing.JToggleButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 
@@ -55,6 +57,7 @@ import javax.swing.JList;
 
 import java.awt.Component;
 import java.awt.Desktop;
+import java.awt.Dialog;
 
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
@@ -92,6 +95,7 @@ public class MainView
 	private FileOps1 fileOperations = new FileOps1();
 	private XmlSessionManager session1 = new XmlSessionManager();
 	private NewSession newSession;
+	private MetadataPreview preview;
 	private int treeLength = 0;
 
 	// TEST VARIABLES //
@@ -305,7 +309,7 @@ public class MainView
 				{
 					currentNode.setVerified(verifyCurrentNode);
 					currentNode.setAnswer(txtrEnterTextHere.getText());
-					txtrEnterTextHere.setText("");
+					//txtrEnterTextHere.setText("");
 					chckbxVerified.setSelected(false);
 					System.out.println(currentNode.getAnswer());
 					System.out.println(currentNode.getVerified());
@@ -314,6 +318,7 @@ public class MainView
 					currentNode = currentNode.getParent();
 					elementLabel.setText(currentNode.getElementName());
 					questionLabel.setText(currentNode.getQuestion());
+					txtrEnterTextHere.setText(currentNode.getAnswer());
 				}
 				else
 				{
@@ -387,7 +392,7 @@ public class MainView
 					{
 						currentNode.setVerified(verifyCurrentNode);
 						currentNode.setAnswer(txtrEnterTextHere.getText());
-						txtrEnterTextHere.setText("");
+						//txtrEnterTextHere.setText("");
 						chckbxVerified.setSelected(false);
 						System.out.println(currentNode.getAnswer());
 						System.out.println(currentNode.getVerified());
@@ -396,6 +401,7 @@ public class MainView
 						currentNode = tempNode;
 						elementLabel.setText(currentNode.getElementName());
 						questionLabel.setText(currentNode.getQuestion());
+						txtrEnterTextHere.setText(currentNode.getAnswer());
 					}
 				}
 			}
@@ -445,12 +451,23 @@ public class MainView
 									if (SharedData.isTemplateSet() == true)
 									{
 										System.out.println("NewSession result: file was set");
+										file = SharedData.getTemplateFile();
 
 										// call to create a document object
 										// model
 										// uses the XmlSessionManager class
-										System.out.println("Creating a document object model...");
-										doc1 = session1.fileToDOM(SharedData.templateFile);
+										doc1 = session1.fileToDOM(file);
+										NodeList nList = null;
+										Node nNode = null;
+										nList = doc1.getElementsByTagName("metadata");
+										nNode = nList.item(0);
+										rootMNode = session1.importDOMToMetadata(nNode);
+										currentNode = rootMNode;
+										elementLabel.setText(currentNode.getElementName());
+										questionLabel.setText(currentNode.getQuestion());
+										// System.out.println("Creating a document object model...");
+										// doc1 = session1.fileToDOM(SharedData.templateFile);									
+										
 									}
 									else
 										System.out.println("NewSession result: file was NOT set");
@@ -734,9 +751,18 @@ public class MainView
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				JOptionPane.showMessageDialog(null, "XML tree preview coming soon...", "Preview",
-						JOptionPane.INFORMATION_MESSAGE);
-			}
+				try
+				{
+							preview = new MetadataPreview(session1.metadataTreeToString(rootMNode));
+							preview.setVisible(true);								
+							//JOptionPane.showMessageDialog(null, "XML tree preview coming soon...", "Preview",
+							//JOptionPane.INFORMATION_MESSAGE);
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+			}	
 		});
 		menuView.add(menuItemPreview);
 
@@ -764,7 +790,7 @@ public class MainView
 		{
 			treeLength = 0;
 			MetadataNode tempNode1 = currentNode;
-			while ((tempNode1 != null) && (tempNode1.hasChild()))
+			while ((tempNode1 != null) && (tempNode1.getChild() != null))
 			{
 				treeLength++;
 				tempNode1 = tempNode1.getChild();
