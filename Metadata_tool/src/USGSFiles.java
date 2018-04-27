@@ -4,8 +4,11 @@ import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JCheckBox;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -54,7 +57,7 @@ public class USGSFiles extends JDialog
 		setResizable(false);
 		setTitle("USGS Project Attributes");
 		file = nFile;
-		setBounds(100, 100, 400, 280);
+		setBounds(100, 100, 400, 300);
 		{
 			JPanel panel = new JPanel();
 			getContentPane().add(panel, BorderLayout.CENTER);
@@ -105,7 +108,33 @@ public class USGSFiles extends JDialog
 			{
 				public void actionPerformed(ActionEvent arg0)
 				{
-					file = getAFile.openFile(null);
+					final JFileChooser newTemplateFileChoose = new JFileChooser();
+					FileFilter xmlFilter = new FileNameExtensionFilter("XML File - eXtensible Markup Language (*.xml)",
+							"xml");
+
+					newTemplateFileChoose.setFileFilter(xmlFilter);
+					// ** Force disable all files option
+					newTemplateFileChoose.setAcceptAllFileFilterUsed(false);
+					newTemplateFileChoose.setDialogTitle("Import a USGS compatible template");
+
+					int newTemplateChooseReturnVal;
+
+					newTemplateChooseReturnVal = newTemplateFileChoose.showOpenDialog(null);
+					file = newTemplateFileChoose.getSelectedFile();
+					
+					if ( file != null )  {
+						System.out.println("User set a custom USGS-compatible xml template");
+						SharedData.changeTemplateSet(true);
+						SharedData.setTemplateFile(file);
+						dispose();
+					} else {
+						SharedData.changeTemplateSet(false);
+						SharedData.setTemplateFile(null);
+					}
+					
+					
+					// ** TESTING: deprecated
+					//file = getAFile.openFile(null);
 				}
 			});
 
@@ -113,21 +142,21 @@ public class USGSFiles extends JDialog
 			gl_panel.setHorizontalGroup(
 				gl_panel.createParallelGroup(Alignment.TRAILING)
 					.addGroup(gl_panel.createSequentialGroup()
-						.addContainerGap(9, Short.MAX_VALUE)
+						.addContainerGap(15, Short.MAX_VALUE)
 						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 							.addComponent(chckbxNewCheckBox_6)
 							.addComponent(chckbxNewCheckBox_7)
 							.addComponent(chckbxNewCheckBox_5)
-							.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_panel.createSequentialGroup()
 									.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 										.addComponent(chckbxNewCheckBox_8)
 										.addComponent(chckbxNewCheckBox))
-									.addPreferredGap(ComponentPlacement.RELATED, 142, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.RELATED, 150, Short.MAX_VALUE)
 									.addComponent(btnOk)
 									.addPreferredGap(ComponentPlacement.UNRELATED)
 									.addComponent(btnCancel))
-								.addGroup(Alignment.LEADING, gl_panel.createSequentialGroup()
+								.addGroup(gl_panel.createSequentialGroup()
 									.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 										.addComponent(chckbxNewCheckBox_1)
 										.addComponent(chckbxNewCheckBox_4)
@@ -140,28 +169,28 @@ public class USGSFiles extends JDialog
 			gl_panel.setVerticalGroup(
 				gl_panel.createParallelGroup(Alignment.TRAILING)
 					.addGroup(gl_panel.createSequentialGroup()
-						.addComponent(chckbxNewCheckBox_7)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(chckbxNewCheckBox_6)
-						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(chckbxNewCheckBox_7, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+						.addGap(1)
+						.addComponent(chckbxNewCheckBox_6, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+						.addGap(1)
 						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 							.addGroup(gl_panel.createSequentialGroup()
-								.addComponent(chckbxNewCheckBox_1)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(chckbxNewCheckBox_2)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(chckbxNewCheckBox_3)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(chckbxNewCheckBox_4)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(chckbxNewCheckBox_5)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(chckbxNewCheckBox)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(chckbxNewCheckBox_8))
+								.addComponent(chckbxNewCheckBox_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+								.addGap(1)
+								.addComponent(chckbxNewCheckBox_2, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+								.addGap(1)
+								.addComponent(chckbxNewCheckBox_3, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+								.addGap(1)
+								.addComponent(chckbxNewCheckBox_4, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+								.addGap(1)
+								.addComponent(chckbxNewCheckBox_5, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+								.addGap(1)
+								.addComponent(chckbxNewCheckBox, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+								.addGap(1)
+								.addComponent(chckbxNewCheckBox_8, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
 							.addGroup(gl_panel.createSequentialGroup()
 								.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-								.addGap(49)
+								.addGap(70)
 								.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 									.addComponent(btnCancel)
 									.addComponent(btnOk))))
