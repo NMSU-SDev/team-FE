@@ -67,6 +67,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.BevelBorder;
 
 @SuppressWarnings({ "unused", "rawtypes" })
 public class MainView
@@ -156,7 +158,9 @@ public class MainView
 		panel.setLayout(gbl_panel);
 		
 		JTextArea openingScreen = new JTextArea();
+		openingScreen.setFont(new Font("Arial", Font.PLAIN, 13));
 		openingScreen.setEditable(false);
+		openingScreen.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
 		GridBagConstraints gbc_openingScreen = new GridBagConstraints();
 		gbc_openingScreen.gridheight = 2;
 		gbc_openingScreen.gridwidth = 5;
@@ -554,7 +558,7 @@ public class MainView
 					GridBagConstraints gbc_tree = new GridBagConstraints();
 					gbc_tree.gridwidth = 2;
 					gbc_tree.gridheight = 9;
-					gbc_tree.insets = new Insets(0, 0, 5, 5);
+					gbc_tree.insets = new Insets(5, 5, 5, 5);
 					gbc_tree.fill = GridBagConstraints.BOTH;
 					gbc_tree.gridx = 0;
 					gbc_tree.gridy = 1;
@@ -733,8 +737,8 @@ public class MainView
 			public void actionPerformed(ActionEvent arg0)
 			{
 				JOptionPane.showMessageDialog(null,
-						"Metadata Software tool - version alpha 3.6"
-								+ "\n2018 April 24 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
+						"Metadata Software tool - version alpha 4.0"
+								+ "\n2018 April 27 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
 								+ "Jacob Espinoza, Isaias Gerena, Lucas Herrman\n"
 								+ "(Not for external distribution - Work in Progress)",
 						"About", JOptionPane.INFORMATION_MESSAGE);
