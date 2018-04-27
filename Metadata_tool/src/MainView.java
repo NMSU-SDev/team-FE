@@ -3,6 +3,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -69,6 +70,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 
 @SuppressWarnings({ "unused", "rawtypes" })
 public class MainView
@@ -151,16 +153,19 @@ public class MainView
 		JPanel panel = new JPanel();
 		frameTeamFeMetadata.getContentPane().add(panel, "name_1876606686560390");
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[] { 0, 120, 50, 80, 0, 50, 0, 90, 25, 0 };
+		gbl_panel.columnWidths = new int[] { 10, 120, 40, 80, 0, 62, 0, 90, 25, 0 };
 		gbl_panel.rowHeights = new int[] { 33, 20, 0, 0, 0, 0, 0, 0, 0, 0, 15, 0 };
-		gbl_panel.columnWeights = new double[] { 1.0, 1.0, 0.0, 1.0, 0.0, 20.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panel.columnWeights = new double[] { 0.0, 20.0, 0.0, 1.0, 0.0, 20.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		gbl_panel.rowWeights = new double[] { 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
 		
 		JTextArea openingScreen = new JTextArea();
 		openingScreen.setFont(new Font("Arial", Font.PLAIN, 13));
 		openingScreen.setEditable(false);
-		openingScreen.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
+		Border textBorder = BorderFactory.createLineBorder(Color.BLACK, 2, true);
+		openingScreen.setBorder( BorderFactory.createCompoundBorder(textBorder, BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+		//** old border setting
+		// openingScreen.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
 		GridBagConstraints gbc_openingScreen = new GridBagConstraints();
 		gbc_openingScreen.gridheight = 2;
 		gbc_openingScreen.gridwidth = 5;
@@ -172,7 +177,7 @@ public class MainView
 		gbc_openingScreen.gridy = 2;
 		panel.add(openingScreen, gbc_openingScreen);
 		openingScreen.setColumns(10);
-		openingScreen.setText("Create new session, open previous session, or import template to proceed");
+		openingScreen.setText("Create new session, open previous session, or import template to proceed...");
 
 		JLabel navLabel = new JLabel("Navigation");
 		navLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -180,7 +185,7 @@ public class MainView
 		GridBagConstraints gbc_navLabel = new GridBagConstraints();
 		gbc_navLabel.ipadx = 20;
 		gbc_navLabel.anchor = GridBagConstraints.SOUTH;
-		gbc_navLabel.insets = new Insets(0, 35, 5, 5);
+		gbc_navLabel.insets = new Insets(0, 5, 5, 5);
 		gbc_navLabel.gridx = 1;
 		gbc_navLabel.gridy = 0;
 		panel.add(navLabel, gbc_navLabel);
@@ -502,6 +507,8 @@ public class MainView
 				else
 				{
 					System.err.println("Not a session file");
+					JOptionPane.showMessageDialog(null, "File selected was not a session file!", "Open Failed",
+							JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		});
@@ -531,6 +538,8 @@ public class MainView
 						"xml");
 
 				importFileChoose.setFileFilter(xmlFilter);
+				// ** Force disable all files option
+				importFileChoose.setAcceptAllFileFilterUsed(false);
 				importFileChoose.setDialogTitle("Import");
 
 				int importChooseReturnVal;
@@ -556,11 +565,13 @@ public class MainView
 					tree = new MyTree(rootMNode);
 
 					GridBagConstraints gbc_tree = new GridBagConstraints();
-					gbc_tree.gridwidth = 2;
+					gbc_tree.gridwidth = 1;
 					gbc_tree.gridheight = 9;
-					gbc_tree.insets = new Insets(5, 5, 5, 5);
+					gbc_tree.insets = new Insets(0, 0, 0, 0);
+			/* ***** Grid bag constraints still will not resize horizontally */
+					gbc_tree.weightx = 1.0;
 					gbc_tree.fill = GridBagConstraints.BOTH;
-					gbc_tree.gridx = 0;
+					gbc_tree.gridx = 1;
 					gbc_tree.gridy = 1;
 					panel.add(tree, gbc_tree);
 
@@ -568,11 +579,12 @@ public class MainView
 					treeView = new JScrollPane();
 
 					GridBagConstraints gbc_treeView = new GridBagConstraints();
-					gbc_treeView.gridwidth = 2;
+					gbc_treeView.gridwidth = 1;
 					gbc_treeView.gridheight = 9;
-					gbc_treeView.insets = new Insets(0, 0, 5, 5);
+					gbc_treeView.insets = new Insets(0, 0, 0, 0);
+					gbc_treeView.weightx = 1.0;
 					gbc_treeView.fill = GridBagConstraints.BOTH;
-					gbc_treeView.gridx = 0;
+					gbc_treeView.gridx = 1;
 					gbc_treeView.gridy = 1;
 					panel.add(treeView, gbc_treeView);
 					

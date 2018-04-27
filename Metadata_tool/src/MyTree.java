@@ -51,7 +51,7 @@ public class MyTree extends JPanel implements TreeSelectionListener {
         //Create the scroll pane and add the tree to it. 
         JScrollPane treeView = new JScrollPane(tree);
 
-        Dimension minimumSize = new Dimension(100, 100);
+        Dimension minimumSize = new Dimension(120, 120);
         
         treeView.setMinimumSize(minimumSize);
         
