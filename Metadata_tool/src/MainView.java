@@ -163,25 +163,25 @@ public class MainView
 		gbl_panel.rowWeights = new double[] { 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
 		
-		JTextArea openingScreen = new JTextArea();
-		openingScreen.setFont(new Font("Arial", Font.PLAIN, 13));
-		openingScreen.setEditable(false);
+		JTextArea openingMsg = new JTextArea();
+		openingMsg.setFont(new Font("Arial", Font.PLAIN, 13));
+		openingMsg.setEditable(false);
 		Border textBorder = BorderFactory.createLineBorder(Color.BLACK, 2, true);
-		openingScreen.setBorder( BorderFactory.createCompoundBorder(textBorder, BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+		openingMsg.setBorder( BorderFactory.createCompoundBorder(textBorder, BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 		//** old border setting
 		// openingScreen.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
 		GridBagConstraints gbc_openingScreen = new GridBagConstraints();
 		gbc_openingScreen.gridheight = 2;
 		gbc_openingScreen.gridwidth = 5;
-		openingScreen.setLineWrap(true);
-		openingScreen.setWrapStyleWord(true);
+		openingMsg.setLineWrap(true);
+		openingMsg.setWrapStyleWord(true);
 		gbc_openingScreen.insets = new Insets(0, 0, 5, 5);
 		gbc_openingScreen.fill = GridBagConstraints.BOTH;
 		gbc_openingScreen.gridx = 3;
 		gbc_openingScreen.gridy = 2;
-		panel.add(openingScreen, gbc_openingScreen);
-		openingScreen.setColumns(10);
-		openingScreen.setText("Create new session, open previous session, or import template to proceed...");
+		panel.add(openingMsg, gbc_openingScreen);
+		openingMsg.setColumns(10);
+		openingMsg.setText("Create new session, open previous session, or import template to proceed...");
 
 		JLabel navLabel = new JLabel("Navigation");
 		navLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -615,7 +615,7 @@ public class MainView
 					saveButton.setVisible(true);
 					txtrEnterTextHere.setEnabled(true);
 					chckbxVerified.setEnabled(true);
-					openingScreen.setVisible(false);
+					openingMsg.setVisible(false);
 				}
 				else
 					System.out.println("No file was selected.");
@@ -751,19 +751,37 @@ public class MainView
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				try
+				EventQueue.invokeLater(new Runnable()
 				{
-							preview = new MetadataPreview(session1.metadataTreeToString(rootMNode));
-							preview.setVisible(true);								
+					public void run()
+					{
+						try
+							{
+							String previewStr = "";
+							previewStr = session1.metadataTreeToString(rootMNode);
+							//preview = new MetadataPreview(session1.metadataTreeToString(rootMNode));
+							preview = new MetadataPreview( previewStr );
+							preview.setVisible(true);
+							preview.addWindowListener(new WindowAdapter()
+							{
+								@Override
+								public void windowClosed(WindowEvent e)
+								{
+									System.out.println("Preview window closed");
+								}
+							}); // end window listener for preview
+							
 							//JOptionPane.showMessageDialog(null, "XML tree preview coming soon...", "Preview",
 							//JOptionPane.INFORMATION_MESSAGE);
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-			}	
-		});
+							}
+						catch (Exception e)
+							{
+								e.printStackTrace();
+							}
+					}
+				}); // end new Runnable
+			} // end new actionPerformed
+		}); //end addActionListener
 		menuView.add(menuItemPreview);
 
 		JMenu menuHelp = new JMenu("Help");
@@ -775,7 +793,7 @@ public class MainView
 			public void actionPerformed(ActionEvent arg0)
 			{
 				JOptionPane.showMessageDialog(null,
-						"Metadata Software tool - version alpha 4.1"
+						"Metadata Software tool - version alpha 4.2"
 								+ "\n2018 April 27 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
 								+ "Jacob Espinoza, Isaias Gerena, Lucas Herrman\n"
 								+ "(Not for external distribution - Work in Progress)",
