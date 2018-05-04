@@ -292,36 +292,47 @@ private void retrieveNodeDescription(Node node, MetadataNode <?> root)
 	/**
 	 * The saveMetadataToDOM method takes a Metadata Node and a Document file, 
 	 * searches the Document for a matching tag and updates its comment. Currently
-	 * the method does not account for multiple instances of a tag and will 
-	 * need to be modified to do so.
+	 * the method does account for multiple instances of a tag.
 	 * 
 	 * @precondition the Document files are NOT the templates originally used at
-	 *               the beginning of the session but are copies of the
-	 *               templates.
+	 *               the beginning of the session but are the working object 
+	 *               representations of the Documents that are updated during a
+	 *               session.
 	 * @param metaNode
 	 *            is the root of the MetadataNode tree
 	 * @param domNode
-	 *            is an array of the Document objects that are being updated as
-	 *            the session progresses.
-	 * @postcondition Document files are updated with changes from the
-	 *                MetadataNode tree and are in a state that can readily be
-	 *                exported to valid XML metadata files
+	 *            is a Document object that is being updated
+	 * @postcondition the Document object is updated with changes from the
+	 *                MetadataNode tree and is in a state that can readily be
+	 *                exported to a valid XML metadata file
 	 */
 	public void saveMetadataToDOM(MetadataNode<?> metaNode, Document dom) {
 		// metaNode is not, necessarily, the root of the MetadataNode tree
 		// dom is the Document object
 		// find the element match, then update the Node text
 		// recursive case: Metadata Node has child or has sibling:
-			// call this method again with next MetadataNode and next Node.
+		// call this method again with next MetadataNode and next Node.
 		// base case: reach Metadata Node with no child and no sibling 		
+		boolean ancestryMatch = false;
+		int index = 0;
 		NodeList nList;
 		Node node, child, sibling;
 		// find the DOM element that matches the metadata node element		
 		nList = dom.getElementsByTagName(metaNode.getElement());
+		// check that the branch path to the root is the same in the 
+		// Document as it is in the MetadataNode
+		// call private method ancestorCompare(MetadataNode, Node)
+		while (!ancestryMatch)
+		{
+			node = nList.item(index);
+			ancestryMatch = ancestorCompare(metaNode, node);
+			index++;
+		} // end loop find correct branch path of the Document
 		// if the list is not empty, proceed. else, go to next metaNode item
 		if (nList != null)
 		{
-			// now that we have found the element that matches the tag that we want, we need to update its corresponding TEXT_NODE
+			// now that we have found the element that matches the tag that we want, 
+			// we need to update its corresponding TEXT_NODE
 			// the corresponding text node will either be a child or a sibling, not both.
 			boolean found = false;		
 			node = nList.item(0);		
@@ -333,7 +344,7 @@ private void retrieveNodeDescription(Node node, MetadataNode <?> root)
 				{
 					child.setNodeValue(metaNode.getAnswer());
 				}
-			}
+			} // end if child was the node that was updated
 			if 	(node.getNextSibling() != null && !found )
 			{
 				sibling = node.getNextSibling();
@@ -341,7 +352,7 @@ private void retrieveNodeDescription(Node node, MetadataNode <?> root)
 				{
 					sibling.setNodeValue(metaNode.getAnswer());
 				}
-			}
+			} // end if sibling is the node that was updated
 		}
 		
 		// find the next text node which will be the node that corresponds to the tag.
@@ -351,7 +362,7 @@ private void retrieveNodeDescription(Node node, MetadataNode <?> root)
 		if ((metaNode.getChild() == null) && (metaNode.getSibling() == null))
 		{
 			return;
-		}
+		} // end base case
 		else // RECURSIVE CASE
 		{
 			// call this method with child first
@@ -362,12 +373,45 @@ private void retrieveNodeDescription(Node node, MetadataNode <?> root)
 			// call this method with sibling second
 			if (metaNode.getSibling() != null)
 			{
-			saveMetadataToDOM(metaNode.getSibling(), dom);
-			}		
-			
-		}
+				saveMetadataToDOM(metaNode.getSibling(), dom);
+			}				
+		} // end recursive case
 		
 		return;
+	}
+	
+	/**
+	 * The ancestorCompare method is a helper method to be sure that the node about to be updated 
+	 * is in the correct branch of the DOM tree. If it is not, then the method returns false and
+	 * the calling method must go to the next tag in the DOM with the same tag name and ask this
+	 * method to check the branch path to the root again.
+	 * @param metaNode the MetadataNode whose branch path to the root is being compared to
+	 * @param node the Node whose branch path to the root is being evaluated
+	 * @return true for a matching branch path and false for a branch path mismatch
+	 */
+	private boolean ancestorCompare(MetadataNode<?> metaNode, Node node) {
+		// is the chain of parents the same in both sets of trees
+		String metaNodeAncestry = "";
+		String nodeAncestry = "";
+		boolean ancestryMatch = false;
+		metaNodeAncestry = metaNode.getElement();
+		nodeAncestry = node.getNodeName();
+		
+		// walk up ancestry tree to be sure we have the right Document leaf
+		while ( (metaNode.getParent() != null) && (node.getParentNode() != null) && (metaNode.getParent().getElement() != "metadata") )
+		{
+			if (metaNodeAncestry == nodeAncestry)
+				ancestryMatch = true;
+			else 
+				ancestryMatch = false;
+			metaNode = metaNode.getParent();
+			node = node.getParentNode();
+			metaNodeAncestry += metaNode.getElement();
+			nodeAncestry += node.getNodeName();
+		}
+		
+		// return the ancestry match result	
+		return ancestryMatch;
 	}
 
 	/**

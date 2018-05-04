@@ -21,7 +21,13 @@ public class TestXmlSessionManager
 {
 
 	static int numElementNode = 0;
-
+	private static String inputFile = "";
+	private static final int MAX = 2;
+	private static XmlSessionManager parse = new XmlSessionManager();
+	private static String [] templates = new String[MAX];
+	private static Document [] docs = new Document [MAX];
+	private static File [] files = new File [MAX];
+	private static Scanner scan = new Scanner(System.in);
 	/**
 	 * The purpose of this method is to text the MetaXML Parser class and to
 	 * develop and test the treeTraversal method so that it can be customized
@@ -33,37 +39,39 @@ public class TestXmlSessionManager
 	public static void main(String[] args) throws IOException
 	{
 		// Instance variables
-		final int MAX = 1;
-		int index = 0;
-		File file;
-		String inputFile = "";
-		Scanner scan = new Scanner(System.in);
-		MetadataNode<?> mNode = null;
-		XmlSessionManager parse = new XmlSessionManager();
-		
-		String [] templates = new String[MAX];		
-		Document [] doc1 = new Document [MAX];
-		
-		do {
-		System.out.print("Enter name and path for " + (index+1) + " of " + MAX + " files: ");
-		inputFile = scan.nextLine();
-		templates[index] = inputFile;
-		file = new File(templates[index]);
-		
-		// ** TEST XML FILE PARSER ** input a file, output a Document object //
-		doc1 [index] = parse.fileToDOM(file);
-		System.out.println(doc1[index].getDocumentURI());
-		index ++;
-		} while (index < MAX);
+		String response = "y";
+		int index = 0;		
+		MetadataNode<?> mNode = null;	
+		// Scanner input = new Scanner(System.in);
+		boolean done = false;
+		do 
+		{
+			files[index] = userInput(index);	
+			docs [index] = parse.fileToDOM(files[index]);
+			
+			System.out.print("Would you like to enter another file? (Y/N) ");	
+			if (scan.hasNext())
+			{
+				response = scan.nextLine();
+				response = response.toLowerCase();
+			}			
+			else 
+			{
+				response = "n";
+			}			
+			if (response == "n")
+				done = true;
+			index++;
+		} while (!done && index < MAX);
 		// code works find up to this point... <SJohnston 12:23am 4/20/2018> //
-		
+		index = 0;
 
 		// ** TEST IMPORT DOM TO METADATA ** input a Node, output a MetadataNode
 		// object //
 		NodeList nList = null;
 		Node nNode = null;
-		nList = doc1[0].getElementsByTagName("metadata");
-		nNode = nList.item(0);
+		nList = docs[index].getElementsByTagName("metadata");
+		nNode = nList.item(index);
 		//System.out.println(nNode.getNodeName());
 		mNode = parse.importDOMToMetadata(nNode);		
 		mNode.print(0); // print terminates
@@ -78,40 +86,22 @@ public class TestXmlSessionManager
 		// ** TEST SAVE SESSION ** //
 		// open saved file in default text editor, check for formatting //
 		inputFile = parse.saveSession(mNode, mNode, templates);
-		FileWriter writer = null;
-		try
-		{
-		    writer = new FileWriter("test.txt");
-		    writer.write(inputFile);
-		}
-		catch ( IOException e)
-		{
-		}
-		finally
-		{
-		    try
-		    {
-		        if ( writer != null)
-		        writer.close( );
-		    }
-		    catch ( IOException e)
-		    {
-		    }
-		}
+		saveFileToDisk(inputFile);
+		/** !!! UNUSED BUT SAVED FOR LATER CODE !!!
 		inputFile = ".\\test.txt";
-		file = new File (inputFile);
+		files[index] = new File (inputFile);
 		
 		try {
-			Desktop.getDesktop().open(file);
+			Desktop.getDesktop().open(files[index]);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// code works find up to this point... <SJohnston 10:12Pm 4/23/2018> //
+		*/
 		
 		// ** TEST ADD DOM TO TREE ** input a Node and the root of a
 		// MetadataNode tree, output an updated MetadataNode root with
-		// dissimilar nodes added //
+		// dissimilar nodes added 
 		// mNode = parse.addDOMToTree(doc1[0].getParentNode(), mNode);
 		
 
@@ -120,10 +110,24 @@ public class TestXmlSessionManager
 		parse.printMetadataTree(mNode);				// !!! NOT WORKING !!! MetadataNode cannot be cast to org.w3c.dom.NodeList
 		
 		
-		// ** TEST OPEN SESSION ** //
+		// ** TEST OPEN SESSION ** input session file, current MetadataNode, array of Strings, 
+		// update current MetadataNode and array of Strings, output root of MetadataNode tree
 		
 		
-		// ** TEST SAVE METADATA TO DOM ** 
+		// ** TEST SAVE METADATA TO DOM ** input a DOM with unpopulated fields and a populated MetadataNode and output a DOM with populated fields
+		// import file of a blank template to a DOM (doc1)
+		
+		// print DOM (doc1) to show it has no entries
+		
+		// import file of a filled template to a DOM (doc2), then to a MetadataNode
+		
+		// print MetadataNode to show it has entries
+		
+		// update DOM (doc1) with MetadataNode
+		
+		// print DOM (doc1) to show it now has entries
+		
+		
 
 		// ** TEST METADATA TREE TO STRING ** input MetadataNode, output
 		// indented String of the MetadataNode tree //
@@ -136,7 +140,7 @@ public class TestXmlSessionManager
 		System.out.println("End of tree");
 		printNode(mNode);
 		
-		scan.close();
+		
 	}
 
 	public static void printNode(MetadataNode<?> mNode)
@@ -151,6 +155,17 @@ public class TestXmlSessionManager
 		return;
 	}
 
+	/**
+	 * The userInput method is so user input can be called from many different tests
+	 * @return
+	 */
+	private static File userInput(int ndx)
+	{				
+		System.out.print("Enter name and path for a metadata file: ");
+		templates[ndx] = scan.nextLine();
+		return (new File(templates[ndx]));
+	}
+	
 	/**
 	 * TreePrint method walks a MetadataNode tree extracting each element and
 	 * the comments associated that element. This method has been
@@ -169,4 +184,31 @@ public class TestXmlSessionManager
 		node.print((int) MetadataNode.treeSize(node));
 
 	}// end treePrint
+	
+	private static void saveFileToDisk(String filePath)
+	{
+		FileWriter writer = null;
+		try
+		{
+		    writer = new FileWriter("test.txt");
+		    writer.write(filePath);
+		    writer = new FileWriter("test.xsm");
+		    writer.write(filePath);
+		}
+		catch ( IOException e)
+		{
+		}
+		finally
+		{
+		    try
+		    {
+		        if ( writer != null)
+		        writer.close( );
+		    }
+		    catch ( IOException e)
+		    {
+		    }
+		}		
+		// code works find up to this point... <SJohnston 10:12Pm 4/23/2018> //
+	}
 }
