@@ -290,10 +290,10 @@ private void retrieveNodeDescription(Node node, MetadataNode <?> root)
 
 
 	/**
-	 * The saveMetadataToDOM method takes a MetadataNode at its root and an
-	 * array of all of the DOM files that are being updated for the session. It
-	 * copies the DOM files, each to a new name, then updates appropriate
-	 * element contents.
+	 * The saveMetadataToDOM method takes a Metadata Node and a Document file, 
+	 * searches the Document for a matching tag and updates its comment. Currently
+	 * the method does not account for multiple instances of a tag and will 
+	 * need to be modified to do so.
 	 * 
 	 * @precondition the Document files are NOT the templates originally used at
 	 *               the beginning of the session but are copies of the
@@ -307,15 +307,65 @@ private void retrieveNodeDescription(Node node, MetadataNode <?> root)
 	 *                MetadataNode tree and are in a state that can readily be
 	 *                exported to valid XML metadata files
 	 */
-	public void saveMetadataToDOM(MetadataNode<?> metaNode, Node domNode) {
+	public void saveMetadataToDOM(MetadataNode<?> metaNode, Document dom) {
 		// metaNode is not, necessarily, the root of the MetadataNode tree
-		// domNode is not necessarily the root of the Node tree
-		// find the first element match, then update the Node text
-		// recursive case: has child or has sibling:
+		// dom is the Document object
+		// find the element match, then update the Node text
+		// recursive case: Metadata Node has child or has sibling:
 			// call this method again with next MetadataNode and next Node.
-		// base case: reach node or metaNode with no child and no sibling 
-		MetadataNode<?> nextMeta = metaNode;		
-		Node nextNode = domNode;
+		// base case: reach Metadata Node with no child and no sibling 		
+		NodeList nList;
+		Node node, child, sibling;
+		// find the DOM element that matches the metadata node element		
+		nList = dom.getElementsByTagName(metaNode.getElement());
+		// if the list is not empty, proceed. else, go to next metaNode item
+		if (nList != null)
+		{
+			// now that we have found the element that matches the tag that we want, we need to update its corresponding TEXT_NODE
+			// the corresponding text node will either be a child or a sibling, not both.
+			boolean found = false;		
+			node = nList.item(0);		
+			if (node.hasChildNodes())
+			{
+				child = node.getFirstChild();
+				found = true;
+				if (child.getNodeType() == Node.TEXT_NODE)
+				{
+					child.setNodeValue(metaNode.getAnswer());
+				}
+			}
+			if 	(node.getNextSibling() != null && !found )
+			{
+				sibling = node.getNextSibling();
+				if (sibling.getNodeType() == Node.TEXT_NODE)
+				{
+					sibling.setNodeValue(metaNode.getAnswer());
+				}
+			}
+		}
+		
+		// find the next text node which will be the node that corresponds to the tag.
+		
+		// update the text node value with the metadata node answer
+		// BASE CASE
+		if ((metaNode.getChild() == null) && (metaNode.getSibling() == null))
+		{
+			return;
+		}
+		else // RECURSIVE CASE
+		{
+			// call this method with child first
+			if (metaNode.getChild() != null)
+			{
+				saveMetadataToDOM(metaNode.getChild(), dom);
+			}
+			// call this method with sibling second
+			if (metaNode.getSibling() != null)
+			{
+			saveMetadataToDOM(metaNode.getSibling(), dom);
+			}		
+			
+		}
 		
 		return;
 	}
@@ -473,8 +523,7 @@ private void retrieveNodeDescription(Node node, MetadataNode <?> root)
 		 * 
 		 * Last, we want to load into the file array the list of template files
 		 * by grabbing them from their absolute paths. !! CAUTION !! may throw a
-		 * FileNotFound exception if a user moved those files.
-		 * 
+		 * FileNotFound exception if a user moved those files.		 * 
 		 */
 		return rootMNode;
 	}
@@ -541,14 +590,14 @@ private void retrieveNodeDescription(Node node, MetadataNode <?> root)
 		// Print out *s for indentation place holders based on loop variable
 		// numElementNode
 		for (int i = 0; i < numElementNode; i++) {
-			System.out.print("*");
+			// System.out.print("*");
 			metadataTreeString += "*";
 		}
 
 		// print the node. This is where we do any operations to the current
 		// parameter node
 		
-		System.out.print(root.getElement() + ((numElementNode == 0) ? "\n" : " "));
+		// System.out.print(root.getElement() + ((numElementNode == 0) ? "\n" : " "));
 		metadataTreeString += root.getElement() + ((numElementNode == 0) ? "\n" : " ");
 		
 
@@ -556,7 +605,7 @@ private void retrieveNodeDescription(Node node, MetadataNode <?> root)
 		// add this node's tag, name, question, answer and verified state to string
 		if (numElementNode != 0)
 		{
-			System.out.println(" ElementName: " + root.getElementName() + " Question: " + root.getQuestion() + " Answer: " + root.getAnswer() + " Verified: " + ((root.getVerified()? "Y" : "N")));			
+			// System.out.println(" ElementName: " + root.getElementName() + " Question: " + root.getQuestion() + " Answer: " + root.getAnswer() + " Verified: " + ((root.getVerified()? "Y" : "N")));			
 			metadataTreeString += (" ElementName: " + root.getElementName() + " Question: " + root.getQuestion() + " Answer: " + root.getAnswer() + " Verified: " + ((root.getVerified()? "Y" : "N")) + "\n");			
 		}		
 		
@@ -601,14 +650,14 @@ private void retrieveNodeDescription(Node node, MetadataNode <?> root)
 		// Print out *s for indentation place holders based on loop variable
 		// numElementNode
 		for (int i = 0; i < numElementNode; i++) {
-			System.out.print("*");
+			// System.out.print("*");
 			domTreeString += "*";
 		}
 
 		// print the node. This is where we do any operations to the current
 		// parameter node
 		
-		System.out.print(node.getNodeName() + ((numElementNode == 0) ? "\n" : " "));
+		// System.out.print(node.getNodeName() + ((numElementNode == 0) ? "\n" : " "));
 		domTreeString += node.getNodeName() + ((numElementNode == 0) ? "\n" : " ");
 
 		// iterate through the nodeList
@@ -618,7 +667,7 @@ private void retrieveNodeDescription(Node node, MetadataNode <?> root)
 
 			// if the node is a comment node, print out the value
 			if (currentNode.getNodeType() == Node.COMMENT_NODE) {
-				System.out.println(currentNode.getNodeValue());
+				// System.out.println(currentNode.getNodeValue());
 				domTreeString += currentNode.getNodeValue() + "\n";
 			}
 			

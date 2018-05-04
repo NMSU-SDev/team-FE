@@ -85,14 +85,12 @@ public class MetadataPreview extends JFrame{
 		{
 			System.out.println("Error setting native LAF: " + e);
 		}
-		
-		//framePreview = new JFrame();
-		//framePreview.setTitle("Metadata Preview");
-		setBounds(100, 100, 400, 300);
+	
+		setBounds(100, 100, 500, 600);
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{380, 0};
-		gridBagLayout.rowHeights = new int[]{280, 0};
+		gridBagLayout.columnWidths = new int[]{480, 0};
+		gridBagLayout.rowHeights = new int[]{580, 0};
 		gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{1.0, Double.MIN_VALUE};
 		getContentPane().setLayout(gridBagLayout);

@@ -122,6 +122,8 @@ public class TestXmlSessionManager
 		
 		// ** TEST OPEN SESSION ** //
 		
+		
+		// ** TEST SAVE METADATA TO DOM ** 
 
 		// ** TEST METADATA TREE TO STRING ** input MetadataNode, output
 		// indented String of the MetadataNode tree //
