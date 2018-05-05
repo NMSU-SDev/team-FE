@@ -159,9 +159,9 @@ public class XmlSessionManager {
 			
 		} // end importDOMToMetadataNode
 		// mini report
-		System.out.print("Tag: " + root.getElement() + " Name: " + root.getElementName());		
-		System.out.print(" Question: " + root.getQuestion() + " Answer: " + root.getAnswer());
-		System.out.println(" Verified: " + ((root.getVerified() ? "True" : "False")));
+		//System.out.print("Tag: " + root.getElement() + " Name: " + root.getElementName());		
+		//System.out.print(" Question: " + root.getQuestion() + " Answer: " + root.getAnswer());
+		//System.out.println(" Verified: " + ((root.getVerified() ? "True" : "False")));
 		
 		// Hello Element Node. Let's build your family tree.
 		// send node to method that looks for an associated comment to this node (usually the next sibling or child node)		
@@ -395,7 +395,7 @@ private void retrieveNodeDescription(Node node, MetadataNode <?> root)
 		String nodeAncestry = "";
 		boolean ancestryMatch = false;
 		metaNodeAncestry = metaNode.getElement();
-		nodeAncestry = node.getNodeName();
+		nodeAncestry = node.getNodeName(); // NULL POINTER EXCEPPTION - REQUIRES DEBUG //
 		
 		// walk up ancestry tree to be sure we have the right Document leaf
 		while ( (metaNode.getParent() != null) && (node.getParentNode() != null) && (metaNode.getParent().getElement() != "metadata") )
@@ -544,7 +544,7 @@ private void retrieveNodeDescription(Node node, MetadataNode <?> root)
 	 * @catch returns a new, empty node to the calling method.
 	 */
 	public MetadataNode<?> openSession(File file, MetadataNode<?> currentNode, String[] templates) {
-		MetadataNode<?> rootMNode = new MetadataNode<Object>(null, null, null);
+		MetadataNode<?> rootMNode = new MetadataNode<Object>("not implemented", null, null);
 		/*
 		 * Set parentNode to rootMNode. Set parentIndentation = 0; Set
 		 * nextIndentation = parentIndentation; Get first String line
