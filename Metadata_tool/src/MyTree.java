@@ -14,7 +14,12 @@ import javax.swing.tree.TreeSelectionModel;
 
 public class MyTree extends JPanel implements TreeSelectionListener {
    
-   private JTree tree;
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+private JTree tree;
    
    //Optionally play with line styles.  Possible values are
     //"Angled" (the default), "Horizontal", and "None".

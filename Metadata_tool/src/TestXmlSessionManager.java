@@ -11,18 +11,15 @@
  * specified by the user.
  */
 
-import java.awt.Desktop;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.util.Scanner;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import java.util.Date;
 
 public class TestXmlSessionManager
 {
@@ -54,7 +51,7 @@ public class TestXmlSessionManager
 		int index = 0;
 		int counter = 1;
 		MetadataNode<?> mNode = null;	
-		MetadataNode<?> currentNode = new MetadataNode("", (MetadataNode)null, (MetadataNode)null);
+		MetadataNode<?> currentNode = null;
 		// Scanner input = new Scanner(System.in);		
 		boolean done = false;
 		// Select files for test
@@ -190,7 +187,7 @@ public class TestXmlSessionManager
 		saveFileToDisk("test_5", logOfTest);
 
 		// ** TEST OPEN SESSION ** input session file, current MetadataNode, array of Strings, 
-		mNode = new MetadataNode("", (MetadataNode)null, (MetadataNode)null);
+		mNode = new MetadataNode<Object>("Open Session", (MetadataNode<?>)null, (MetadataNode<?>)null);
 		logOfTest += "TEST OPEN SESSION\n";
 		logOfTest += (printNode(mNode) + "\n");				
 		// update current MetadataNode and array of Strings, output root of MetadataNode tree
@@ -211,7 +208,7 @@ public class TestXmlSessionManager
 		// ** TEST SAVE METADATA TO DOM ** input a DOM with un-populated fields and a populated MetadataNode and output a DOM with populated fields
 		logOfTest += "TEST SAVE METADATA TO DOM\n";
 		index = 0;
-		mNode = new MetadataNode("empty", (MetadataNode)null, (MetadataNode)null);
+		mNode = new MetadataNode<Object>("empty", (MetadataNode<?>)null, (MetadataNode<?>)null);
 		logOfTest += "Contents of Metadata Node before loading DOM:\n";
 		logOfTest += (printNode(mNode) + "\n");
 		

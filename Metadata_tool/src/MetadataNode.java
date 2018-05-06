@@ -1,6 +1,5 @@
 import java.util.Enumeration;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
@@ -656,7 +655,7 @@ public class MetadataNode<M> extends Object implements MutableTreeNode
 	}
 
 	@Override
-	public Enumeration children()
+	public Enumeration<?> children()
 	{
 		// TODO Auto-generated method stub
 		return null;

@@ -151,7 +151,7 @@ public class FileOps1
 	 * @return a File object of the file that was opened or null if the file
 	 *         could not be opened.
 	 */
-	@SuppressWarnings("unused")
+	
 	public File openFile(Component parent)
 	{
 
@@ -245,7 +245,7 @@ public class FileOps1
 	/*
 	 * Main for testing purposes only!
 	 ***********************************/
-	@SuppressWarnings("unused")
+	
 	public static void main(String[] args)
 	{
 		Scanner s = new Scanner(System.in);

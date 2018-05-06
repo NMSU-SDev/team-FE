@@ -87,11 +87,11 @@ public class MainView
 	private String inputFile = "";
 	private NodeList nList = null;
 	private Node rootDOM = null;
-	private MetadataNode rootMNode = new MetadataNode("root", "empty", (MetadataNode) null, (MetadataNode) null);
+	private MetadataNode rootMNode = new MetadataNode<Object>("root", "empty", (MetadataNode<?>) null, (MetadataNode<?>) null);
 	/*
 	 */
 	Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-	private MetadataNode currentNode = new MetadataNode("TOC", "Table of Contents", rootMNode, (MetadataNode) null);
+	private MetadataNode currentNode = new MetadataNode<Object>("TOC", "Table of Contents", rootMNode, (MetadataNode<?>) null);
 	private FileOps1 fileOperations = new FileOps1();
 	private XmlSessionManager session1 = new XmlSessionManager();
 	private NewSession newSession;

@@ -1,22 +1,12 @@
 import java.awt.EventQueue;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
-import java.awt.BorderLayout;
-import java.awt.Color;
-
-import javax.swing.JTextArea;
 import javax.swing.UIManager;
-import javax.swing.border.EtchedBorder;
 import java.awt.GridBagLayout;
-import java.awt.Component;
-import javax.swing.Box;
-import javax.swing.JPanel;
 import javax.swing.JTextPane;
 
 public class MetadataPreview extends JFrame{
@@ -27,8 +17,6 @@ public class MetadataPreview extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private JFrame framePreview;	
 	private static String preview;
-	private JTextArea textArea;
-
 	/**
 	 * Launch the application.
 	 */
