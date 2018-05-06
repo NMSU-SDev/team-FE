@@ -94,12 +94,20 @@ public class XmlSessionManager {
 		if (node.getNodeType() == Node.ELEMENT_NODE)
 		{
 			root.setElement(node.getNodeName());
+			/**System.out.println(root.getElement());
+			System.out.println(node.getTextContent());
+			System.out.println((node.hasAttributes())? node.getAttributes(): "No attributes");
+			System.out.println(!(node.getFirstChild() == null) ? "Has child" : "Is leaf" );
+			if ((node.getFirstChild() == null))
+				root.setAnswer(node.getTextContent());
+			*/
 			//System.out.print("I am an element. My tag is: " + root.getElement()); 
+			
 			if (node.hasChildNodes())
 			{
 				child = node.getFirstChild();
 				root.setAnswer(child.getNodeValue());
-				if (root.getAnswer().contains("\n"))
+				/*if (root.getAnswer().contains("\n"))
 				{
 					int escapeSequence = root.getAnswer().indexOf("\n");
 					if (escapeSequence > 0)
@@ -108,7 +116,8 @@ public class XmlSessionManager {
 					}
 					else
 						root.setAnswer("");
-				}				
+				}
+				*/			
 			}
 			retrieveNodeDescription(node, root);
 			//System.out.println(" My name is: " + root.getElementName() + " My description is: " + root.getQuestion());
@@ -285,6 +294,7 @@ private void retrieveNodeDescription(Node node, MetadataNode <?> root)
 				sibling = sibling.getNextSibling();	
 			} // end while sibling is not an element nor null
 		} // end else incoming node is a leaf
+		
 		return;
 	}
 
@@ -319,18 +329,24 @@ private void retrieveNodeDescription(Node node, MetadataNode <?> root)
 		Node node, child, sibling;
 		// find the DOM element that matches the metadata node element		
 		nList = dom.getElementsByTagName(metaNode.getElement());
+		node = nList.item(0);
 		// check that the branch path to the root is the same in the 
 		// Document as it is in the MetadataNode
 		// call private method ancestorCompare(MetadataNode, Node)
-		while (!ancestryMatch)
+		while (!ancestryMatch && index < nList.getLength()) 		// !!! POTENTIAL FOR INFINITE LOOP !!! //
 		{
 			node = nList.item(index);
 			ancestryMatch = ancestorCompare(metaNode, node);
 			index++;
 		} // end loop find correct branch path of the Document
+		
 		// if the list is not empty, proceed. else, go to next metaNode item
-		if (nList != null)
+		if ((nList != null) && ancestryMatch && !(node.hasChildNodes()))
 		{
+			boolean found = false;			
+			node.setTextContent(metaNode.getAnswer());
+			found = true;
+			/**
 			// now that we have found the element that matches the tag that we want, 
 			// we need to update its corresponding TEXT_NODE
 			// the corresponding text node will either be a child or a sibling, not both.
@@ -338,11 +354,11 @@ private void retrieveNodeDescription(Node node, MetadataNode <?> root)
 			node = nList.item(0);		
 			if (node.hasChildNodes())
 			{
-				child = node.getFirstChild();
-				found = true;
+				child = node.getFirstChild();				
 				if (child.getNodeType() == Node.TEXT_NODE)
 				{
 					child.setNodeValue(metaNode.getAnswer());
+					found = true;
 				}
 			} // end if child was the node that was updated
 			if 	(node.getNextSibling() != null && !found )
@@ -351,8 +367,10 @@ private void retrieveNodeDescription(Node node, MetadataNode <?> root)
 				if (sibling.getNodeType() == Node.TEXT_NODE)
 				{
 					sibling.setNodeValue(metaNode.getAnswer());
+					found = true;
 				}
 			} // end if sibling is the node that was updated
+			*/
 		}
 		
 		// find the next text node which will be the node that corresponds to the tag.
@@ -397,19 +415,30 @@ private void retrieveNodeDescription(Node node, MetadataNode <?> root)
 		metaNodeAncestry = metaNode.getElement();
 		nodeAncestry = node.getNodeName(); // NULL POINTER EXCEPPTION - REQUIRES DEBUG //
 		
-		// walk up ancestry tree to be sure we have the right Document leaf
-		while ( (metaNode.getParent() != null) && (node.getParentNode() != null) && (metaNode.getParent().getElement() != "metadata") )
+		// If the incoming metaNode and node are both the root, return true
+		/**
+		if (metaNodeAncestry.equals("metadata"))
 		{
-			if (metaNodeAncestry == nodeAncestry)
-				ancestryMatch = true;
-			else 
-				ancestryMatch = false;
-			metaNode = metaNode.getParent();
-			node = node.getParentNode();
-			metaNodeAncestry += metaNode.getElement();
-			nodeAncestry += node.getNodeName();
+			ancestryMatch = true;
 		}
 		
+		// else, walk up ancestry tree to be sure we have the right Document leaf
+		else
+		{
+		*/	while (!(metaNodeAncestry.contains("metadata")))
+			{				
+				if ((metaNode.getParent() != null))
+					metaNode = metaNode.getParent();
+				if ((node.getParentNode() != null))
+					node = node.getParentNode();
+				metaNodeAncestry = (metaNode.getElement() + "->" + metaNodeAncestry);
+				nodeAncestry = (node.getNodeName() + "->" + nodeAncestry);
+			}	
+			if (metaNodeAncestry.equals(nodeAncestry))
+				ancestryMatch = true;			
+			else 
+				ancestryMatch = false;
+		//}
 		// return the ancestry match result	
 		return ancestryMatch;
 	}
@@ -454,28 +483,47 @@ private void retrieveNodeDescription(Node node, MetadataNode <?> root)
 	 * @param savePath
 	 *            is the folder in which the files are to be saved
 	 * @return
-	 * @throws FileNotFoundException
+	 * @throws IOException 
 	 */
-	public void exportXMLFiles(Document[] domList, String[] nameList, String savePath) throws FileNotFoundException {
+	public void exportXMLFiles(Document[] domList, String[] nameList, String projectNumber) throws IOException {
 		// Create TransformerFactory
+		String[] outputList = new String[nameList.length];
+		String path = "";
+		String fileName = "";
+		String extension = "";
+		char token = '\\';
+		char dot = '.';
+		int tokenIndex = 0;
+		int dotIndex = 0;
+		// Add projectNumber to front of tile name, remove "template" from file name
+		for (int i = 0; i < nameList.length; i++)
+		{
+			// find index of last token and file extension
+			tokenIndex = nameList[i].lastIndexOf(token) + 1;
+			dotIndex = nameList[i].lastIndexOf(dot);
+			// assign string before token to path
+			path = nameList[i].substring(0, tokenIndex);
+			// assign string after token to fileName
+			fileName = nameList[i].substring(tokenIndex,  dotIndex);
+			// assign file extension to extension
+			extension = nameList[i].substring(dotIndex, nameList[i].length());
+			fileName = (projectNumber + "_" + fileName);
+			tokenIndex = fileName.indexOf("_template");
+			fileName = fileName.substring(0, tokenIndex);
+			outputList[i] = path + fileName + extension;
+		}
+		
 		TransformerFactory transFactory = TransformerFactory.newInstance();
 		try {
 			// Create Transformer
 			Transformer trans = transFactory.newTransformer();
 			// Transform each Document to a Result
 			for (int index = 0; index < domList.length; index++) {
+				BufferedWriter out;
 				DOMSource source = new DOMSource(domList[index]);
-				// !!! need this to output to an array of file objects
-				StreamResult result = new StreamResult(System.out); 
-				trans.transform(source, result);
-				// Convert Result to a file, stored in an array
-				String newPath = (savePath + "\\" + nameList[index] + ".xml");
-				try {
-					PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(newPath)));
-					out.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				// This is where the magic happens
+				StreamResult result = new StreamResult(new File(outputList[index])); 
+				trans.transform(source, result);				
 			}
 		} catch (TransformerConfigurationException e) {
 			// TODO Auto-generated catch block
@@ -604,16 +652,17 @@ private void retrieveNodeDescription(Node node, MetadataNode <?> root)
 	 *         File ?!?
 	 */
 	public String saveSession(MetadataNode<?> root, MetadataNode<?> currentNode, String[] templates) {
-		String xMlSessionSave = "";
+		String xmlSessionSave = "!MetadataNodeTree!\n";
 		// File sessionFile;
 
-		xMlSessionSave += metadataTreeToString(root);
-		xMlSessionSave += "\n!EndTree!\nCurrent Node: " + currentNode.getElement() + "\n!EndCurrentNode!";
+		xmlSessionSave += metadataTreeToString(root);
+		xmlSessionSave += "!EndTree!\n!Current Node!\n" + currentNode.getElement() + "\n!EndCurrentNode!\n!TemplateList!\n";
 		for (int index = 0; index < templates.length; index++) {
-			xMlSessionSave += templates[index] + "\n!EndTemplatesList!";
+			xmlSessionSave += templates[index] + "\n";
 		}
+		xmlSessionSave += "!EndTemplatesList!\n";
 
-		return xMlSessionSave;
+		return xmlSessionSave;
 	}
 
 	/**

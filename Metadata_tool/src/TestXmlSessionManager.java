@@ -12,6 +12,7 @@
  */
 
 import java.awt.Desktop;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -148,7 +149,8 @@ public class TestXmlSessionManager
 		// ** TEST SAVE SESSION ** //
 		// open saved file in default text editor, check for formatting //
 		logOfTest += "TEST SAVE SESSION\n";
-		inputFile = parse.saveSession(mNode, mNode, templates);
+		currentNode = mNode.getChild().getSibling().getChild().getSibling();
+		inputFile = parse.saveSession(mNode, currentNode, templates);
 		if (inputFile != "")
 		{
 			logOfTest += "XmlSessionManager.saveSession String:\n";
@@ -182,8 +184,7 @@ public class TestXmlSessionManager
 		mNode = parse.addDOMToTree(docs[0].getParentNode(), mNode);
 		if (mNode != null)
 		{
-			logOfTest += parse.metadataTreeToString(mNode);
-			
+			logOfTest += parse.metadataTreeToString(mNode);			
 		}
 		logOfTest += "END ADD DOM TO METADATA NODE TREE TEST\n\n";
 		saveFileToDisk("test_5", logOfTest);
@@ -215,8 +216,8 @@ public class TestXmlSessionManager
 		logOfTest += (printNode(mNode) + "\n");
 		
 		// import file of a blank template to a DOM (doc1)
-		logOfTest += "Path to a blank XML template file:\n";
-		System.out.print("Path to a blank XML template file: ");		
+		logOfTest += "Path to a blank XML template file...\n";
+		System.out.println("Path to a blank XML template file...");		
 		files[index] = userInput(index);
 		docs[index] = parse.fileToDOM(files[index]);
 		// show loaded contents of DOM (docs[0]) to show it has no entries
@@ -225,15 +226,15 @@ public class TestXmlSessionManager
 		index++; 
 		
 		// import file of a filled template to a DOM (docs[1]), then to a MetadataNode
-		logOfTest += "Path to a filled XML template file:\n";
-		System.out.println("Path to a filled XML template file:\n");
+		logOfTest += "Path to a filled XML template file...\n";
+		System.out.println("\nPath to a filled XML template file...");
 		files[index] = userInput(index);
 		docs[index] = parse.fileToDOM(files[index]);
 		// show loaded contents of DOM (docs[1]) to show it has populated entries
 		logOfTest += ("DOM contents:\n" + parse.domTreeToString(docs[index]));
 		logOfTest += "Loading the Metadata Node...\n";
-		nList = docs[index].getChildNodes();
-		nNode = nList.item(index);
+		nList = docs[index].getElementsByTagName("metadata");
+		nNode = nList.item(0);
 		mNode = parse.importDOMToMetadata(nNode);
 		// show MetadataNode to show it has entries
 		logOfTest += ("Metadata Node contents:\n");		
@@ -241,7 +242,7 @@ public class TestXmlSessionManager
 		index--;
 		
 		// update DOM (docs[0]) with MetadataNode entries
-		logOfTest += "Saving entries from Metadata Node Tree to DOM with no entries...\n";
+		logOfTest += "Saving populated entries from Metadata Node Tree to DOM that had empty entries...\n";
 		parse.saveMetadataToDOM(mNode, docs[index]);
 		
 		// print DOM (docs[0]) to show it now has entries
@@ -255,17 +256,19 @@ public class TestXmlSessionManager
 		logOfTest += "TEST EXPORT XML FILES\n";
 		System.out.print("What is the project number: ");
 		projectNumber = scan.nextInt();
-		inputFile = ("" + projectNumber);
+		inputFile = ("" + projectNumber);		
 		parse.exportXMLFiles(docs, templates, inputFile);
 		index = 0;
 		while (index < templates.length && index < MAX)
 		{
 			logOfTest += (templates[index] + "\n");
+			index++;
 		}
 		
-		System.out.print("Root of MetadataNode: ");
-		printNode(mNode);	
-		logOfTest += "\nEND TEST XML SESSION MANAGER";
+		logOfTest += "Root of MetadataNode:\n";
+		// System.out.print("Root of MetadataNode: ");
+		logOfTest += printNode(mNode);	
+		logOfTest += "\nEND TEST XML SESSION MANAGER\n";
 		saveFileToDisk("test_8", logOfTest);
 	}
 
@@ -314,13 +317,31 @@ public class TestXmlSessionManager
 	}// end treePrint
 	
 	private static void saveFileToDisk(String fileName, String fileContent)
-	{
-		FileWriter writer = null;
+	{		
+		BufferedWriter writer = null;
 		try
 		{
-		    writer = new FileWriter((fileName + ".txt"));
-		    writer.write(fileContent);
-		    writer = new FileWriter((fileName + ".xsm"));
+		    writer = new BufferedWriter(new FileWriter(fileName + ".txt"));
+		    writer.write(fileContent);	
+		}
+		catch ( IOException e)
+		{
+		}
+		finally
+		{
+		    try
+		    {
+		        if ( writer != null)
+		        writer.close( );
+		    }
+		    catch ( IOException e)
+		    {
+		    }
+		}
+		
+		try
+		{
+		    writer = new BufferedWriter(new FileWriter(fileName + ".xsm"));
 		    writer.write(fileContent);
 		}
 		catch ( IOException e)
@@ -336,7 +357,7 @@ public class TestXmlSessionManager
 		    catch ( IOException e)
 		    {
 		    }
-		}		
+		}
 		// code works find up to this point... <SJohnston 10:12Pm 4/23/2018> //
 	}
 	
