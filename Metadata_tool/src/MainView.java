@@ -69,6 +69,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -498,7 +499,7 @@ public class MainView
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				String extension = "";
+				String fName = "";
 				// call the open code from FileOps1
 				System.out.println("Open menu option clicked");
 				// load metadata or session file into 'file'
@@ -506,16 +507,26 @@ public class MainView
 
 				/* Must check to make sure the user selected a file */
 				if (file != null)
-					extension = file.getName();
+					fName = file.getName();
 
 				// if file is an XML, run Preview method
-				if (extension.contains(".xml"))
+				if (fName.contains(".xml"))
 				{
 					try
 					{
-						Desktop.getDesktop().open(file);
+						//Desktop.getDesktop().open(file);
+						Document doc1 = session1.fileToDOM( file );
+						TransformerFactory tf = TransformerFactory.newInstance();
+						Transformer transformer = tf.newTransformer();
+						transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+						StringWriter writer = new StringWriter();
+						transformer.transform(new DOMSource(doc1), new StreamResult(writer));
+						String output = writer.getBuffer().toString();
+						
+						preview = new MetadataPreview( output, fName );
+						preview.setVisible(true);
 					}
-					catch (IOException e)
+					catch (TransformerException e)
 					{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -523,18 +534,18 @@ public class MainView
 				}
 
 				// else if file is an xsm, run openSession method
-				else if (extension.contains(".xsm"))
+				else if (fName.contains(".xsm"))
 				{
 					rootMNode = session1.openSession(file, currentNode, templates);
 				}
 
-				else
+				else if ( file != null )
 				{
 					System.err.println("Not a session file");
-					JOptionPane.showMessageDialog(null, "File selected was not a session file!", "Open Failed",
+					JOptionPane.showMessageDialog(null, "File selected was not a session file or an XML file!", "Open Failed",
 							JOptionPane.WARNING_MESSAGE);
 				}
-			}
+			} // end action performed for open file menu
 		});
 		menuFile.add(menuItemOpen);
 
@@ -794,7 +805,7 @@ public class MainView
 							String previewStr = "";
 							previewStr = session1.metadataTreeToString(rootMNode);
 							//preview = new MetadataPreview(session1.metadataTreeToString(rootMNode));
-							preview = new MetadataPreview( previewStr );
+							preview = new MetadataPreview( previewStr, "" );
 							preview.setVisible(true);
 							preview.addWindowListener(new WindowAdapter()
 							{

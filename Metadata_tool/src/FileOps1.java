@@ -15,10 +15,11 @@ import static java.nio.file.StandardOpenOption.CREATE;
 
 /* Merrick Metadata Project
  * CS 371 Software Dev - Spring 2018
- * 2018 March 12 - 16
+ * Created: 2018 March 12 - 16
+ * Revised: 2018 May 06
  * 
  * Basic File I/O operations code
- * Revision 2a
+ * Revision 2a3.5
  * 
  * Author: Jacob Espinoza
  * 
