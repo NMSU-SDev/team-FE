@@ -374,7 +374,7 @@ public class XmlSessionManager {
 	 * @return
 	 * @throws IOException 
 	 */
-	public void exportXMLFiles(Document[] domList, String[] nameList, String projectNumber) throws IOException {
+	public String [] exportXMLFiles(Document[] domList, String[] nameList, String projectNumber) throws IOException {
 		// Create TransformerFactory
 		String[] outputList = new String[nameList.length];
 		String path = "";
@@ -421,7 +421,7 @@ public class XmlSessionManager {
 			e.printStackTrace();
 		}
 	
-		return;
+		return outputList;
 	}
 
 	/**

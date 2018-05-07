@@ -69,6 +69,12 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.SoftBevelBorder;
@@ -97,10 +103,11 @@ public class MainView
 	private NewSession newSession;
 	private MetadataPreview preview;
 	private int treeLength = 0;
+	private static final int MAX = 2;
 
 	// TEST VARIABLES //
 	private Document doc1 = null;
-	private Document doc2 = null;
+	private Document [] docs = new Document [MAX];
 	Scanner scan = new Scanner(System.in);
 	private boolean verifyCurrentNode = false;
 	private JTextField textField;
@@ -536,10 +543,10 @@ public class MainView
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				// call SaveSession() method that creates a File object to send
-				// to the saveFile(File) method
+				// call SaveSession() method that creates a String object of this session
+				String session = session1.saveSession(rootMNode, currentNode, templates);				
 				// call FileOps1 save file method
-				fileOperations.saveFile(file);
+				fileOperations.saveFile(file, session);
 			}
 		});
 		menuFile.add(menuItemSave);
@@ -640,14 +647,41 @@ public class MainView
 				exportFileChoose.setFileFilter(xmlFilter);
 				exportFileChoose.setDialogTitle("Select location for export...");
 
+				String [] outputList = new String [MAX];
 				int exportChooseReturnVal;
-				File exportF = null;
+				docs [0] = doc1;
+				try {
+				outputList = session1.exportXMLFiles(docs, templates, "12345678");
+				}
+				catch (Exception e)
+				{
+					// err message
+				}
+				File exportF = new File(outputList[0]);
 
 				exportChooseReturnVal = exportFileChoose.showSaveDialog(frameTeamFeMetadata);
 				exportF = exportFileChoose.getSelectedFile();
 				if (exportF != null)
 				{
-					System.out.printf("File to be exported is %s\n", exportF.toString());
+					TransformerFactory transFactory = TransformerFactory.newInstance();
+					try {
+						// Create Transformer
+						Transformer trans = transFactory.newTransformer();
+						// Transform each Document to a Result
+						for (int index = 0; index < docs.length; index++) {
+							DOMSource source = new DOMSource(docs[index]);
+							// This is where the magic happens
+							StreamResult result = new StreamResult(new File(outputList[index])); 
+							trans.transform(source, result);				
+						}
+					} catch (TransformerConfigurationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (TransformerException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					// System.out.printf("File to be exported is %s\n", exportF.toString());
 				}
 				else
 					System.out.println("No file was selected.");

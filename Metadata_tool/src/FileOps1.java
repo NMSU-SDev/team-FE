@@ -111,7 +111,7 @@ public class FileOps1
 	 */
 	// an additional parameter will be a document object model object
 	// Session files are proprietary .xsm (Xml Session Metadata)
-	public File writeFile(File fileObjIn)
+	public File writeFile(File fileObjIn, String session)
 	{
 
 		// initialize the saved file object to null at the start
@@ -120,15 +120,18 @@ public class FileOps1
 		Path pathToFile = fileObjIn.toPath();
 
 		// some test output to write to the file
+		/** DEPRECATED
 		String content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + "<note>\r\n"
 				+ "  <heading>Test File</heading>\r\n"
 				+ "  <body>This test XSM file tests the file writing method.</body>\r\n" + "</note> ";
-		byte byteArray[] = content.getBytes();
+		*/
+		// byte byteArray[] = content.getBytes(); DEPRECATED
+		byte byteArray[] = session.getBytes();
 
 		try (OutputStream out = new BufferedOutputStream(Files.newOutputStream(pathToFile, CREATE, APPEND)))
 		{
 			out.write(byteArray, 0, byteArray.length);
-			System.out.println(" XSM file creation successful!");
+			// System.out.println(" XSM file creation successful!");
 		}
 		catch (IOException e)
 		{
@@ -205,7 +208,7 @@ public class FileOps1
 	 * @return a File object of the file that was opened or null if the file
 	 *         could not be opened.
 	 */
-	public void saveFile(File file)
+	public void saveFile(File file, String session)
 	{
 
 		JFrame saveFrame = new JFrame();
@@ -224,7 +227,7 @@ public class FileOps1
 		int userSelection = saveFileChoose.showSaveDialog(saveFrame);
 		if (userSelection == JFileChooser.APPROVE_OPTION)
 		{
-			File testFile = writeFile(file);
+			File testFile = writeFile(file, session);
 			System.out.println("Save as file: " + testFile.getAbsolutePath());
 			return;
 		}
