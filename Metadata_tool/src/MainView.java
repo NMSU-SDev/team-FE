@@ -174,7 +174,24 @@ public class MainView
 	/* Display a welcome dialog, aka a "splash screen" */
 	private void displayWelcome() {
 		//coming soon ;
-	}
+		EventQueue.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				String message = "Create new session, open previous session, or import template";
+				Object options[] = { "New", "Open", "Import" };
+		
+				int result = JOptionPane.showOptionDialog(frameTeamFeMetadata, message, "Welcome", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+				
+				System.out.printf("JOptionPane result value is %d\n", result);
+				
+				if (result == 0 ) createNew();
+				else if (result == 1) open();
+				else if (result == 2) importFile();
+			}
+		});
+		
+	} // end displayWelcome()
 	
 	/* action done to create a new session */
 	private void createNew() {
@@ -409,6 +426,8 @@ public class MainView
 		panel.add(openingMsg, gbc_openingScreen);
 		openingMsg.setColumns(10);
 		openingMsg.setText("Create new session, open previous session, or import template to proceed...");
+		//**** disable the opening message for now
+		openingMsg.setVisible(false);
 
 
 		navLabel.setText("Navigation");
