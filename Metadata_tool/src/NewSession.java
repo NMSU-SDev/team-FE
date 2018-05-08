@@ -100,7 +100,7 @@ public class NewSession extends JFrame
 				// to import from file
 				try
 				{
-					USGSFiles dialog = new USGSFiles(file);
+					USGSFiles dialog = new USGSFiles(file, newFrame);
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
 					dialog.addWindowListener(new WindowAdapter()

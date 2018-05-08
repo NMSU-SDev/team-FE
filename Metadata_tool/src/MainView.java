@@ -178,7 +178,7 @@ public class MainView
 		{
 			public void run()
 			{
-				String message = "Create new session, open previous session, or import template";
+				String message = "Would you like to create a new session, open a previous session, or import a template?";
 				Object options[] = { "New", "Open", "Import" };
 		
 				int result = JOptionPane.showOptionDialog(frameTeamFeMetadata, message, "Welcome", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
