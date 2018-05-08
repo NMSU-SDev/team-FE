@@ -1,13 +1,17 @@
 
 /**
- * 
  * @author SJohnston & LHermann
- * @version 1.0.1
- * @date March 12, 2018
- * Command line test code for interfacing with the XmlSessionManager and learning how to navigate a DOM tree object.
+ * @version 2.0
+ * @date began March 12, 2018
+ * @date revised May 5, 2018
+ * @deprecated Command line test code for interfacing with the 
+ * @deprecated XmlSessionManager and learning how to navigate a DOM tree object.
+ * TestXmlSessionManager purpose is to aid in testing the methods of 
+ * the XmlSessionManager class to verify that they meet requirements
+ * specified by the user.
  */
 
-import java.awt.Desktop;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -21,7 +25,15 @@ public class TestXmlSessionManager
 {
 
 	static int numElementNode = 0;
-
+	private static String inputFile = "";
+	private static final int MAX = 2;
+	private static XmlSessionManager parse = new XmlSessionManager();
+	private static String [] templates = new String[MAX];
+	private static Document [] docs = new Document [MAX];
+	private static File [] files = new File [MAX];
+	private static Scanner scan = new Scanner(System.in);
+	private static String logOfTest = "";
+	private static int projectNumber = 0;
 	/**
 	 * The purpose of this method is to text the MetaXML Parser class and to
 	 * develop and test the treeTraversal method so that it can be customized
@@ -33,122 +45,255 @@ public class TestXmlSessionManager
 	public static void main(String[] args) throws IOException
 	{
 		// Instance variables
-		final int MAX = 1;
+		logOfTest += "BEGIN TEST XML SESSION MANAGER\n\n";
+		logOfTest += "INSTANTIATION AND INITIALIZATION\n";
+		String response = "y";
 		int index = 0;
-		File file;
-		String inputFile = "";
-		Scanner scan = new Scanner(System.in);
-		MetadataNode<?> mNode = null;
-		XmlSessionManager parse = new XmlSessionManager();
-		
-		String [] templates = new String[MAX];		
-		Document [] doc1 = new Document [MAX];
-		
-		do {
-		System.out.print("Enter name and path for " + (index+1) + " of " + MAX + " files: ");
-		inputFile = scan.nextLine();
-		templates[index] = inputFile;
-		file = new File(templates[index]);
-		
-		// ** TEST XML FILE PARSER ** input a file, output a Document object //
-		doc1 [index] = parse.fileToDOM(file);
-		System.out.println(doc1[index].getDocumentURI());
-		index ++;
-		} while (index < MAX);
+		int counter = 1;
+		MetadataNode<?> mNode = null;	
+		MetadataNode<?> currentNode = null;
+		// Scanner input = new Scanner(System.in);		
+		boolean done = false;
+		// Select files for test
+		do 
+		{
+			files[index] = userInput(index);
+			docs [index] = parse.fileToDOM(files[index]);
+			
+			System.out.print("Would you like to enter another file? (Y/N) ");	
+			if (scan.hasNext())
+			{
+				response = scan.nextLine();
+				response = response.toLowerCase();
+				if (response.equals("n"))
+				{
+					done = true;
+				}
+				else 
+				{
+					done = false;
+					counter++;
+					index++;
+				}
+				
+			}
+			else 
+			{
+				System.out.println("Invalid entry");
+			}
+			
+		} while (!done && index < MAX);
 		// code works find up to this point... <SJohnston 12:23am 4/20/2018> //
+		index = 0;
+		done = false;
 		
-
+		logOfTest += (counter + " XML files added:\n");
+		
+		while (index < templates.length && index < counter)
+		{
+			logOfTest += (templates[index] + "\n");
+			index++;
+		}
+		logOfTest += "END INSTANTIATION AND INITIALLIZATION\n\n";		
+		saveFileToDisk("test_1", logOfTest);
+		
 		// ** TEST IMPORT DOM TO METADATA ** input a Node, output a MetadataNode
 		// object //
+		index = 0;
+		logOfTest += "TEST IMPORT DOM TO METADATA\n";
 		NodeList nList = null;
 		Node nNode = null;
-		nList = doc1[0].getElementsByTagName("metadata");
-		nNode = nList.item(0);
+		nList = docs[index].getElementsByTagName("metadata");
+		nNode = nList.item(index);
 		//System.out.println(nNode.getNodeName());
-		mNode = parse.importDOMToMetadata(nNode);		
-		mNode.print(0); // print terminates
-		// code works find up to this point... <SJohnston 2:51am 4/22/2018> //
+		mNode = parse.importDOMToMetadata(nNode);
+		if (mNode != null)
+		{
+			logOfTest += "XmlSessionManager importDOMToMetadata - PASS\n";
+			logOfTest += (parse.metadataTreeToString(mNode) + "\n");
+			mNode.print(0); // print terminates
+			logOfTest += "MetadataNode.print to console - PASS\n";
+		}
+		else 
+		{
+			logOfTest += "XmlSessionManager importDOMToMetadata - FAIL\n";
+			logOfTest += "MetadataNode.print to console - FAIL\n";
+		}// code works find up to this point... <SJohnston 2:51am 4/22/2018> //
+		logOfTest += "END IMPORT DOM TO METADATA TEST\n\n";
+		saveFileToDisk("test_2", logOfTest);
+		
 		
 		// ** TEST DOM PRINT ** input a Node, output to console the contents of
 		// the Node tree //
+		logOfTest += "TEST DOM PRINT\n";
 		nNode = nList.item(0);
-		parse.printDOM(nNode);
-		// code works find up to this point... <SJohnston 10:12Pm 4/23/2018> //		
+		if (nNode != null)
+		{
+			logOfTest += "Node tree to String:\n";
+			logOfTest += (parse.domTreeToString(nNode) + "\n");
+			parse.printDOM(nNode);
+			logOfTest += "XmlSessionManager.printDOM to console - PASS\n";
+		}
+		else 
+		{
+			logOfTest += "XmlSessionManager.domTreeToString - FAIL\n";
+			logOfTest += "XmlSessionManager.printDOM to console - FAIL\n";
+		}// code works find up to this point... <SJohnston 10:12Pm 4/23/2018> //
+		logOfTest += "END DOM PRINT TEST\n\n";
+		saveFileToDisk("test_3", logOfTest);
+				
 		
 		// ** TEST SAVE SESSION ** //
 		// open saved file in default text editor, check for formatting //
-		inputFile = parse.saveSession(mNode, mNode, templates);
-		FileWriter writer = null;
-		try
+		logOfTest += "TEST SAVE SESSION\n";
+		currentNode = mNode.getChild().getSibling().getChild().getSibling();
+		inputFile = parse.saveSession(mNode, currentNode, templates);
+		if (inputFile != "")
 		{
-		    writer = new FileWriter("test.txt");
-		    writer.write(inputFile);
+			logOfTest += "XmlSessionManager.saveSession String:\n";
+			logOfTest += (inputFile + "\n");
+			saveFileToDisk("session_1", inputFile);
+			logOfTest += "Session file saved to disk.\n";
 		}
-		catch ( IOException e)
+		else
 		{
+			logOfTest += "XmlSessionManager.saveSession - FAIL\n";
 		}
-		finally
-		{
-		    try
-		    {
-		        if ( writer != null)
-		        writer.close( );
-		    }
-		    catch ( IOException e)
-		    {
-		    }
-		}
+		logOfTest += "END SAVE SESSION TEST\n\n";
+		saveFileToDisk("test_4", logOfTest);
+		/** !!! UNUSED BUT SAVED FOR LATER CODE !!!
 		inputFile = ".\\test.txt";
-		file = new File (inputFile);
+		files[index] = new File (inputFile);
 		
 		try {
-			Desktop.getDesktop().open(file);
+			Desktop.getDesktop().open(files[index]);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// code works find up to this point... <SJohnston 10:12Pm 4/23/2018> //
+		*/
 		
-		// ** TEST ADD DOM TO TREE ** input a Node and the root of a
+		// ** TEST ADD DOM TO METADATA NODE TREE ** input a Node and the root of a
 		// MetadataNode tree, output an updated MetadataNode root with
-		// dissimilar nodes added //
-		// mNode = parse.addDOMToTree(doc1[0].getParentNode(), mNode);
-		
+		// dissimilar nodes added 
+		mNode = null;
+		logOfTest += "TEST ADD DOM TO METADATA NODE TREE\n";
+		mNode = parse.addDOMToTree(docs[0].getParentNode(), mNode);
+		if (mNode != null)
+		{
+			logOfTest += parse.metadataTreeToString(mNode);			
+		}
+		logOfTest += "END ADD DOM TO METADATA NODE TREE TEST\n\n";
+		saveFileToDisk("test_5", logOfTest);
 
-		// ** TEST PRINT METADATA TREE  ** input a MetadataNode, output to
-		// console contents of the MetadataNode tree //
-		parse.printMetadataTree(mNode);				// !!! NOT WORKING !!! MetadataNode cannot be cast to org.w3c.dom.NodeList
+		// ** TEST OPEN SESSION ** input session file, current MetadataNode, array of Strings, 
+		mNode = new MetadataNode<Object>("Open Session", (MetadataNode<?>)null, (MetadataNode<?>)null);
+		logOfTest += "TEST OPEN SESSION\n";
+		logOfTest += (printNode(mNode) + "\n");				
+		// update current MetadataNode and array of Strings, output root of MetadataNode tree
+		mNode = parse.openSession(files[1], currentNode, templates);
+		logOfTest += ("Root MetadataNode:\n" + printNode(mNode) + "\n");
+		logOfTest += ("MetadataNode Tree from Session File:\n" + parse.metadataTreeToString(mNode) + "\n");
+		logOfTest += ("Current Node:\n" + printNode(currentNode) + "\n");
+		logOfTest += ("Template files:\n");
+		index = 0;
+		while (index < templates.length && index < MAX)
+		{
+			logOfTest += (templates[index] + "\n");
+			index++;
+		}
+		logOfTest += "END OPEN SESSION TEST\n\n";
+		saveFileToDisk("test_6", logOfTest);
 		
+		// ** TEST SAVE METADATA TO DOM ** input a DOM with un-populated fields and a populated MetadataNode and output a DOM with populated fields
+		logOfTest += "TEST SAVE METADATA TO DOM\n";
+		index = 0;
+		mNode = new MetadataNode<Object>("empty", (MetadataNode<?>)null, (MetadataNode<?>)null);
+		logOfTest += "Contents of Metadata Node before loading DOM:\n";
+		logOfTest += (printNode(mNode) + "\n");
 		
-		// ** TEST OPEN SESSION ** //
+		// import file of a blank template to a DOM (doc1)
+		logOfTest += "Path to a blank XML template file...\n";
+		System.out.println("Path to a blank XML template file...");		
+		files[index] = userInput(index);
+		docs[index] = parse.fileToDOM(files[index]);
+		// show loaded contents of DOM (docs[0]) to show it has no entries
+		logOfTest += ("DOM contents:\n" + parse.domTreeToString(docs[index]));
+				
+		index++; 
 		
-
-		// ** TEST METADATA TREE TO STRING ** input MetadataNode, output
-		// indented String of the MetadataNode tree //
-		// The method saveSession calls metadataTreeToString and already works //
-
-		// ** TEST DOM TREE TO STRING ** input Node, output indented String of
-		// the Node tree //
-		// The method printDOM calls domTreeToString and already works //
-
-		System.out.println("End of tree");
-		printNode(mNode);
+		// import file of a filled template to a DOM (docs[1]), then to a MetadataNode
+		logOfTest += "Path to a filled XML template file...\n";
+		System.out.println("\nPath to a filled XML template file...");
+		files[index] = userInput(index);
+		docs[index] = parse.fileToDOM(files[index]);
+		// show loaded contents of DOM (docs[1]) to show it has populated entries
+		logOfTest += ("DOM contents:\n" + parse.domTreeToString(docs[index]));
+		logOfTest += "Loading the Metadata Node...\n";
+		nList = docs[index].getElementsByTagName("metadata");
+		nNode = nList.item(0);
+		mNode = parse.importDOMToMetadata(nNode);
+		// show MetadataNode to show it has entries
+		logOfTest += ("Metadata Node contents:\n");		
 		
-		scan.close();
+		index--;
+		
+		// update DOM (docs[0]) with MetadataNode entries
+		logOfTest += "Saving populated entries from Metadata Node Tree to DOM that had empty entries...\n";
+		parse.saveMetadataToDOM(mNode, docs[index]);
+		
+		// print DOM (docs[0]) to show it now has entries
+		logOfTest += "Contents of updated DOM:\n";
+		logOfTest += parse.domTreeToString(docs[index]);
+		logOfTest += "END SAVE METADATA TO DOM TEST\n\n";
+		saveFileToDisk("test_7", logOfTest);
+		
+		// ** TEST EXPORT XML FILES ** input DOM array, templates array, and project Number
+		// output files to disk
+		logOfTest += "TEST EXPORT XML FILES\n";
+		System.out.print("What is the project number: ");
+		projectNumber = scan.nextInt();
+		inputFile = ("" + projectNumber);		
+		parse.exportXMLFiles(docs, templates, inputFile);
+		index = 0;
+		while (index < templates.length && index < MAX)
+		{
+			logOfTest += (templates[index] + "\n");
+			index++;
+		}
+		
+		logOfTest += "Root of MetadataNode:\n";
+		// System.out.print("Root of MetadataNode: ");
+		logOfTest += printNode(mNode);	
+		logOfTest += "\nEND TEST XML SESSION MANAGER\n";
+		saveFileToDisk("test_8", logOfTest);
 	}
 
-	public static void printNode(MetadataNode<?> mNode)
+	public static String printNode(MetadataNode<?> mNode)
 	{
-		System.out.println("Element: " + mNode.getElement());
-		System.out.println("Element Name: " + mNode.getElementName());
-		System.out.println("Question: " + mNode.getQuestion());
-		System.out.println("Answer: " + mNode.getAnswer());
-		System.out.println("Verified: " + mNode.getVerified());
-		System.out.println(!(mNode.getChild() == null) ? "Has child" : "Has no child");
-		System.out.println(!(mNode.getSibling() == null) ? "Has sibling" : "Has no sibling");
-		return;
+		String nodeReport = "";
+		nodeReport += ("Element: " + mNode.getElement() + "\n");
+		nodeReport += ("Element Name: " + mNode.getElementName() + "\n");
+		nodeReport += ("Question: " + mNode.getQuestion() + "\n");
+		nodeReport += ("Answer: " + mNode.getAnswer() + "\n");
+		nodeReport += ("Verified: " + mNode.getVerified() + "\n");
+		nodeReport += ((!(mNode.getChild() == null) ? "Has child" : "Has no child") + "\n");
+		nodeReport += ((!(mNode.getSibling() == null) ? "Has sibling" : "Has no sibling") + "\n");
+		nodeReport += ((!(mNode.getParent() == null) ? "Has parent" : "Is root") + "\n");
+		return nodeReport;
 	}
 
+	/**
+	 * The userInput method is so user input can be called from many different tests
+	 * @return
+	 */
+	private static File userInput(int ndx)
+	{				
+		System.out.print("Enter name and path for a metadata file: ");
+		templates[ndx] = scan.nextLine();
+		return (new File(templates[ndx]));
+	}
+	
 	/**
 	 * TreePrint method walks a MetadataNode tree extracting each element and
 	 * the comments associated that element. This method has been
@@ -167,4 +312,50 @@ public class TestXmlSessionManager
 		node.print((int) MetadataNode.treeSize(node));
 
 	}// end treePrint
+	
+	private static void saveFileToDisk(String fileName, String fileContent)
+	{		
+		BufferedWriter writer = null;
+		try
+		{
+		    writer = new BufferedWriter(new FileWriter(fileName + ".txt"));
+		    writer.write(fileContent);	
+		}
+		catch ( IOException e)
+		{
+		}
+		finally
+		{
+		    try
+		    {
+		        if ( writer != null)
+		        writer.close( );
+		    }
+		    catch ( IOException e)
+		    {
+		    }
+		}
+		
+		try
+		{
+		    writer = new BufferedWriter(new FileWriter(fileName + ".xsm"));
+		    writer.write(fileContent);
+		}
+		catch ( IOException e)
+		{
+		}
+		finally
+		{
+		    try
+		    {
+		        if ( writer != null)
+		        writer.close( );
+		    }
+		    catch ( IOException e)
+		    {
+		    }
+		}
+		// code works find up to this point... <SJohnston 10:12Pm 4/23/2018> //
+	}
+	
 }

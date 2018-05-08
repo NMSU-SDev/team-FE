@@ -1,6 +1,5 @@
 import java.util.Enumeration;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
@@ -17,10 +16,11 @@ public class MetadataNode<M> extends Object implements MutableTreeNode
 	private String element;
 	private String elementName;
 	private MetadataNode<?> child, parent;
-	MetadataNode<?> sibling;
+	private MetadataNode<?> sibling;
 	private String answer;
 	private String question;
 	private boolean verified;
+	private boolean nodeHasChild = false;
 
 	/**
 	 * Initialize a <CODE>BTNode</CODE> with a specified initial element and
@@ -50,6 +50,10 @@ public class MetadataNode<M> extends Object implements MutableTreeNode
 		answer = "";
 		verified = false;
 		parent = null;
+		if (child == null)
+			nodeHasChild = false;
+		else
+			nodeHasChild = true;
 	}
 
 	/**
@@ -83,6 +87,10 @@ public class MetadataNode<M> extends Object implements MutableTreeNode
 		answer = "";
 		verified = false;
 		parent = null;
+		if (child == null)
+			nodeHasChild = false;
+		else
+			nodeHasChild = true;
 	}
 
 	/**
@@ -118,6 +126,10 @@ public class MetadataNode<M> extends Object implements MutableTreeNode
 		answer = answ;
 		verified = false;
 		parent = null;
+		if (child == null)
+			nodeHasChild = false;
+		else
+			nodeHasChild = true;
 	}
 
 	/**
@@ -155,6 +167,10 @@ public class MetadataNode<M> extends Object implements MutableTreeNode
 		answer = initialAnswer;
 		verified = initialVerified;
 		parent = null;
+		if (child == null)
+			nodeHasChild = false;
+		else
+			nodeHasChild = true;
 	}
 
 	public MetadataNode(String initialElement, String initialElementName, String initialQuestion, String initialAnswer)
@@ -167,7 +183,12 @@ public class MetadataNode<M> extends Object implements MutableTreeNode
 		answer = null;
 		verified = false;
 		parent = null;
+		if (child == null)
+			nodeHasChild = false;
+		else
+			nodeHasChild = true;
 	}
+
 	/**
 	 * Accessor method to get the element from this node.
 	 * 
@@ -271,7 +292,7 @@ public class MetadataNode<M> extends Object implements MutableTreeNode
 	{
 		return sibling;
 	}
-	
+
 	public MetadataNode<?> getParent()
 	{
 		return parent;
@@ -424,7 +445,7 @@ public class MetadataNode<M> extends Object implements MutableTreeNode
 	public void addChild(MetadataNode<?> metadataNode)
 	{
 		child = (MetadataNode<M>) metadataNode;
-		
+
 	}
 
 	/**
@@ -443,11 +464,16 @@ public class MetadataNode<M> extends Object implements MutableTreeNode
 	{
 		sibling = metadataNode;
 	}
-	
+
 	public void setParent(MetadataNode<M> newParent)
 	{
 		parent = newParent;
-		
+
+	}
+
+	public boolean hasChild()
+	{
+		return nodeHasChild;
 	}
 
 	/**
@@ -589,28 +615,20 @@ public class MetadataNode<M> extends Object implements MutableTreeNode
 		System.out.println(element + " : " + elementName + " : " + question + " : " + answer + " : "
 				+ ((verified) ? "verified" : "not verified"));
 
-		// Print the children first		
+		// Print the children first
 		if (child != null)
 			child.print(depth + 1);
 		/*
-		else if (sibling != null)
-		{
-			for (i = 1; i <= depth+1; i++)
-				System.out.print("    ");
-			System.out.println("--");
-		}
-		*/
+		 * else if (sibling != null) { for (i = 1; i <= depth+1; i++)
+		 * System.out.print("    "); System.out.println("--"); }
+		 */
 		// Print the siblings second
 		if (sibling != null)
 			sibling.print(depth);
 		/*
-		else if (child != null)
-		{
-			for (i = 1; i <= depth + 1; i++)
-				System.out.print("    ");
-			System.out.println("--");
-		}
-		*/
+		 * else if (child != null) { for (i = 1; i <= depth + 1; i++)
+		 * System.out.print("    "); System.out.println("--"); }
+		 */
 	}
 
 	/**
@@ -637,69 +655,80 @@ public class MetadataNode<M> extends Object implements MutableTreeNode
 	}
 
 	@Override
-	public Enumeration children() {
+	public Enumeration<?> children()
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean getAllowsChildren() {
+	public boolean getAllowsChildren()
+	{
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public TreeNode getChildAt(int arg0) {
+	public TreeNode getChildAt(int arg0)
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public int getChildCount() {
+	public int getChildCount()
+	{
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int getIndex(TreeNode arg0) {
+	public int getIndex(TreeNode arg0)
+	{
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public void insert(MutableTreeNode arg0, int arg1) {
+	public void insert(MutableTreeNode arg0, int arg1)
+	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void remove(int arg0) {
+	public void remove(int arg0)
+	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void remove(MutableTreeNode arg0) {
+	public void remove(MutableTreeNode arg0)
+	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void removeFromParent() {
+	public void removeFromParent()
+	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void setParent(MutableTreeNode arg0) {
+	public void setParent(MutableTreeNode arg0)
+	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void setUserObject(Object arg0) {
+	public void setUserObject(Object arg0)
+	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

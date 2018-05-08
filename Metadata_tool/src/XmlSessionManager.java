@@ -9,6 +9,7 @@
 import java.io.*;
 
 import java.lang.Object;
+import java.util.Scanner;
 
 import javax.xml.parsers.*;
 import javax.xml.transform.Transformer;
@@ -38,6 +39,235 @@ public class XmlSessionManager {
 		dBuild = null;
 		metaDoc = null;
 	}
+
+	/**
+	 * saveSession takes in the root of a MetadataNode tree, a
+	 * currentNode pointer and a list of xml file paths that were used as the
+	 * templates for this session. The method creates a String object 
+	 * represention of the state of the session at the moment it was saved. 
+	 * The tree structure hierarchy is represented by stars for each level of 
+	 * the tree. 
+	 * 
+	 * @precondition the incoming node is the desired root of the tree.
+	 * @param root
+	 *            is the root of the MetadataNode tree from the Metadata Tool
+	 *            session.
+	 * @param currentNode
+	 *            is a pointer to the node that the Metadata Tool was currently
+	 *            working on when the session was saved.
+	 * @param templates
+	 *            is an array of the file objects of all xml files used as the
+	 *            templates for this session
+	 * @param xMlSessionSave
+	 *            is the formatted string that represents the state of the saved
+	 *            Metadata Tool session.
+	 * @postcondition a String of the contents of the tree using indentation
+	 *                markers to represent the hierarchy
+	 * @return the xmlSessionManager String. ?!? should this instead return a
+	 *         File ?!?
+	 */
+	public String saveSession(MetadataNode<?> root, MetadataNode<?> currentNode, String[] templates) {
+		String xmlSessionSave = "!MetadataNodeTree!\r";
+		// File sessionFile;
+	
+		xmlSessionSave += metadataTreeToString(root);
+		xmlSessionSave += "!EndTree!\r!Current Node!\r" + currentNode.getElement() + "\r!EndCurrentNode!\n!TemplateList!\r";
+		for (int index = 0; index < templates.length; index++) {
+			xmlSessionSave += templates[index] + "\r";
+		}
+		xmlSessionSave += "!EndTemplatesList!\r";
+	
+		return xmlSessionSave;
+	}
+
+	/**
+	 * The openSession method reads the contents of a session.xsm file, creates
+	 * a MetadataNode tree with appropriate attributes, points currentNode to
+	 * the first node with the right tag and fills the array of absolute paths
+	 * to the template files for the session.  
+	 * 
+	 * @precondition The incoming file is of type .xsm and not any other type.
+	 * @param file
+	 *            the incoming .xsm file.
+	 * @postcondition a tree has been created with the parent/child/sibling
+	 *                connections. and attributes that are identical to when the
+	 *                session was saved.
+	 * @return the root node to a MetadataNode tree.
+	 * @throws TypeMismatchException.
+	 * @throws FileNotFoundException
+	 * @catch returns a new, empty node to the calling method.
+	 */
+	public MetadataNode<?> openSession(File file, MetadataNode<?> currentNode, String[] templates) // throws FileNotFoundException
+	{
+		MetadataNode<?> root = new MetadataNode<Object>("metadata", null, null);
+		MetadataNode<?> newNode, parent = root;
+		String sessionFileLine = new String();
+		Scanner reader = null;
+		String element, elementName, question, answer, verified;
+		element = "UnInitialized";
+		int elementIndex, elementNameIndex, questionIndex, answerIndex, verifiedIndex;
+		boolean found = false;
+		/*
+		 * !! CAUTION !! may throw a FileNotFound exception if a user moved the session file.  
+		 */		
+		try {
+			reader = new Scanner(file);
+			// read first line of file
+			sessionFileLine = reader.nextLine();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		// PART1 load tree
+		if (sessionFileLine.contains("!MetadataNodeTree!"))
+		{
+			int parentIndex = 0;
+			while (reader.hasNextLine() && !(sessionFileLine.contains("!EndTree!")))
+			{	
+				int index = 0;				
+				while (sessionFileLine.charAt(index) == '*')
+				{
+					index++;					
+				}					
+				elementIndex = sessionFileLine.indexOf(" ElementName:");
+				if (index < elementIndex)
+				{
+					element = sessionFileLine.substring(index, elementIndex);
+				}
+
+				if (!(sessionFileLine.contains("metadata")))
+				{					
+					newNode = new MetadataNode(element, (MetadataNode<?>)null, (MetadataNode<?>)null);					
+					// extract the remaining attributes from sessionFileLine string
+					loadMetadataNodeAttributes(newNode, sessionFileLine);
+
+					// CHILD CASE
+					if (index > parentIndex) // adds child. index should only be 1 greater than parentIndex
+					{
+						parent.addChild(newNode);
+						newNode.setParent(parent);
+						parentIndex++;
+					} // end add child to parent
+					// SIBLING CASE 1
+					else if (index == parentIndex) // add sibling. index should be equal to parentIndex
+					{
+						parent.addSibling(newNode);
+						newNode.setParent(parent.getParent());
+					} // end add sibling to parent
+					// SIBLING CASE 2
+					else
+					{
+						while (index < parentIndex) // add sibling. parentIndex should be decreased until equal to index
+						{
+							parent = parent.getParent();
+							parentIndex--;
+						}						
+						parent.addSibling(newNode);
+						newNode.setParent(parent.getParent());	
+
+					} // end else add sibling to grandparent
+					parent = newNode;
+				} // end if not metadata root line					
+				sessionFileLine = reader.nextLine();				
+			} // end while not at end of tree
+		} // end if sessionFileLine is reading entries for tree
+		while (reader.hasNextLine() && !(sessionFileLine.contains("!Current Node!")) && !(sessionFileLine.contains("!TemplateList!")))
+		{
+			sessionFileLine = reader.nextLine();
+		}
+		// PART2 set currentNode
+		if (sessionFileLine.contains("!Current Node!"))
+		{
+			elementIndex = sessionFileLine.indexOf('\r');
+			if (elementIndex > 0)
+				element = sessionFileLine.substring(0, elementIndex);
+			else
+				element = sessionFileLine;
+			// call method that searches tree to find the node with the same element name
+			found = findMetadataNodeWithName(root, currentNode, element);				
+		}
+		while (reader.hasNextLine() && !(sessionFileLine.contains("!TemplateList!")))
+		{
+			sessionFileLine = reader.nextLine();
+		}
+		// PART 3 fill template list
+		if (sessionFileLine.contains("!TemplateList!"))
+		{
+			sessionFileLine = reader.nextLine();
+			int index = 0;
+			while (!(sessionFileLine.contains("!EndTemplateList!")))
+			{
+				templates[index] = sessionFileLine;
+				index++;
+			}
+		}
+
+		return root;		
+	}	
+	
+	/**
+	 * The loadMetadataNodeAttributes method populates the attributes of a node from
+	 * a String line extracted from an session.xsm file.
+	 * @param newNode the node needing attributes populated
+	 * @param sessionFileLine the string from a session.xsm file containing the necessary
+	 * entries for populating the node attributes.
+	 */
+	private void loadMetadataNodeAttributes(MetadataNode<?> newNode, String sessionFileLine) 
+	{
+		String elementName, question, answer, verified;
+		int elementIndex, elementNameIndex, questionIndex, answerIndex, verifiedIndex;
+		elementIndex = sessionFileLine.lastIndexOf("ElementName: ");
+		elementNameIndex = sessionFileLine.indexOf(" Question:");
+		elementName = sessionFileLine.substring(elementIndex, elementNameIndex);
+		newNode.setElementName(elementName);
+		elementNameIndex = sessionFileLine.lastIndexOf("Question: ");
+		questionIndex = sessionFileLine.indexOf(" Answer:");
+		question = sessionFileLine.substring(elementNameIndex, questionIndex);
+		newNode.setQuestion(question);
+		questionIndex = sessionFileLine.lastIndexOf("Answer: ");
+		answerIndex = sessionFileLine.indexOf(" Verified:");
+		answer = sessionFileLine.substring(questionIndex, answerIndex);
+		newNode.setAnswer(answer);
+		answerIndex = sessionFileLine.lastIndexOf("Verfied: ");
+		verifiedIndex = sessionFileLine.indexOf('\r');
+		verified = sessionFileLine.substring(answerIndex, verifiedIndex);
+		newNode.setVerified((verified.equals("Y") ? true : false));		
+	}
+
+	/**
+	 * The findMetadataNodeWithName method searches a tree looking for a node with a tag
+	 * matching the desired string provided
+	 * @param root is the node that the method whose tag is being compared to the string
+	 * @param currentNode is the node that needs to be assigned a place to point to
+	 * @param element is the tag the method is looking for
+	 * @return true if the matching node is found, false if there is no matching node found
+	 */
+	private boolean findMetadataNodeWithName(MetadataNode<?> root, MetadataNode<?> currentNode, String element) 
+	{
+		// recursively call this method until matching node is found
+		// BASE CASE - match found
+		boolean found = false;
+		if (root.getElement().equals(element))
+		{
+			currentNode = root;
+			found = true;
+		}
+		// RECURSIVE CASE - match not found, look at the next child/sibling
+		else 
+		{
+			if (root.getChild() != null)
+			{
+				root = root.getChild();
+				found = findMetadataNodeWithName(root, currentNode, element);
+			}
+			if (root.getSibling() != null && !found)
+			{
+				root = root.getSibling();
+				found = findMetadataNodeWithName(root, currentNode, element);
+			}
+		}
+		return found;
+	}
+	
 
 	/**
 	 * file to DOM takes in a valid XML or HTML file and returns a Document
@@ -81,38 +311,29 @@ public class XmlSessionManager {
 	public MetadataNode<?> importDOMToMetadata(Node node) {
 		// starting over:
 		Node sibling, child;
-		MetadataNode root = new MetadataNode("root", null, null);
-		int attributeFlag = 0;
-		// Incoming node: what is it?
-		// Hello node. what type are you? Element, Comment, Attribute?
-		// if you are an element, I will create a Metadata node with your name on it
-			
-			
-			// then, if you have children, we will connect you to your first child.
+		MetadataNode <?> root = new MetadataNode<Object>("root", (MetadataNode<?>)null, (MetadataNode<?>)null);
+		// then, if you have children, we will connect you to your first child.
 		// if you are not an element, well, then we don't know what to do with you. 
 		// First, let us make some code to see what type of node is the root that is given to us		
 		if (node.getNodeType() == Node.ELEMENT_NODE)
 		{
 			root.setElement(node.getNodeName());
+			
 			//System.out.print("I am an element. My tag is: " + root.getElement()); 
+			
 			if (node.hasChildNodes())
 			{
 				child = node.getFirstChild();
 				root.setAnswer(child.getNodeValue());
-				if (root.getAnswer().contains("\n"))
+				if (root.getAnswer().equals("\n"))
 				{
-					int escapeSequence = root.getAnswer().indexOf("\n");
-					if (escapeSequence > 0)
-					{
-						root.setAnswer(root.getAnswer().substring(0, root.getAnswer().indexOf("\n")));
-					}
-					else
-						root.setAnswer("");
-				}				
+					root.setAnswer("");
+				}							
 			}
-			retrieveNodeDescription(node, root);
-			//System.out.println(" My name is: " + root.getElementName() + " My description is: " + root.getQuestion());
+			// send node to method that looks for an associated comment to this node (usually the next sibling or child node)
+			retrieveNodeDescription(node, root);			
 		}
+		// Hello Element Node. Let's build your family tree.
 		
 		// now that we have you named, do you have siblings?
 		if (node.getNextSibling() != null)
@@ -157,23 +378,356 @@ public class XmlSessionManager {
 			else
 				root.addChild(null);			
 			
-		} // end importDOMToMetadataNode
-		// mini report
-		System.out.print("Tag: " + root.getElement() + " Name: " + root.getElementName());		
-		System.out.print(" Question: " + root.getQuestion() + " Answer: " + root.getAnswer());
-		System.out.println(" Verified: " + ((root.getVerified() ? "True" : "False")));
-		
-		// Hello Element Node. Let's build your family tree.
-		// send node to method that looks for an associated comment to this node (usually the next sibling or child node)		
+		} // end importDOMToMetadataNode				
+				
 		return root;		
 	}
 	/**
+	 * The addDOMToTree method takes in a Document Object Model (DOM) node
+	 * and the root to a MetadataNode tree and adds only those nodes from the
+	 * DOM that are necessary copies or are non-duplicates of elements already
+	 * in the MetadataNode tree.
+	 * 
+	 * @assumption Add DOM Tree assumes the incoming DOM tree and the
+	 *             MetadataNode tree are geospatial metadata files that follow
+	 *             the same element order.
+	 * @param dom
+	 *            is a root to a Document object tree
+	 * @param root
+	 *            is the root to a MetadataNode tree
+	 * @return the root of the MetadataNode tree.
+	 */
+	public boolean MetadataNode<?> addDOMToTree(Node node, MetadataNode<?> root) {
+		// PSEUDOCODE 
+		// LOOP
+		// COMPARE Does MetdataNode have element equal to Node Element tag
+		// IF YES
+		// CONDITIONS
+		// FOR
+		// conditions to be met for adding: 
+			// node name does not already exist in MetadataNode tree
+			// parent same in both node and MetadataNode
+			// sibling same in both node and MetadataNode 
+			// or end of sibling list, add new sibling
+		boolean exists = false;
+		boolean found = false;
+		Node sibling, parent = node;
+		MetadataNode<?> mSibling, mParent, mThis = root;
+		// BASE CASE - matching parents
+			// search for matching sibling
+				// if parents sibling matches, 
+					// do the tags match?
+						// if tags match, exists = true
+						// if tags do not match, add
+				// else parents match but matching sibling not found
+		if (node.getNodeName().equals(mThis.getElement()))
+		{
+			exists = true;
+		}
+		// RECURSIVE CASE - parents do not match, search next child, then next sibling
+		else
+		{
+			 //
+		}
+		return root;
+	}
+
+	/**
+	 * The saveMetadataToDOM method takes a Metadata Node and a Document file, 
+	 * searches the Document for a matching tag and updates its comment. Currently
+	 * the method does account for multiple instances of a tag.
+	 * 
+	 * @precondition the Document files are NOT the templates originally used at
+	 *               the beginning of the session but are the working object 
+	 *               representations of the Documents that are updated during a
+	 *               session.
+	 * @param metaNode
+	 *            is the root of the MetadataNode tree
+	 * @param domNode
+	 *            is a Document object that is being updated
+	 * @postcondition the Document object is updated with changes from the
+	 *                MetadataNode tree and is in a state that can readily be
+	 *                exported to a valid XML metadata file
+	 */
+	public void saveMetadataToDOM(MetadataNode<?> metaNode, Document dom) {
+		// metaNode is not, necessarily, the root of the MetadataNode tree
+		// dom is the Document object
+		// find the element match, then update the Node text
+		// recursive case: Metadata Node has child or has sibling:
+		// call this method again with next MetadataNode and next Node.
+		// base case: reach Metadata Node with no child and no sibling 		
+		boolean ancestryMatch = false;
+		int index = 0;
+		NodeList nList;
+		Node node;
+		// find the DOM element that matches the metadata node element		
+		nList = dom.getElementsByTagName(metaNode.getElement());
+		node = nList.item(0);
+		// check that the branch path to the root is the same in the 
+		// Document as it is in the MetadataNode
+		// call private method ancestorCompare(MetadataNode, Node)
+		while (!ancestryMatch && index < nList.getLength()) 		// !!! POTENTIAL FOR INFINITE LOOP !!! //
+		{
+			node = nList.item(index);
+			ancestryMatch = ancestorCompare(metaNode, node);
+			index++;
+		} // end loop find correct branch path of the Document
+		
+		// if the list is not empty, proceed. else, go to next metaNode item
+		if ((nList != null) && ancestryMatch && !(node.hasChildNodes()))
+		{
+			node.setTextContent(metaNode.getAnswer());
+		}
+		
+		// find the next text node which will be the node that corresponds to the tag.
+		
+		// update the text node value with the metadata node answer
+		// BASE CASE
+		if ((metaNode.getChild() == null) && (metaNode.getSibling() == null))
+		{
+			return;
+		} // end base case
+		// RECURSIVE CASE
+		else 
+		{
+			// call this method with child first
+			if (metaNode.getChild() != null)
+			{
+				saveMetadataToDOM(metaNode.getChild(), dom);
+			}
+			// call this method with sibling second
+			if (metaNode.getSibling() != null)
+			{
+				saveMetadataToDOM(metaNode.getSibling(), dom);
+			}				
+		} // end recursive case
+		
+		return;
+	}
+
+	/**
+	 * The exportXMLFiles method takes in an array of Documents and an array of
+	 * names of the files to be exported and the file path to export those
+	 * files.
+	 * 
+	 * @precondition the Documents and the names of files should be in matching
+	 *               order
+	 * @param domList
+	 *            is a list of Document objects uses as the DOMSource
+	 * @param nameList
+	 *            is a list of names for the files of each Document
+	 * @param savePath
+	 *            is the folder in which the files are to be saved
+	 * @return
+	 * @throws IOException 
+	 */
+	public String [] exportXMLFiles(Document[] domList, String[] nameList, String projectNumber) throws IOException {
+		// Create TransformerFactory
+		String[] outputList = new String[nameList.length];
+		String path = "";
+		String fileName = "";
+		String extension = "";
+		char token = '\\';
+		char dot = '.';
+		int tokenIndex = 0;
+		int dotIndex = 0;
+		// Add projectNumber to front of tile name, remove "template" from file name
+		for (int i = 0; i < nameList.length; i++)
+		{
+			// find index of last token and file extension
+			tokenIndex = nameList[i].lastIndexOf(token) + 1;
+			dotIndex = nameList[i].lastIndexOf(dot);
+			// assign string before token to path
+			path = nameList[i].substring(0, tokenIndex);
+			// assign string after token to fileName
+			fileName = nameList[i].substring(tokenIndex,  dotIndex);
+			// assign file extension to extension
+			extension = nameList[i].substring(dotIndex, nameList[i].length());
+			fileName = (projectNumber + "_" + fileName);
+			tokenIndex = fileName.indexOf("_template");
+			fileName = fileName.substring(0, tokenIndex);
+			outputList[i] = path + fileName + extension;
+		}
+		
+		TransformerFactory transFactory = TransformerFactory.newInstance();
+		try {
+			// Create Transformer
+			Transformer trans = transFactory.newTransformer();
+			// Transform each Document to a Result
+			for (int index = 0; index < domList.length; index++) {
+				DOMSource source = new DOMSource(domList[index]);
+				// This is where the magic happens
+				StreamResult result = new StreamResult(new File(outputList[index])); 
+				trans.transform(source, result);				
+			}
+		} catch (TransformerConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		return outputList;
+	}
+
+	/**
+	 * The domTreeToString converts a Document Object Model (DOM) to a single
+	 * String object for displaying the file contents in an easily readable
+	 * format. Only leaf nodes are displayed with xml tags being replaced by
+	 * properly descriptive titles for each element. Contents are displayed
+	 * beneath and indented to show relationship to the title.
+	 * 
+	 * @precondition the incoming node is the desired root of a DOM tree.
+	 *               Contrary to the name of the method, you cannot send this
+	 *               method a Document object or it will throw an exception and
+	 *               most likely crash and burn.
+	 * @param root
+	 *            is the node given as the root of a MetadataNode tree.
+	 * @postcondition a plain text display of the contents of the tree using
+	 *                indentation markers to show hierarchy and content
+	 *                ownership. Formatting of text includes only indentation,
+	 *                not font characteristics such as bold, italics, size, etc.
+	 * @return the metadataTreeString String.
+	 * 
+	 */
+	public String domTreeToString(Node node) {
+		String domTreeString = "";
+		// Print out *s for indentation place holders based on loop variable
+		// numElementNode
+		for (int i = 0; i < numElementNode; i++) {
+			// System.out.print("*");
+			domTreeString += "*";
+		}
+	
+		// print the node. This is where we do any operations to the current
+		// parameter node
+		
+		// System.out.print(node.getNodeName() + ((numElementNode == 0) ? "\n" : " "));
+		domTreeString += node.getNodeName() + ((numElementNode == 0) ? "\n" : " ");
+	
+		// iterate through the nodeList
+		NodeList nodeList = node.getChildNodes();
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Node currentNode = nodeList.item(i);
+	
+			// if the node is a comment node, print out the value
+			if (currentNode.getNodeType() == Node.COMMENT_NODE) {
+				// System.out.println(currentNode.getNodeValue());
+				domTreeString += currentNode.getNodeValue() + "\n";
+			}
+			
+			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
+				// calls this method for all the children which is Element
+				numElementNode++;
+				domTreeString += domTreeToString(currentNode);
+				numElementNode--;
+			} // end if
+		} // end for
+		return domTreeString;
+	}
+
+	/**
+	 * The metadataTreeToString converts a MetadataNode tree to a specifically
+	 * formatted single String object that is ideal for either displaying the
+	 * tree or saving the tree in a Metadata Tool Session file.
+	 * 
+	 * @precondition the incoming node is the desired root of the tree
+	 * @param root
+	 *            is the node given as the root of a MetadataNode tree
+	 * @postcondition a display of the contents of the tree using indentation
+	 *                markers to show the hierarchy
+	 * @return the metadataTreeString String.
+	 */
+	public String metadataTreeToString(MetadataNode<?> root) {
+		String metadataTreeString = "";
+	
+		// Print out *s for indentation place holders based on loop variable
+		// numElementNode
+		for (int i = 0; i < numElementNode; i++) {
+			// System.out.print("*");
+			metadataTreeString += "*";
+		}
+	
+		// print the node. This is where we do any operations to the current
+		// parameter node
+		
+		// System.out.print(root.getElement() + ((numElementNode == 0) ? "\r" : " "));
+		metadataTreeString += root.getElement() + ((numElementNode == 0) ? "\r" : " ");
+		
+	
+		// iterate through the tree, child first, then sibling
+		// add this node's tag, name, question, answer and verified state to string
+		if (numElementNode != 0)
+		{
+			// System.out.println(" ElementName: " + root.getElementName() + " Question: " + root.getQuestion() + " Answer: " + root.getAnswer() + " Verified: " + ((root.getVerified()? "Y" : "N")) + "\r");			
+			metadataTreeString += (" ElementName: " + root.getElementName() + " Question: " + root.getQuestion() + " Answer: " 
+			+ ((root.getAnswer().equals("\n")) ? "" : root.getAnswer()) + " Verified: " 
+					+ ((root.getVerified()? "Y" : "N")) + "\r");			
+		}		
+		
+			// if the node has a child, call child
+			if (root.getChild() != null)
+			{
+				numElementNode++;
+				metadataTreeString += metadataTreeToString(root.getChild());
+				numElementNode--;
+			} // end if has a child
+			// if the node has a sibling, call sibling
+			if (root.getSibling() != null)
+			{
+				metadataTreeString += metadataTreeToString(root.getSibling());
+			} // end if has a sibling		 
+	
+		return metadataTreeString;
+	}
+
+	/**
+	 * The printDOM method walks a DOM tree extracting each element and the
+	 * comments associated with that element.
+	 * 
+	 * @precondition the method assumes that the incoming node is the root of a
+	 *               DOM tree that was created from an XML or HTML file.
+	 * @param node
+	 *            is the first element of a DOM tree.
+	 * @postcondition the console will display an indented representation of a
+	 *                DOM object
+	 */
+	public void printDOM(Node node) {
+	
+		// calls the domTreeToString() method and displays in console
+		System.out.println(domTreeToString(node));
+	
+	}// end treePrint
+
+	/**
+	 * printMetadataTree method walks a MetadataNode tree printing each leaf of
+	 * the tree in hierarchical order. Printed leaf contents include all
+	 * attributes of the leaf: Element, Element Name, Question, Answer and
+	 * Verified.
+	 * 
+	 * @precondition the method assumes that the incoming node is the root of a
+	 *               MetadataNode tree that is associated with a Metadata Tool
+	 *               session.
+	 * @param mNode
+	 *            is the root node of a MetadataNode tree.
+	 * @postcondition the console will display an indented representation of a
+	 *                DOM object
+	 */
+	public void printMetadataTree(MetadataNode<?> mNode) {
+	
+		// calls the metadataTreeToString() method and displays in console
+		System.out.println(metadataTreeToString(mNode));
+	
+	}// end printMetadataTree method
+
+	/**
 	 * The whoseYourDaddy method is a band-aid fix for setting the parent to a MetadataNode.
 	 * @param root
 	 */
 	private void connectParent(MetadataNode <?> root) 
 	{
-		MetadataNode adopted = root;
+		MetadataNode <?> adopted = root;
 		if (root.getSibling() != null)
 		{
 			adopted = root.getSibling();		
@@ -285,350 +839,53 @@ private void retrieveNodeDescription(Node node, MetadataNode <?> root)
 				sibling = sibling.getNextSibling();	
 			} // end while sibling is not an element nor null
 		} // end else incoming node is a leaf
-		return;
-	}
-
-
-	/**
-	 * The saveMetadataToDOM method takes a MetadataNode at its root and an
-	 * array of all of the DOM files that are being updated for the session. It
-	 * copies the DOM files, each to a new name, then updates appropriate
-	 * element contents.
-	 * 
-	 * @precondition the Document files are NOT the templates originally used at
-	 *               the beginning of the session but are copies of the
-	 *               templates.
-	 * @param metaNode
-	 *            is the root of the MetadataNode tree
-	 * @param domNode
-	 *            is an array of the Document objects that are being updated as
-	 *            the session progresses.
-	 * @postcondition Document files are updated with changes from the
-	 *                MetadataNode tree and are in a state that can readily be
-	 *                exported to valid XML metadata files
-	 */
-	public void saveMetadataToDOM(MetadataNode<?> metaNode, Node domNode) {
-		// metaNode is not, necessarily, the root of the MetadataNode tree
-		// domNode is not necessarily the root of the Node tree
-		// find the first element match, then update the Node text
-		// recursive case: has child or has sibling:
-			// call this method again with next MetadataNode and next Node.
-		// base case: reach node or metaNode with no child and no sibling 
-		MetadataNode<?> nextMeta = metaNode;		
-		Node nextNode = domNode;
 		
 		return;
 	}
 
-	/**
-	 * The addDOMToTree method takes in a Document Object Model (DOM) root node
-	 * and the root to a MetadataNode tree and adds only those nodes from the
-	 * DOM that are necessary copies or are non-duplicates of elements already
-	 * in the MetadataNode tree. Implementation planned for Demo 3
-	 * 
-	 * @assumption Add DOM Tree assumes the incoming DOM tree and the
-	 *             MetadataNode tree are geospatial metadata files that follow
-	 *             the same element order.
-	 * @param dom
-	 *            is a root to a Document object tree
-	 * @param root
-	 *            is the root to a MetadataNode tree
-	 * @return the root of the MetadataNode tree.
-	 */
-	public MetadataNode<?> addDOMToTree(Node dom, MetadataNode<?> root) {
-		// PSEUDOCODE
-		// POINTER MetadataNode currentMetaNode
-		// LOOP
-		// COMPARE Does DOM have element equal to currentMetaNode
-		// IF YES
-		// CONDITIONS
-		// FOR
-		return root;
-	}
 
 	/**
-	 * The exportXMLFiles method takes in an array of Documents and an array of
-	 * names of the files to be exported and the file path to export those
-	 * files.
-	 * 
-	 * @precondition the Documents and the names of files should be in matching
-	 *               order
-	 * @param domList
-	 *            is a list of Document objects uses as the DOMSource
-	 * @param nameList
-	 *            is a list of names for the files of each Document
-	 * @param savePath
-	 *            is the folder in which the files are to be saved
-	 * @return
-	 * @throws FileNotFoundException
+	 * The ancestorCompare method is a helper method to be sure that the node about to be updated 
+	 * is in the correct branch of the DOM tree. If it is not, then the method returns false and
+	 * the calling method must go to the next tag in the DOM with the same tag name and ask this
+	 * method to check the branch path to the root again.
+	 * @param metaNode the MetadataNode whose branch path to the root is being compared to
+	 * @param node the Node whose branch path to the root is being evaluated
+	 * @return true for a matching branch path and false for a branch path mismatch
 	 */
-	public void exportXMLFiles(Document[] domList, String[] nameList, String savePath) throws FileNotFoundException {
-		// Create TransformerFactory
-		TransformerFactory transFactory = TransformerFactory.newInstance();
-		try {
-			// Create Transformer
-			Transformer trans = transFactory.newTransformer();
-			// Transform each Document to a Result
-			for (int index = 0; index < domList.length; index++) {
-				DOMSource source = new DOMSource(domList[index]);
-				// !!! need this to output to an array of file objects
-				StreamResult result = new StreamResult(System.out); 
-				trans.transform(source, result);
-				// Convert Result to a file, stored in an array
-				String newPath = (savePath + "\\" + nameList[index] + ".xml");
-				try {
-					PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(newPath)));
-					out.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		} catch (TransformerConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return;
-	}
-
-	/**
-	 * The printDOM method walks a DOM tree extracting each element and the
-	 * comments associated with that element.
-	 * 
-	 * @precondition the method assumes that the incoming node is the root of a
-	 *               DOM tree that was created from an XML or HTML file.
-	 * @param node
-	 *            is the first element of a DOM tree.
-	 * @postcondition the console will display an indented representation of a
-	 *                DOM object
-	 */
-	public void printDOM(Node node) {
-
-		// calls the domTreeToString() method and displays in console
-		System.out.println(domTreeToString(node));
-
-	}// end treePrint
-
-	/**
-	 * printMetadataTree method walks a MetadataNode tree printing each leaf of
-	 * the tree in hierarchical order. Printed leaf contents include all
-	 * attributes of the leaf: Element, Element Name, Question, Answer and
-	 * Verified.
-	 * 
-	 * @precondition the method assumes that the incoming node is the root of a
-	 *               MetadataNode tree that is associated with a Metadata Tool
-	 *               session.
-	 * @param mNode
-	 *            is the root node of a MetadataNode tree.
-	 * @postcondition the console will display an indented representation of a
-	 *                DOM object
-	 */
-	public void printMetadataTree(MetadataNode<?> mNode) {
-
-		// calls the metadataTreeToString() method and displays in console
-		System.out.println(metadataTreeToString(mNode));
-
-	}// end printMetadataTree method
-
-	/**
-	 * The openSession method takes in a Metadata Tool proprietary .xsm file and
-	 * creates a populated MetadataNode tree with the state of all attributes
-	 * for all children and siblings.
-	 * 
-	 * 
-	 * @precondition The incoming file is of type .xsm and not any other type.
-	 * @param file
-	 *            the incoming .xsm file.
-	 * @postcondition a tree has been created with the parent/child/sibling
-	 *                connections. and attributes that are identical to when the
-	 *                session was saved.
-	 * @return the root node to a MetadataNode tree.
-	 * @throws TypeMismatchException.
-	 * @catch returns a new, empty node to the calling method.
-	 */
-	public MetadataNode<?> openSession(File file, MetadataNode<?> currentNode, String[] templates) {
-		MetadataNode<?> rootMNode = new MetadataNode<Object>(null, null, null);
-		/*
-		 * Set parentNode to rootMNode. Set parentIndentation = 0; Set
-		 * nextIndentation = parentIndentation; Get first String line
-		 * parentIndentation = count indentation markers in String line To
-		 * populate the attributes of the any Node, read String line, each line
-		 * represents a node. Parse text in each line into the 5 attributes of a
-		 * node: element, elementName, Question, Answer, Verified populate
-		 * parentNode Begin loop: get String nextLine while not encountering
-		 * special break character '\r' (known as a carriage return), create new
-		 * node nextIndentation = count indentation markers for new node parse
-		 * text to node attributes If next line has more indentation markers
-		 * '*', add newNode to parentNode; parentNode.addChild(newNode) else if
-		 * next line has equal indentation markers '*',, add newNode as sibling
-		 * to parentNode else if next line has less indentation markers '*'
-		 * point parentNode to getParent() for each 'less' indentation add
-		 * newNode as sibling to parentNode get String nextLine end loop
-		 * 
-		 * After the tree is created we want to set currentNode to the element
-		 * in rootMNode that = the element listed in the .xsm file
-		 * 
-		 * Last, we want to load into the file array the list of template files
-		 * by grabbing them from their absolute paths. !! CAUTION !! may throw a
-		 * FileNotFound exception if a user moved those files.
-		 * 
-		 */
-		return rootMNode;
-	}
-
-	/**
-	 * saveSession takes in a MetadataNode tree at its root along with the
-	 * currentNode pointer and the list of xml files used as templates for this
-	 * session and creates a very long String object that represents the state
-	 * of this session at the moment it is saved. When opened in a text editor,
-	 * the .xsm file should show each Node of the tree, starting with its root,
-	 * cascading down the family genealogy, indenting each generation of the
-	 * family to the right unto the last leaf. Each leaf will have displayed the
-	 * state of its attributes at the time of save: Element, ElementName,
-	 * Question, Answer and Verified. After the MetadataNode tree, the String
-	 * should state the element name of the CurrentNode pointer. Last, the
-	 * String should list the template files that this session is based on.
-	 * 
-	 * @precondition the incoming node is the desired root of the tree.
-	 * @param root
-	 *            is the root of the MetadataNode tree from the Metadata Tool
-	 *            session.
-	 * @param currentNode
-	 *            is a pointer to the node that the Metadata Tool was currently
-	 *            working on when the session was saved.
-	 * @param templates
-	 *            is an array of the file objects of all xml files used as the
-	 *            templates for this session
-	 * @param xMlSessionSave
-	 *            is the formatted string that represents the state of the saved
-	 *            Metadata Tool session.
-	 * @postcondition a String of the contents of the tree using indentation
-	 *                markers to represent the hierarchy
-	 * @return the xmlSessionManager String. ?!? should this instead return a
-	 *         File ?!?
-	 */
-	public String saveSession(MetadataNode<?> root, MetadataNode<?> currentNode, String[] templates) {
-		String xMlSessionSave = "";
-		// File sessionFile;
-
-		xMlSessionSave += metadataTreeToString(root);
-		xMlSessionSave += "\n!EndTree!\nCurrent Node: " + currentNode.getElement() + "\n!EndCurrentNode!";
-		for (int index = 0; index < templates.length; index++) {
-			xMlSessionSave += templates[index] + "\n!EndTemplatesList!";
-		}
-
-		return xMlSessionSave;
-	}
-
-	/**
-	 * The metadataTreeToString converts a MetadataNode tree to a specifically
-	 * formatted single String object that is ideal for either displaying the
-	 * tree or saving the tree in a Metadata Tool Session file.
-	 * 
-	 * @precondition the incoming node is the desired root of the tree
-	 * @param root
-	 *            is the node given as the root of a MetadataNode tree
-	 * @postcondition a display of the contents of the tree using indentation
-	 *                markers to show the hierarchy
-	 * @return the metadataTreeString String.
-	 */
-	public String metadataTreeToString(MetadataNode<?> root) {
-		String metadataTreeString = "";
-
-		// Print out *s for indentation place holders based on loop variable
-		// numElementNode
-		for (int i = 0; i < numElementNode; i++) {
-			System.out.print("*");
-			metadataTreeString += "*";
-		}
-
-		// print the node. This is where we do any operations to the current
-		// parameter node
+	private boolean ancestorCompare(MetadataNode<?> metaNode, Node node) {
+		// is the chain of parents the same in both sets of trees
+		String metaNodeAncestry = "";
+		String nodeAncestry = "";
+		boolean ancestryMatch = false;
+		metaNodeAncestry = metaNode.getElement();
+		nodeAncestry = node.getNodeName(); // NULL POINTER EXCEPPTION - REQUIRES DEBUG //
 		
-		System.out.print(root.getElement() + ((numElementNode == 0) ? "\n" : " "));
-		metadataTreeString += root.getElement() + ((numElementNode == 0) ? "\n" : " ");
-		
-
-		// iterate through the tree, child first, then sibling
-		// add this node's tag, name, question, answer and verified state to string
-		if (numElementNode != 0)
+		// If the incoming metaNode and node are both the root, return true
+		/**
+		if (metaNodeAncestry.equals("metadata"))
 		{
-			System.out.println(" ElementName: " + root.getElementName() + " Question: " + root.getQuestion() + " Answer: " + root.getAnswer() + " Verified: " + ((root.getVerified()? "Y" : "N")));			
-			metadataTreeString += (" ElementName: " + root.getElementName() + " Question: " + root.getQuestion() + " Answer: " + root.getAnswer() + " Verified: " + ((root.getVerified()? "Y" : "N")) + "\n");			
-		}		
-		
-			// if the node has a child, call child
-			if (root.getChild() != null)
-			{
-				numElementNode++;
-				metadataTreeString += metadataTreeToString(root.getChild());
-				numElementNode--;
-			} // end if has a child
-			// if the node has a sibling, call sibling
-			if (root.getSibling() != null)
-			{
-				metadataTreeString += metadataTreeToString(root.getSibling());
-			} // end if has a sibling		 
-
-		return metadataTreeString;
-	}
-
-	/**
-	 * The domTreeToString converts a Document Object Model (DOM) to a single
-	 * String object for displaying the file contents in an easily readable
-	 * format. Only leaf nodes are displayed with xml tags being replaced by
-	 * properly descriptive titles for each element. Contents are displayed
-	 * beneath and indented to show relationship to the title.
-	 * 
-	 * @precondition the incoming node is the desired root of a DOM tree.
-	 *               Contrary to the name of the method, you cannot send this
-	 *               method a Document object or it will throw an exception and
-	 *               most likely crash and burn.
-	 * @param root
-	 *            is the node given as the root of a MetadataNode tree.
-	 * @postcondition a plain text display of the contents of the tree using
-	 *                indentation markers to show hierarchy and content
-	 *                ownership. Formatting of text includes only indentation,
-	 *                not font characteristics such as bold, italics, size, etc.
-	 * @return the metadataTreeString String.
-	 * 
-	 */
-	public String domTreeToString(Node node) {
-		String domTreeString = "";
-		// Print out *s for indentation place holders based on loop variable
-		// numElementNode
-		for (int i = 0; i < numElementNode; i++) {
-			System.out.print("*");
-			domTreeString += "*";
+			ancestryMatch = true;
 		}
-
-		// print the node. This is where we do any operations to the current
-		// parameter node
 		
-		System.out.print(node.getNodeName() + ((numElementNode == 0) ? "\n" : " "));
-		domTreeString += node.getNodeName() + ((numElementNode == 0) ? "\n" : " ");
-
-		// iterate through the nodeList
-		NodeList nodeList = node.getChildNodes();
-		for (int i = 0; i < nodeList.getLength(); i++) {
-			Node currentNode = nodeList.item(i);
-
-			// if the node is a comment node, print out the value
-			if (currentNode.getNodeType() == Node.COMMENT_NODE) {
-				System.out.println(currentNode.getNodeValue());
-				domTreeString += currentNode.getNodeValue() + "\n";
-			}
-			
-			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
-				// calls this method for all the children which is Element
-				numElementNode++;
-				domTreeString += domTreeToString(currentNode);
-				numElementNode--;
-			} // end if
-		} // end for
-		return domTreeString;
+		// else, walk up ancestry tree to be sure we have the right Document leaf
+		else
+		{
+		*/	while (!(metaNodeAncestry.contains("metadata")))
+			{				
+				if ((metaNode.getParent() != null))
+					metaNode = metaNode.getParent();
+				if ((node.getParentNode() != null))
+					node = node.getParentNode();
+				metaNodeAncestry = (metaNode.getElement() + "->" + metaNodeAncestry);
+				nodeAncestry = (node.getNodeName() + "->" + nodeAncestry);
+			}	
+			if (metaNodeAncestry.equals(nodeAncestry))
+				ancestryMatch = true;			
+			else 
+				ancestryMatch = false;
+		//}
+		// return the ancestry match result	
+		return ancestryMatch;
 	}
 }

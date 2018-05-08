@@ -69,6 +69,12 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.SoftBevelBorder;
@@ -87,20 +93,21 @@ public class MainView
 	private String inputFile = "";
 	private NodeList nList = null;
 	private Node rootDOM = null;
-	private MetadataNode rootMNode = new MetadataNode("root", "empty", (MetadataNode) null, (MetadataNode) null);
+	private MetadataNode rootMNode = new MetadataNode<Object>("root", "empty", (MetadataNode<?>) null, (MetadataNode<?>) null);
 	/*
 	 */
 	Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-	private MetadataNode currentNode = new MetadataNode("TOC", "Table of Contents", rootMNode, (MetadataNode) null);
+	private MetadataNode currentNode = new MetadataNode<Object>("TOC", "Table of Contents", rootMNode, (MetadataNode<?>) null);
 	private FileOps1 fileOperations = new FileOps1();
 	private XmlSessionManager session1 = new XmlSessionManager();
 	private NewSession newSession;
 	private MetadataPreview preview;
 	private int treeLength = 0;
+	private static final int MAX = 2;
 
 	// TEST VARIABLES //
 	private Document doc1 = null;
-	private Document doc2 = null;
+	private Document [] docs = new Document [MAX];
 	Scanner scan = new Scanner(System.in);
 	private boolean verifyCurrentNode = false;
 	private JTextField textField;
@@ -163,25 +170,25 @@ public class MainView
 		gbl_panel.rowWeights = new double[] { 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
 		
-		JTextArea openingScreen = new JTextArea();
-		openingScreen.setFont(new Font("Arial", Font.PLAIN, 13));
-		openingScreen.setEditable(false);
+		JTextArea openingMsg = new JTextArea();
+		openingMsg.setFont(new Font("Arial", Font.PLAIN, 13));
+		openingMsg.setEditable(false);
 		Border textBorder = BorderFactory.createLineBorder(Color.BLACK, 2, true);
-		openingScreen.setBorder( BorderFactory.createCompoundBorder(textBorder, BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+		openingMsg.setBorder( BorderFactory.createCompoundBorder(textBorder, BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 		//** old border setting
 		// openingScreen.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
 		GridBagConstraints gbc_openingScreen = new GridBagConstraints();
 		gbc_openingScreen.gridheight = 2;
 		gbc_openingScreen.gridwidth = 5;
-		openingScreen.setLineWrap(true);
-		openingScreen.setWrapStyleWord(true);
+		openingMsg.setLineWrap(true);
+		openingMsg.setWrapStyleWord(true);
 		gbc_openingScreen.insets = new Insets(0, 0, 5, 5);
 		gbc_openingScreen.fill = GridBagConstraints.BOTH;
 		gbc_openingScreen.gridx = 3;
 		gbc_openingScreen.gridy = 2;
-		panel.add(openingScreen, gbc_openingScreen);
-		openingScreen.setColumns(10);
-		openingScreen.setText("Create new session, open previous session, or import template to proceed...");
+		panel.add(openingMsg, gbc_openingScreen);
+		openingMsg.setColumns(10);
+		openingMsg.setText("Create new session, open previous session, or import template to proceed...");
 
 		JLabel navLabel = new JLabel("Navigation");
 		navLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -451,6 +458,7 @@ public class MainView
 									if (SharedData.isTemplateSet() == true)
 									{
 										System.out.println("NewSession result: file was set");
+										file = SharedData.getTemplateFile();
 
 										// call to create a document object
 										// model
@@ -535,10 +543,10 @@ public class MainView
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				// call SaveSession() method that creates a File object to send
-				// to the saveFile(File) method
+				// call SaveSession() method that creates a String object of this session
+				String session = session1.saveSession(rootMNode, currentNode, templates);				
 				// call FileOps1 save file method
-				fileOperations.saveFile(file);
+				fileOperations.saveFile(file, session);
 			}
 		});
 		menuFile.add(menuItemSave);
@@ -614,7 +622,7 @@ public class MainView
 					saveButton.setVisible(true);
 					txtrEnterTextHere.setEnabled(true);
 					chckbxVerified.setEnabled(true);
-					openingScreen.setVisible(false);
+					openingMsg.setVisible(false);
 				}
 				else
 					System.out.println("No file was selected.");
@@ -637,16 +645,43 @@ public class MainView
 						"xml");
 
 				exportFileChoose.setFileFilter(xmlFilter);
-				exportFileChoose.setDialogTitle("Selection location for export...");
+				exportFileChoose.setDialogTitle("Select location for export...");
 
+				String [] outputList = new String [MAX];
 				int exportChooseReturnVal;
-				File exportF = null;
+				docs [0] = doc1;
+				try {
+				outputList = session1.exportXMLFiles(docs, templates, "12345678");
+				}
+				catch (Exception e)
+				{
+					// err message
+				}
+				File exportF = new File(outputList[0]);
 
 				exportChooseReturnVal = exportFileChoose.showSaveDialog(frameTeamFeMetadata);
 				exportF = exportFileChoose.getSelectedFile();
 				if (exportF != null)
 				{
-					System.out.printf("File to be exported is %s\n", exportF.toString());
+					TransformerFactory transFactory = TransformerFactory.newInstance();
+					try {
+						// Create Transformer
+						Transformer trans = transFactory.newTransformer();
+						// Transform each Document to a Result
+						for (int index = 0; index < docs.length; index++) {
+							DOMSource source = new DOMSource(docs[index]);
+							// This is where the magic happens
+							StreamResult result = new StreamResult(new File(outputList[index])); 
+							trans.transform(source, result);				
+						}
+					} catch (TransformerConfigurationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (TransformerException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					// System.out.printf("File to be exported is %s\n", exportF.toString());
 				}
 				else
 					System.out.println("No file was selected.");
@@ -750,19 +785,37 @@ public class MainView
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				try
+				EventQueue.invokeLater(new Runnable()
 				{
-							preview = new MetadataPreview(session1.metadataTreeToString(rootMNode));
-							preview.setVisible(true);								
+					public void run()
+					{
+						try
+							{
+							String previewStr = "";
+							previewStr = session1.metadataTreeToString(rootMNode);
+							//preview = new MetadataPreview(session1.metadataTreeToString(rootMNode));
+							preview = new MetadataPreview( previewStr );
+							preview.setVisible(true);
+							preview.addWindowListener(new WindowAdapter()
+							{
+								@Override
+								public void windowClosed(WindowEvent e)
+								{
+									System.out.println("Preview window closed");
+								}
+							}); // end window listener for preview
+							
 							//JOptionPane.showMessageDialog(null, "XML tree preview coming soon...", "Preview",
 							//JOptionPane.INFORMATION_MESSAGE);
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-			}	
-		});
+							}
+						catch (Exception e)
+							{
+								e.printStackTrace();
+							}
+					}
+				}); // end new Runnable
+			} // end new actionPerformed
+		}); //end addActionListener
 		menuView.add(menuItemPreview);
 
 		JMenu menuHelp = new JMenu("Help");
@@ -774,7 +827,7 @@ public class MainView
 			public void actionPerformed(ActionEvent arg0)
 			{
 				JOptionPane.showMessageDialog(null,
-						"Metadata Software tool - version alpha 4.0"
+						"Metadata Software tool - version alpha 4.2"
 								+ "\n2018 April 27 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
 								+ "Jacob Espinoza, Isaias Gerena, Lucas Herrman\n"
 								+ "(Not for external distribution - Work in Progress)",
