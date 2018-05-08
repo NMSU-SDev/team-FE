@@ -239,7 +239,7 @@ public class FileOps1
 		{
 			System.err.println("There was a problem saving the file");
 			JOptionPane.showMessageDialog(null, "There was a problem saving the file", "Error",
-					JOptionPane.WARNING_MESSAGE);
+					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 	} // end method saveFile
