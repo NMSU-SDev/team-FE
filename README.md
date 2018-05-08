@@ -5,10 +5,12 @@ The tool guides the user through the process of entering the correct information
 When complete, the tool will produce Federal Geographic Data Committee (FGDC) compliant metadata for the various types of geo-spatial data products in a simple GUI environment.
 
 ---
-Platform: Windows (7 or later)
+Platform: all operating systems
 
 Runs using Java
 
-Installer and installation instructions coming soon...
+#### Installation instructions:
 
-_Last updated: 2018-04-27_
+Download the jar file and place it anywhere on your computer. Run the jar file and the application will run.
+
+_Last updated: 2018-05-08_
