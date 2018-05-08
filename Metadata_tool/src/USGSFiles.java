@@ -56,6 +56,7 @@ public class USGSFiles extends JDialog
 	{
 		setResizable(false);
 		setTitle("USGS Project Attributes");
+		setLocationRelativeTo(null);
 		file = nFile;
 		setBounds(100, 100, 400, 300);
 		{

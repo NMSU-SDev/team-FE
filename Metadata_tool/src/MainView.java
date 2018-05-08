@@ -3,6 +3,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -14,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.ImageIcon;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -31,6 +33,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Scanner;
 import java.awt.event.ActionListener;
@@ -157,10 +160,14 @@ public class MainView
 			System.out.println("Error setting native LAF: " + e);
 		}
 		frameTeamFeMetadata = new JFrame();
+		// **** attempted to set icon, but no change - Jacob Espinoza on 2018 May 07
+		//frameTeamFeMetadata.setIconImage(Toolkit.getDefaultToolkit().getImage(MainView.class.getResource("/resources/XSM2.ico")));
+		
 		frameTeamFeMetadata.setTitle("Team FE Metadata Project [Pre-Release]");
 		frameTeamFeMetadata.setBounds(100, 100, 600, 555);
 		frameTeamFeMetadata.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frameTeamFeMetadata.getContentPane().setLayout(new CardLayout(0, 0));
+		frameTeamFeMetadata.setLocationRelativeTo(null);
 
 		JPanel panel = new JPanel();
 		frameTeamFeMetadata.getContentPane().add(panel, "name_1876606686560390");
@@ -838,8 +845,8 @@ public class MainView
 			public void actionPerformed(ActionEvent arg0)
 			{
 				JOptionPane.showMessageDialog(null,
-						"Metadata Software tool - version alpha 4.2"
-								+ "\n2018 April 27 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
+						"Metadata Software tool - version alpha 4.5"
+								+ "\n2018 May 08 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
 								+ "Jacob Espinoza, Isaias Gerena, Lucas Herrman\n"
 								+ "(Not for external distribution - Work in Progress)",
 						"About", JOptionPane.INFORMATION_MESSAGE);

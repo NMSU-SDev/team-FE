@@ -81,6 +81,7 @@ public class MetadataPreview extends JFrame{
 		}
 	
 		setBounds(100, 100, 500, 600);
+		setLocationRelativeTo(null);
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{480, 0};

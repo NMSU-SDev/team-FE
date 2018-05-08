@@ -232,8 +232,6 @@ public class FileOps1
 		if (userSelection == JFileChooser.CANCEL_OPTION)
 		{
 			System.out.println("User cancelled file selection.");
-			JOptionPane.showMessageDialog(null, "There was a problem saving the file", "Error",
-					JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 

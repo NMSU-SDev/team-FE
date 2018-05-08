@@ -87,6 +87,7 @@ public class NewSession extends JFrame
 		}
 
 		setBounds(100, 100, 344, 290);
+		setLocationRelativeTo(null);
 		JButton btnNewButton = new JButton("USGS");
 		btnNewButton.setToolTipText("USGS compliant metadata");
 
