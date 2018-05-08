@@ -71,15 +71,26 @@ public class XmlSessionManager {
 	 *         File ?!?
 	 */
 	public String saveSession(MetadataNode<?> root, MetadataNode<?> currentNode, String[] templates) {
-		String xmlSessionSave = "!MetadataNodeTree!\n";
+		StringBuilder sb = new StringBuilder();
+		String xmlSessionSave;
+		
+		sb.append("!MetadataNodeTree!\n");
 		// File sessionFile;
 	
-		xmlSessionSave += metadataTreeToString(root);
-		xmlSessionSave += "!EndTree!\n!Current Node!\n" + currentNode.getElement() + "\n!EndCurrentNode!\n!TemplateList!\n";
-		for (int index = 0; index < templates.length; index++) {
-			xmlSessionSave += templates[index] + "\n";
+		sb.append( metadataTreeToString(root) );
+		sb.append("!EndTree!\n!Current Node!\n").append( currentNode.getElement() ).append( "\n!EndCurrentNode!\n!TemplateList!\n");
+		
+		if ( templates == null ) {
+			sb.append("!EndTemplatesList!\n");
+			return sb.toString();
 		}
-		xmlSessionSave += "!EndTemplatesList!\n";
+		
+		for (int index = 0; index < templates.length; index++) {
+			sb.append( templates[index] ).append("\n");
+		}
+		sb.append("!EndTemplatesList!\n");
+		
+		xmlSessionSave = sb.toString();
 	
 		return xmlSessionSave;
 	}
@@ -494,6 +505,8 @@ public class XmlSessionManager {
 	 */
 	public String metadataTreeToString(MetadataNode<?> root) {
 		String metadataTreeString = "";
+		
+		if ( root == null ) return metadataTreeString;
 	
 		// Print out *s for indentation place holders based on loop variable
 		// numElementNode

@@ -655,7 +655,7 @@ public class MetadataNode<M> extends Object implements MutableTreeNode
 	}
 
 	@Override
-	public Enumeration<?> children()
+	public Enumeration<? extends TreeNode> children()
 	{
 		// TODO Auto-generated method stub
 		return null;

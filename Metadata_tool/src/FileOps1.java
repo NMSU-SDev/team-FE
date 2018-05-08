@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -107,6 +108,9 @@ public class FileOps1
 	 * 
 	 * @param fileObjIn
 	 *            a File object that will be written to.
+	 * @param session
+	 * 			  a String that corresponds to the .xsm session file           
+	 *            
 	 * @return a File object reference to the saved file or null if an error
 	 *         occurred.
 	 */
@@ -120,13 +124,6 @@ public class FileOps1
 
 		Path pathToFile = fileObjIn.toPath();
 
-		// some test output to write to the file
-		/** DEPRECATED
-		String content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + "<note>\r\n"
-				+ "  <heading>Test File</heading>\r\n"
-				+ "  <body>This test XSM file tests the file writing method.</body>\r\n" + "</note> ";
-		*/
-		// byte byteArray[] = content.getBytes(); DEPRECATED
 		byte byteArray[] = session.getBytes();
 
 		try (OutputStream out = new BufferedOutputStream(Files.newOutputStream(pathToFile, CREATE, APPEND)))
@@ -221,9 +218,8 @@ public class FileOps1
 
 		saveFileChoose.setFileFilter(xsmFilter);
 		saveFileChoose.setSelectedFile(new File("*.xsm"));
-		saveFileChoose.setCurrentDirectory(null); // null points the dialog
-													// initially to the user's
-													// default directory
+		saveFileChoose.setCurrentDirectory(null); 
+		// null points the dialog initially to the user's default directory
 
 		int userSelection = saveFileChoose.showSaveDialog(saveFrame);
 		if (userSelection == JFileChooser.APPROVE_OPTION)
@@ -236,12 +232,16 @@ public class FileOps1
 		if (userSelection == JFileChooser.CANCEL_OPTION)
 		{
 			System.out.println("User cancelled file selection.");
+			JOptionPane.showMessageDialog(null, "There was a problem saving the file", "Error",
+					JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 
 		if (userSelection == JFileChooser.ERROR_OPTION)
 		{
 			System.err.println("There was a problem saving the file");
+			JOptionPane.showMessageDialog(null, "There was a problem saving the file", "Error",
+					JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 	} // end method saveFile
