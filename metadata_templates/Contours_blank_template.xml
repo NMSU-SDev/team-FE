@@ -162,7 +162,7 @@
 <horizpa>
 <!-- Horizontal Positional Accuracy -- an estimate of accuracy of the horizontal positions of the spatial objects. Type: compound -->
 <horizpar></horizpar>
-Horizontal Positional Accuracy Report -- an explanation of the accuracy of the horizontal coordinate measurements and a description of the tests used. Type: text Domain: free text -->
+<!-- Horizontal Positional Accuracy Report -- an explanation of the accuracy of the horizontal coordinate measurements and a description of the tests used. Type: text Domain: free text -->
 </horizpa>
 <vertacc>
 <!-- Vertical Positional Accuracy - an estimate of accuracy of the vertical positions in the data set. This set of tags is suggested for projects that include both classified and unclassified las files and required for projects that only include classified las files. Type: compound. -->
@@ -182,18 +182,18 @@ Horizontal Positional Accuracy Report -- an explanation of the accuracy of the h
 <!-- Originator - the name of an organization or individual that developed the data set. If the name of editors or compilers are provided, the name must be followed by "(ed.)" or "(comp.)" respectively. Type: text. Domain: free text. -->
 <pubdate></pubdate>
 <!-- Publication Date - the date when the data set is published or otherwise made available for release. Type: date. Domain: "Unknown"; "Unpublished material"; free date.-->
-<pubtime>Unknown</pubtime>
+<pubtime></pubtime>
 <!-- Publication Time -- the time of day when the data set is published or otherwise made available for release. Type: time Domain: "Unknown" free time. -->
 <title></title>
 <!-- Title - the name by which the data set is known. Type: text. Domain: free text.-->
 <geoform></geoform>
 <!-- Geospatial Data Presentation Form - the mode in which the geospatial data are represented. Type: text. Domain: "atlas"; "audio"; "diagram"; "document"; "globe"; "map"; "model"; "multimedia presentation"; "profile"; "raster digital data"; "remote-sensing image"; "section"; "spreadsheet"; "tabular digital data"; "vector digital data"; "video"; "view"; free text. -->
 <serinfo>
-
-<sername>Lidar checkpoints</sername>
-
-<issue>Lidar checkpoints</issue>
-
+<!-- Series Information. The identification of the series publication of which the data set is a part. Type: compound. -->
+<sername></sername>
+<!-- Series Name -- the name of the series publication of which the data set is a part. Type: text Domain: free text. -->
+<issue></issue>
+<!-- Issue Identification -- information identifying the issue of the series publication of which the data set is a part. Type: text Domain: free text -->
 </serinfo>
 <pubinfo>
 <!-- Publication Information - publication details for published data sets. Type: compound. -->
@@ -216,12 +216,12 @@ Horizontal Positional Accuracy Report -- an explanation of the accuracy of the h
 <!-- Single Date/Time - means of encoding a single date and time. Type: compound. -->
 <caldate></caldate>
 <!-- Calendar Date - the year (and optionally month, or month and day). Type: date. Domain: "Unknown"; free date. -->
-<time>unknown</time>
-
+<time></time>
+<!-- Time of Day -- the hour (and optionally minute, or minute and second) of the day. Type: time Domain: "Unknown free time. -->
 </sngdate>
 </timeinfo>
-<srccurr>ground condition</srccurr>
-
+<srccurr></srccurr>
+<!-- Source Currentness Reference -- the basis on which the source time period of content information of the source data set is determined. Type: text Domain: "ground condition" "publication date" free text. --> 
 </srctime>
 <srccitea></srccitea>
 <!-- Source Citation Abbreviation - short-form alias for the source citation. Type: text. Domain: free text. -->
@@ -239,17 +239,17 @@ Horizontal Positional Accuracy Report -- an explanation of the accuracy of the h
 <pubdate></pubdate>
 <!-- Publication Date - the date when the data set is published or otherwise made available for release. Type: date. Domain: "Unknown"; "Unpublished material"; free date.-->
 <pubtime></pubtime>
-
+<!-- Publication Time -- the time of day when the data set is published or otherwise made available for release. Type: time Domain: "Unknown" free time. -->
 <title></title>
 <!-- Title - the name by which the data set is known. Type: text. Domain: free text.-->
 <geoform></geoform>
 <!-- Geospatial Data Presentation Form - the mode in which the geospatial data are represented. Type: text. Domain: "atlas"; "audio"; "diagram"; "document"; "globe"; "map"; "model"; "multimedia presentation"; "profile"; "raster digital data"; "remote-sensing image"; "section"; "spreadsheet"; "tabular digital data"; "vector digital data"; "video"; "view"; free text. -->
 <serinfo>
-
-<sername>Lidar</sername>
-
-<issue>Lidar</issue>
-
+<!-- Series Information. The identification of the series publication of which the data set is a part. Type: compound. -->
+<sername></sername>
+<!-- Series Name -- the name of the series publication of which the data set is a part. Type: text Domain: free text. -->
+<issue></issue>
+<!-- Issue Identification -- information identifying the issue of the series publication of which the data set is a part. Type: text Domain: free text -->
 </serinfo>
 <pubinfo>
 <!-- Publication Information - publication details for published data sets. Type: compound. -->
@@ -269,19 +269,19 @@ Horizontal Positional Accuracy Report -- an explanation of the accuracy of the h
 <timeinfo>
 <!-- Time Period Information - information about the date and time of an event. (Note: this section provides a means of stating temporal information, and is used by other sections of the metadata standard. This section is never used alone.) -->
 <rngdates>
-
-<begdate>20161223</begdate>
-
-<begtime>unknown</begtime>
-
-<enddate>20170602</enddate>
-
-<endtime>unknown</endtime>
-
+<!-- Range of Dates/Times -- means of encoding a range of dates and times. Type: compound -->
+<begdate></begdate>
+<!-- Beginning Date - the first year (and optionally month, or month and day) of the collection. Type: date. Domain: "Unknown" free date. -->
+<begtime></begtime>
+<!-- Beginning Time -- the first hour (and optionally minute, or minute and second) of the day for the event. Type: time Domain: "Unknown" free time --->
+<enddate></enddate>
+<!-- Ending Date - the last year (and optionally month, or month and day) for the collection. Type: date. Domain: "Unknown" free date. -->
+<endtime></endtime>
+<!-- Ending Time -- the last hour (and optionally minute, or minute and second) of the day for the event. Type: time Domain: "Unknown" free time. -->
 </rngdates>
 </timeinfo>
-<srccurr>ground condition</srccurr>
-
+<srccurr></srccurr>
+<!-- Source Currentness Reference -- the basis on which the source time period of content information of the source data set is determined. Type: text Domain: "ground condition" "publication date" free text. --> 
 </srctime>
 <srccitea></srccitea>
 <!-- Source Citation Abbreviation - short-form alias for the source citation. Type: text. Domain: free text. -->
@@ -299,14 +299,14 @@ Horizontal Positional Accuracy Report -- an explanation of the accuracy of the h
 <cntinfo>
 <!-- Contact Information - Identity of, and means to communicate with, person(s) and organization(s) associated with the data set.Type: compound. -->
 <cntperp>
-
+<!-- Contact Person Primary -- the person, and the affiliation of the person, associated with the data set. Used in cases where the association of the person to the data set is more significant than the association of the organization to the data set. Type: compound -->
 <cntper></cntper>
 <!-- Contact Person Primary - the person, and the affiliation of the person, associated with the data set. Used in cases where the association of the person to the data set is more significant than the association of the organization to the data set. Domain: -->
 <cntorg></cntorg>
 <!-- Contact Organization - the name of the organization. Type: text. Domain: free text. -->
 </cntperp>
-<cntpos>Project Manager</cntpos>
-
+<cntpos></cntpos>
+<!-- Contact Position -- the title of individual. Type: text Domain: free text. -->
 <cntaddr>
 <!-- Contact Address - the address for the organization or individual. Type: compound. -->
 <addrtype></addrtype>
@@ -416,112 +416,112 @@ Horizontal Positional Accuracy Report -- an explanation of the accuracy of the h
 </vertdef>
 </spref>
 <eainfo>
-
+<!-- Entity and Attribute Information -- details about the information content of the data set, including the entity types, their attributes, and the domains from which attribute values may be assigned. Type: compound. -->
 <detailed>
-
+<!-- Detailed Description -- description of the entities, attributes, attribute values, and related characteristics encoded in the data set. Type: compound. -->
 <enttyp>
-
-<enttypl>Contour_2ft</enttypl>
-
-<enttypd>Contour_2ft</enttypd>
-
-<enttypds>Surdex</enttypds>
-
+<!-- Entity Type -- the definition and description of a set into which similar entity instances are classified. Type: compound. -->
+<enttypl></enttypl>
+<!-- Entity Type Label -- the name of the entity type. Type: text. Domain: free text. -->
+<enttypd></enttypd>
+<!-- Entity Type Definition -- the description of the entity type. Type: text. Domain: free text. -->
+<enttypds></enttypds>
+<!-- Entity Type Definition Source -- the authority of the definition. Type: text. Domain: free text. -->
 </enttyp>
 <attr>
-
-<attrlabl>OBJECTID</attrlabl>
-
-<attrdef>Internal feature number.</attrdef>
-
-<attrdefs>ESRI</attrdefs>
-
+<!-- Attribute -- a defined characteristic of an entity. Type: compound. -->
+<attrlabl></attrlabl>
+<!-- Attribute Label -- the name of the attribute. Type: text. Domain: free text. -->
+<attrdef></attrdef>
+<!-- Attribute Definition -- the description of the attribute. Type: text. Domain: free text. -->
+<attrdefs></attrdefs>
+<!-- Attribute Definition Source -- the authority of the definition. Type: text. Domain: free text. -->
 <attrdomv>
-
-<udom>Sequential unique whole numbers that are automatically generated.</udom>
-
+<!-- Attribute Domain Values -- the valid values that can be assigned for an attribute. Type: compound. -->
+<udom></udom>
+<!-- Unrepresentable Domain -- description of the values and reasons why they cannot be represented. Type: text. Domain: free text. -->
 </attrdomv>
 </attr>
 <attr>
-
-<attrlabl>Shape</attrlabl>
-
-<attrdef>Feature geometry.</attrdef>
-
-<attrdefs>ESRI</attrdefs>
-
+<!-- Attribute -- a defined characteristic of an entity. Type: compound. -->
+<attrlabl></attrlabl>
+<!-- Attribute Label -- the name of the attribute. Type: text. Domain: free text. -->
+<attrdef></attrdef>
+<!-- Attribute Definition -- the description of the attribute. Type: text. Domain: free text. -->
+<attrdefs></attrdefs>
+<!-- Attribute Definition Source -- the authority of the definition. Type: text. Domain: free text. -->
 <attrdomv>
-
-<udom>Coordinates defining the features.</udom>
-
+<!-- ttribute Domain Values -- the valid values that can be assigned for an attribute. Type: compound. -->
+<udom></udom>
+<!-- Unrepresentable Domain -- description of the values and reasons why they cannot be represented. Type: text. Domain: free text. -->
 </attrdomv>
 </attr>
 <attr>
-
-<attrlabl>Shape_Length</attrlabl>
-
-<attrdef>Length of feature in internal units.</attrdef>
-
-<attrdefs>ESRI</attrdefs>
-
+<!-- Attribute -- a defined characteristic of an entity. Type: compound. -->
+<attrlabl></attrlabl>
+<!-- Attribute Label -- the name of the attribute. Type: text. Domain: free text. -->
+<attrdef></attrdef>
+<!-- Attribute Definition -- the description of the attribute. Type: text. Domain: free text. -->
+<attrdefs></attrdefs>
+<!-- Attribute Definition Source -- the authority of the definition. Type: text. Domain: free text. -->
 <attrdomv>
-
-<udom>Positive real numbers that are automatically generated.</udom>
-
+<!-- ttribute Domain Values -- the valid values that can be assigned for an attribute. Type: compound. -->
+<udom></udom>
+<!-- Unrepresentable Domain -- description of the values and reasons why they cannot be represented. Type: text. Domain: free text. -->
 </attrdomv>
 </attr>
 <attr>
-
-<attrlabl>Ftype</attrlabl>
-
-<attrdef>Ftype</attrdef>
-
-<attrdefs>Surdex</attrdefs>
-
+<!-- Attribute -- a defined characteristic of an entity. Type: compound. -->
+<attrlabl></attrlabl>
+<!-- Attribute Label -- the name of the attribute. Type: text. Domain: free text. -->
+<attrdef></attrdef>
+<!-- Attribute Definition -- the description of the attribute. Type: text. Domain: free text. -->
+<attrdefs></attrdefs>
+<!-- Attribute Definition Source -- the authority of the definition. Type: text. Domain: free text. -->
 <attrdomv>
-
-<udom>Ftype</udom>
-
+<!-- ttribute Domain Values -- the valid values that can be assigned for an attribute. Type: compound. -->
+<udom></udom>
+<!-- Unrepresentable Domain -- description of the values and reasons why they cannot be represented. Type: text. Domain: free text. -->
 </attrdomv>
 </attr>
 <attr>
-
-<attrlabl>Elev</attrlabl>
-
-<attrdef>Elev</attrdef>
-
-<attrdefs>Surdex</attrdefs>
-
+<!-- Attribute -- a defined characteristic of an entity. Type: compound. -->
+<attrlabl></attrlabl>
+<!-- Attribute Label -- the name of the attribute. Type: text. Domain: free text. -->
+<attrdef></attrdef>
+<!-- Attribute Definition -- the description of the attribute. Type: text. Domain: free text. -->
+<attrdefs></attrdefs>
+<!-- Attribute Definition Source -- the authority of the definition. Type: text. Domain: free text. -->
 <attrdomv>
-
-<udom>Elev</udom>
-
+<!-- ttribute Domain Values -- the valid values that can be assigned for an attribute. Type: compound. -->
+<udom></udom>
+<!-- Unrepresentable Domain -- description of the values and reasons why they cannot be represented. Type: text. Domain: free text. -->
 </attrdomv>
 </attr>
 </detailed>
 <overview>
-
-<eaover>Two-foot interval Contour feature class</eaover>
-
-<eadetcit>Two-foot interval Contour feature class</eadetcit>
-
+<!-- Overview Description -- summary of, and citation to detailed description of, the information content of the data set. Type: compound. -->
+<eaover></eaover>
+<!-- Entity and Attribute Overview -- detailed summary of the information contained in a data set. Type: text. Domain: free text. -->
+<eadetcit></eadetcit>
+<!-- Entity and Attribute Detail Citation -- reference to the complete description of the entity types, attributes, and attribute values for the data set. Type: text. Domain: free text. -->
 </overview>
 </eainfo>
   <distinfo>
     <!-- Distribution Information - PLEASE NOTE: This section should ONLY be populated if an entity other than the USGS holds distribution rights to the data. Information about the distributor of and options for obtaining the dataset.  -->
     <distrib>
-    
+      <!-- Distributor -- the party from whom the data set may be obtained. Type: compound. -->
       <cntinfo>
         <!-- Contact Information - PLEASE NOTE: This section should ONLY be populated if an entity other than the USGS holds distribution rights to the data. Identity of, and means to communicate with, person(s) and organization(s) associated with the data set.Type: compound. -->
         <cntperp>
-        
+          <!-- Contact Person Primary - the person, and the affiliation of the person, associated with the data set. Used in cases where the association of the person to the data set is more significant than the association of the organization to the data set. Domain: -->
           <cntper></cntper>
           <!-- Contact Person Primary - PLEASE NOTE: This section should ONLY be populated if an entity other than the USGS holds distribution rights to the data. The person, and the affiliation of the person, associated with the data set. Used in cases where the association of the person to the data set is more significant than the association of the organization to the data set. Domain: -->
           <cntorg></cntorg>
           <!-- Contact Organization - PLEASE NOTE: This section should ONLY be populated if an entity other than the USGS holds distribution rights to the data. The name of the organization. Type: text. Domain: free text. -->
         </cntperp>
-        <cntpos>Project Manager</cntpos>
-        
+        <cntpos></cntpos>
+        <!-- Contact Position -- the title of individual. Type: text Domain: free text. -->
         <cntaddr>
           <!-- Contact Address - PLEASE NOTE: This section should ONLY be populated if an entity other than the USGS holds distribution rights to the data. The address for the organization or individual. Type: compound. -->
           <addrtype></addrtype>
@@ -553,14 +553,14 @@ Horizontal Positional Accuracy Report -- an explanation of the accuracy of the h
 <cntinfo>
 <!-- Contact Information - Identity of, and means to communicate with, person(s) and organization(s) associated with the data set.Type: compound. -->
 <cntperp>
-
-<cntper>Wade Williams</cntper>
-
+<!-- Contact Person Primary - the person, and the affiliation of the person, associated with the data set. Used in cases where the association of the person to the data set is more significant than the association of the organization to the data set. Domain: -->
+<cntper></cntper>
+<!-- Contact Person Primary - PLEASE NOTE: This section should ONLY be populated if an entity other than the USGS holds distribution rights to the data. The person, and the affiliation of the person, associated with the data set. Used in cases where the association of the person to the data set is more significant than the association of the organization to the data set. Domain: -->
 <cntorg></cntorg>
 <!-- Contact Organization - the name of the organization. Type: text. Domain: free text. -->
 </cntperp>
-<cntpos>Project Manager</cntpos>
-
+<cntpos></cntpos>
+<!-- Contact Position -- the title of individual. Type: text Domain: free text. -->
 <cntaddr>
 <!-- Contact Address - the address for the organization or individual. Type: compound. -->
 <addrtype></addrtype>
@@ -585,7 +585,7 @@ Horizontal Positional Accuracy Report -- an explanation of the accuracy of the h
 <metstdv></metstdv>
 <!-- Metadata Standard Version - identification of the version of the metadata standard used to document the data set. Type: text. Domain: free text. -->
 <mettc>local time</mettc>
-
+<!-- Metadata Time Convention -- form used to convey time of day information in the metadata entry. Used if time of day information is included in the metadata for a data set. Type: text. Domain: "local time" "local time with time differential factor" "universal time". -->
 <metextns>
 <!-- Metadata Extensions - a reference to extended elements to the standard which may be defined by a metadata producer or a user community. Extended elements are elements outside the Standard, but needed by the metadata producer. If extended elements are created, they must follow the guidelines in Appendix D, Guidelines for Creating Extended Elements to the Content Standard for Digital Geospatial Metadata. Type: Compound -->
 <onlink></onlink>
