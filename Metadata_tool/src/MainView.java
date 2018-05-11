@@ -93,7 +93,6 @@ public class MainView
 	private MyTree tree;
 	JScrollPane treeView;
 	private File file;
-	private String[] templates;
 	private String inputFile = "";
 	private NodeList nList = null;
 	private Node rootDOM = null;
@@ -108,6 +107,8 @@ public class MainView
 	private MetadataPreview preview;
 	private int treeLength = 0;
 	private static final int MAX = 2;
+	
+	private String[] templates = new String[ MAX ];
 	
 	/* ** GUI ELEMENTS, global vars **** */
 	JLabel elementLabel = new JLabel(currentNode.getElementName());
@@ -313,7 +314,8 @@ public class MainView
 
 		importChooseReturnVal = importFileChoose.showOpenDialog(frameTeamFeMetadata);
 		importF = importFileChoose.getSelectedFile();
-		// THIS LINE CAUSES A NULL POINTER ERROR!!!!! templates[0] = importF.getAbsolutePath();
+	    templates[0] = importF.getAbsolutePath();
+		
 		if (importF != null)
 		{
 			setUI();
