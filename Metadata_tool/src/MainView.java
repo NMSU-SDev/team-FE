@@ -313,6 +313,7 @@ public class MainView
 
 		importChooseReturnVal = importFileChoose.showOpenDialog(frameTeamFeMetadata);
 		importF = importFileChoose.getSelectedFile();
+		// THIS LINE CAUSES A NULL POINTER ERROR!!!!! templates[0] = importF.getAbsolutePath();
 		if (importF != null)
 		{
 			setUI();
@@ -524,13 +525,13 @@ public class MainView
 				{
 					currentNode.setVerified(verifyCurrentNode);
 					currentNode.setAnswer(txtrEnterTextHere.getText());
-					//txtrEnterTextHere.setText("");
-					chckbxVerified.setSelected(false);
+					
 					System.out.println(currentNode.getAnswer());
 					System.out.println(currentNode.getVerified());
 					//These test the two lines above
 					
 					currentNode = currentNode.getParent();
+					chckbxVerified.setSelected(currentNode.getVerified() );
 					elementLabel.setText(currentNode.getElementName());
 					questionLabel.setText(currentNode.getQuestion());
 					txtrEnterTextHere.setText(currentNode.getAnswer());
@@ -563,6 +564,7 @@ public class MainView
 						System.out.println(currentNode.getAnswer());
 						System.out.println(currentNode.getVerified());
 						//These test the two lines above
+						session1.saveMetadataToDOM(rootMNode, doc1);
 					}
 			
 				});
@@ -580,18 +582,13 @@ public class MainView
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				// TODO Auto-generated method stub
 				MetadataNode tempNode;
 				tempNode = currentNode.getChild();
 				if (tempNode != null)
 				{
-					// need to save changes in MetadataNode to DOM first
-					session1.saveMetadataToDOM(rootMNode, doc1);
-
 					currentNode.setVerified(verifyCurrentNode);
 					currentNode.setAnswer(txtrEnterTextHere.getText());
 					txtrEnterTextHere.setText("");
-					chckbxVerified.setSelected(false);
 					System.out.println(currentNode.getAnswer());
 					System.out.println(currentNode.getVerified());
 					//These test the two lines above
@@ -599,6 +596,7 @@ public class MainView
 					currentNode = tempNode;
 					elementLabel.setText(currentNode.getElementName());
 					questionLabel.setText(currentNode.getQuestion());
+					chckbxVerified.setSelected( currentNode.getVerified() );
 				}
 				else
 				{
