@@ -3,6 +3,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -14,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.ImageIcon;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -31,6 +33,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Scanner;
 import java.awt.event.ActionListener;
@@ -69,6 +72,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -104,8 +108,20 @@ public class MainView
 	private MetadataPreview preview;
 	private int treeLength = 0;
 	private static final int MAX = 2;
+	
+	/* ** GUI ELEMENTS, global vars **** */
+	JLabel elementLabel = new JLabel(currentNode.getElementName());
+	JTextArea questionLabel = new JTextArea(currentNode.getQuestion());
+	JPanel panel = new JPanel();
+	JTextArea mainTxtBox = new JTextArea();
+	JLabel navLabel = new JLabel();
+	JCheckBox chckbxVerified = new JCheckBox();
+	JButton prevButton = new JButton();
+	JButton nextButton = new JButton();
+	JButton saveButton = new JButton();
+	JTextArea openingMsg = new JTextArea();
 
-	// TEST VARIABLES //
+	/* *** TEST VARIABLES  **** */
 	private Document doc1 = null;
 	private Document [] docs = new Document [MAX];
 	Scanner scan = new Scanner(System.in);
@@ -133,14 +149,233 @@ public class MainView
 			}
 		});
 	}
+	
+	public void setUI() {
+		try
+		{
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}
+		catch (Exception e)
+		{
+			System.out.println("Error setting native LAF: " + e);
+		}
+	}
 
 	/**
 	 * Create the application.
 	 */
 	public MainView()
 	{
+		setUI();
 		initialize();
+		displayWelcome();
 	}
+	
+	/* Display a welcome dialog, aka a "splash screen" */
+	private void displayWelcome() {
+		//coming soon ;
+		EventQueue.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				String message = "Would you like to create a new session, open a previous session, or import a template?";
+				Object options[] = { "New", "Open", "Import" };
+		
+				int result = JOptionPane.showOptionDialog(frameTeamFeMetadata, message, "Welcome", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+				
+				System.out.printf("JOptionPane result value is %d\n", result);
+				
+				if (result == 0 ) createNew();
+				else if (result == 1) open();
+				else if (result == 2) importFile();
+			}
+		});
+		
+	} // end displayWelcome()
+	
+	/* action done to create a new session */
+	private void createNew() {
+		// Open a new dialog window with two buttons: "USGS" and "non-USGS"
+		System.out.println("Calling NewSession frame");
+		EventQueue.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				try
+				{
+					newSession = new NewSession(file);
+					newSession.setVisible(true);
+					newSession.addWindowListener(new WindowAdapter()
+					{
+						@Override
+						public void windowClosed(WindowEvent e)
+						{
+							if (SharedData.isTemplateSet() == true)
+							{
+								System.out.println("NewSession result: file was set");
+								file = SharedData.getTemplateFile();
+
+								// call to create a document object
+								// model
+								// uses the XmlSessionManager class
+								doc1 = session1.fileToDOM(file);
+								NodeList nList = null;
+								Node nNode = null;
+								nList = doc1.getElementsByTagName("metadata");
+								nNode = nList.item(0);
+								rootMNode = session1.importDOMToMetadata(nNode);
+								currentNode = rootMNode;
+								elementLabel.setText(currentNode.getElementName());
+								questionLabel.setText(currentNode.getQuestion());
+								// System.out.println("Creating a document object model...");
+								// doc1 = session1.fileToDOM(SharedData.templateFile);									
+								
+							}
+							else
+								System.out.println("NewSession result: file was NOT set");
+						}
+					}); // end window listener for dialog
+
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+			} // end run()
+		});
+	} // end createNew()
+	
+	/* action done to open an existing session or file */
+	private void open() {
+		String fName = "";
+		System.out.println("Open menu option clicked");
+		// call the open code from FileOps1
+		// load metadata or session file into 'file'
+		file = fileOperations.openFile(frameTeamFeMetadata);
+
+		/* Must check to make sure the user selected a file */
+		if (file != null)
+			fName = file.getName();
+
+		// if file is an XML, run Preview method
+		if (fName.contains(".xml"))
+		{
+			try
+			{
+				//Desktop.getDesktop().open(file);
+				Document doc1 = session1.fileToDOM( file );
+				TransformerFactory tf = TransformerFactory.newInstance();
+				Transformer transformer = tf.newTransformer();
+				transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+				StringWriter writer = new StringWriter();
+				transformer.transform(new DOMSource(doc1), new StreamResult(writer));
+				String output = writer.getBuffer().toString();
+				
+				preview = new MetadataPreview( output, fName );
+				preview.setVisible(true);
+			}
+			catch (TransformerException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		// else if file is an xsm, run openSession method
+		else if (fName.contains(".xsm"))
+		{
+			rootMNode = session1.openSession(file, currentNode, templates);
+		}
+
+		else if ( file != null )
+		{
+			System.err.println("Not a session file");
+			JOptionPane.showMessageDialog(null, "File selected was not a session file or an XML file!", "Open Failed",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	} // end open
+	
+	public void importFile() {
+		// action for when import is selected
+		setUI();
+		
+		final JFileChooser importFileChoose = new JFileChooser();
+		FileFilter xmlFilter = new FileNameExtensionFilter("XML File - eXtensible Markup Language (*.xml)",
+				"xml");
+
+		importFileChoose.setFileFilter(xmlFilter);
+		// ** Force disable all files option
+		importFileChoose.setAcceptAllFileFilterUsed(false);
+		importFileChoose.setDialogTitle("Import");
+
+		int importChooseReturnVal;
+		File importF = null;
+
+		importChooseReturnVal = importFileChoose.showOpenDialog(frameTeamFeMetadata);
+		importF = importFileChoose.getSelectedFile();
+		templates[0] = importF.getAbsolutePath();
+		if (importF != null)
+		{
+			setUI();
+			
+			doc1 = session1.fileToDOM(importF);
+			NodeList nList = null;
+			Node nNode = null;
+			nList = doc1.getElementsByTagName("metadata");
+			nNode = nList.item(0);
+			rootMNode = session1.importDOMToMetadata(nNode);
+			currentNode = rootMNode;
+			elementLabel.setText(currentNode.getElementName());
+			questionLabel.setText(currentNode.getQuestion());
+
+			// Moved creation of the table of contents to create on import
+			// instead of on program start
+			tree = new MyTree(rootMNode);
+
+			GridBagConstraints gbc_tree = new GridBagConstraints();
+			gbc_tree.gridwidth = 1;
+			gbc_tree.gridheight = 9;
+			gbc_tree.insets = new Insets(0, 0, 0, 0);
+	/* ***** Grid bag constraints still will not resize horizontally */
+			gbc_tree.weightx = 1.0;
+			gbc_tree.fill = GridBagConstraints.BOTH;
+			gbc_tree.gridx = 1;
+			gbc_tree.gridy = 1;
+			panel.add(tree, gbc_tree);
+
+			// Create the scroll pane and add the tree to it.
+			treeView = new JScrollPane();
+
+			GridBagConstraints gbc_treeView = new GridBagConstraints();
+			gbc_treeView.gridwidth = 1;
+			gbc_treeView.gridheight = 9;
+			gbc_treeView.insets = new Insets(0, 0, 0, 0);
+			gbc_treeView.weightx = 1.0;
+			gbc_treeView.fill = GridBagConstraints.BOTH;
+			gbc_treeView.gridx = 1;
+			gbc_treeView.gridy = 1;
+			panel.add(treeView, gbc_treeView);
+			
+			elementLabel.setVisible(true);
+			questionLabel.setVisible(true);
+			mainTxtBox.setVisible(true);
+			navLabel.setVisible(true);
+			chckbxVerified.setVisible(true);
+			prevButton.setVisible(true);
+			nextButton.setVisible(true);
+			saveButton.setVisible(true);
+			mainTxtBox.setEnabled(true);
+			chckbxVerified.setEnabled(true);
+			openingMsg.setVisible(false);
+		}
+		else
+			System.out.println("No file was selected.");
+
+		if (importChooseReturnVal == JFileChooser.CANCEL_OPTION)
+		{
+			System.out.println("User cancelled file selection.");
+		}
+	} // end importFile();
 
 	/**
 	 * Initialize the contents of the frameTeamFeMetadata.
@@ -156,12 +391,16 @@ public class MainView
 			System.out.println("Error setting native LAF: " + e);
 		}
 		frameTeamFeMetadata = new JFrame();
+		// **** attempted to set icon, but no change - Jacob Espinoza on 2018 May 07
+		//frameTeamFeMetadata.setIconImage(Toolkit.getDefaultToolkit().getImage(MainView.class.getResource("/resources/XSM2.ico")));
+		
 		frameTeamFeMetadata.setTitle("Team FE Metadata Project [Pre-Release]");
 		frameTeamFeMetadata.setBounds(100, 100, 600, 555);
 		frameTeamFeMetadata.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frameTeamFeMetadata.getContentPane().setLayout(new CardLayout(0, 0));
+		frameTeamFeMetadata.setLocationRelativeTo(null);
 
-		JPanel panel = new JPanel();
+		
 		frameTeamFeMetadata.getContentPane().add(panel, "name_1876606686560390");
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[] { 10, 120, 40, 80, 0, 62, 0, 90, 25, 0 };
@@ -170,7 +409,6 @@ public class MainView
 		gbl_panel.rowWeights = new double[] { 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
 		
-		JTextArea openingMsg = new JTextArea();
 		openingMsg.setFont(new Font("Arial", Font.PLAIN, 13));
 		openingMsg.setEditable(false);
 		Border textBorder = BorderFactory.createLineBorder(Color.BLACK, 2, true);
@@ -189,8 +427,11 @@ public class MainView
 		panel.add(openingMsg, gbc_openingScreen);
 		openingMsg.setColumns(10);
 		openingMsg.setText("Create new session, open previous session, or import template to proceed...");
+		//**** disable the opening message for now
+		openingMsg.setVisible(false);
 
-		JLabel navLabel = new JLabel("Navigation");
+
+		navLabel.setText("Navigation");
 		navLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
 		navLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		GridBagConstraints gbc_navLabel = new GridBagConstraints();
@@ -201,7 +442,7 @@ public class MainView
 		gbc_navLabel.gridy = 0;
 		panel.add(navLabel, gbc_navLabel);
 
-		JLabel elementLabel = new JLabel(currentNode.getElementName());
+		
 		elementLabel.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 		elementLabel.setBounds(new Rectangle(0, 5, 0, 0));
 		elementLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -213,24 +454,6 @@ public class MainView
 		gbc_elementLabel.gridy = 0;
 		panel.add(elementLabel, gbc_elementLabel);
 
-		/*
-		 * Moved creation of the TOC to import behavior - Lucas
-		 * 
-		 * tree = new MyTree(rootMNode);
-		 * 
-		 * GridBagConstraints gbc_tree = new GridBagConstraints();
-		 * gbc_tree.gridwidth = 2; gbc_tree.gridheight = 9; gbc_tree.insets =
-		 * new Insets(0, 0, 5, 5); gbc_tree.fill = GridBagConstraints.BOTH;
-		 * gbc_tree.gridx = 0; gbc_tree.gridy = 1; panel.add(tree, gbc_tree); //
-		 * Create the scroll pane and add the tree to it. treeView = new
-		 * JScrollPane(); // JScrollPane scrollPane = new JScrollPane();
-		 * GridBagConstraints gbc_treeView = new GridBagConstraints();
-		 * gbc_treeView.gridwidth = 2; gbc_treeView.gridheight = 9;
-		 * gbc_treeView.insets = new Insets(0, 0, 5, 5); gbc_treeView.fill =
-		 * GridBagConstraints.BOTH; gbc_treeView.gridx = 0; gbc_treeView.gridy =
-		 * 1; panel.add(treeView, gbc_treeView); //
-		 * treeView.setViewportView(tree); // scrollPane.setViewportView(tree);
-		 */
 		JTextArea questionLabel = new JTextArea(currentNode.getQuestion());
 		questionLabel.setEditable(false);
 		questionLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -259,7 +482,7 @@ public class MainView
 		gbc_txtrEnterTextHere.gridy = 4;
 		panel.add(txtrEnterTextHere, gbc_txtrEnterTextHere);
 
-		JCheckBox chckbxVerified = new JCheckBox("Verified");
+		chckbxVerified.setText("Verified");
 		chckbxVerified.setFocusable(false);
 		chckbxVerified.setEnabled(false);
 		GridBagConstraints gbc_chckbxVerified = new GridBagConstraints();
@@ -281,21 +504,7 @@ public class MainView
 			
 				});
 
-		/*
-		 * MetadataNode page1 = new MetadataNode("First name",
-		 * "First element name", "First question", "answer"); MetadataNode page2
-		 * = new MetadataNode("Second name", "Second element name",
-		 * "Second question", "answer"); MetadataNode page3 = new MetadataNode(
-		 * "Third name", "Third element name", "Third question", "answer");
-		 * page1.addChild(page2); page2.addChild(page3); page2.setParent(page1);
-		 * page3.setParent(page2); currentNode = page1;
-		 * elementLabel.setText(currentNode.getElementName());
-		 * questionLabel.setText(currentNode.getQuestion()); String elements[] =
-		 * new String[] { page1.getElement(), page2.getElement(),
-		 * page3.getElement() }; list.setListData(elements);
-		 */
-
-		JButton prevButton = new JButton("Previous");
+		prevButton.setText("Previous");
 		prevButton.setHorizontalAlignment(SwingConstants.RIGHT);
 		GridBagConstraints gbc_prevButton = new GridBagConstraints();
 		gbc_prevButton.anchor = GridBagConstraints.EAST;
@@ -316,14 +525,13 @@ public class MainView
 				{
 					currentNode.setVerified(verifyCurrentNode);
 					currentNode.setAnswer(txtrEnterTextHere.getText());
-					//txtrEnterTextHere.setText("");
-					chckbxVerified.setSelected(false);
 					System.out.println(currentNode.getAnswer());
 					System.out.println(currentNode.getVerified());
-					//These test the two lines above
 					
+					//These test the two lines above					
 					currentNode = currentNode.getParent();
 					elementLabel.setText(currentNode.getElementName());
+					chckbxVerified.setSelected(currentNode.getVerified());
 					questionLabel.setText(currentNode.getQuestion());
 					txtrEnterTextHere.setText(currentNode.getAnswer());
 				}
@@ -335,7 +543,7 @@ public class MainView
 
 		});
 
-		JButton saveButton = new JButton("Save");
+		saveButton.setText("Save");
 		saveButton.setFont(new Font("Tahoma", Font.BOLD, 11));
 		GridBagConstraints gbc_saveButton = new GridBagConstraints();
 		gbc_saveButton.insets = new Insets(0, 0, 5, 5);
@@ -354,12 +562,12 @@ public class MainView
 						currentNode.setAnswer(txtrEnterTextHere.getText());
 						System.out.println(currentNode.getAnswer());
 						System.out.println(currentNode.getVerified());
-						//These test the two lines above
+						session1.saveMetadataToDOM(rootMNode, doc1);
 					}
 			
 				});
 
-		JButton nextButton = new JButton("Next");
+		nextButton.setText("Next");
 		GridBagConstraints gbc_nextButton = new GridBagConstraints();
 		gbc_nextButton.anchor = GridBagConstraints.NORTHWEST;
 		gbc_nextButton.insets = new Insets(0, 0, 5, 5);
@@ -377,13 +585,10 @@ public class MainView
 				tempNode = currentNode.getChild();
 				if (tempNode != null)
 				{
-					// need to save changes in MetadataNode to DOM first
-					session1.saveMetadataToDOM(rootMNode, doc1);
-
 					currentNode.setVerified(verifyCurrentNode);
 					currentNode.setAnswer(txtrEnterTextHere.getText());
 					txtrEnterTextHere.setText("");
-					chckbxVerified.setSelected(false);
+					
 					System.out.println(currentNode.getAnswer());
 					System.out.println(currentNode.getVerified());
 					//These test the two lines above
@@ -391,6 +596,7 @@ public class MainView
 					currentNode = tempNode;
 					elementLabel.setText(currentNode.getElementName());
 					questionLabel.setText(currentNode.getQuestion());
+					chckbxVerified.setSelected(currentNode.getVerified());
 				}
 				else
 				{
@@ -439,56 +645,7 @@ public class MainView
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				// Open a new dialog window with two buttons: "USGS" and
-				// "non-USGS"
-				System.out.println("Calling NewSession frame");
-				EventQueue.invokeLater(new Runnable()
-				{
-					public void run()
-					{
-						try
-						{
-							newSession = new NewSession(file);
-							newSession.setVisible(true);
-							newSession.addWindowListener(new WindowAdapter()
-							{
-								@Override
-								public void windowClosed(WindowEvent e)
-								{
-									if (SharedData.isTemplateSet() == true)
-									{
-										System.out.println("NewSession result: file was set");
-										file = SharedData.getTemplateFile();
-
-										// call to create a document object
-										// model
-										// uses the XmlSessionManager class
-										doc1 = session1.fileToDOM(file);
-										NodeList nList = null;
-										Node nNode = null;
-										nList = doc1.getElementsByTagName("metadata");
-										nNode = nList.item(0);
-										rootMNode = session1.importDOMToMetadata(nNode);
-										currentNode = rootMNode;
-										elementLabel.setText(currentNode.getElementName());
-										questionLabel.setText(currentNode.getQuestion());
-										// System.out.println("Creating a document object model...");
-										// doc1 = session1.fileToDOM(SharedData.templateFile);									
-										
-									}
-									else
-										System.out.println("NewSession result: file was NOT set");
-								}
-							}); // end window listener for dialog
-
-						}
-						catch (Exception e)
-						{
-							e.printStackTrace();
-						}
-					}
-				});
-
+				createNew();
 			} // end new menu action performed
 		});
 		menuFile.add(menuItemNew);
@@ -498,43 +655,8 @@ public class MainView
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				String extension = "";
-				// call the open code from FileOps1
-				System.out.println("Open menu option clicked");
-				// load metadata or session file into 'file'
-				file = fileOperations.openFile(frameTeamFeMetadata);
-
-				/* Must check to make sure the user selected a file */
-				if (file != null)
-					extension = file.getName();
-
-				// if file is an XML, run Preview method
-				if (extension.contains(".xml"))
-				{
-					try
-					{
-						Desktop.getDesktop().open(file);
-					}
-					catch (IOException e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-
-				// else if file is an xsm, run openSession method
-				else if (extension.contains(".xsm"))
-				{
-					rootMNode = session1.openSession(file, currentNode, templates);
-				}
-
-				else
-				{
-					System.err.println("Not a session file");
-					JOptionPane.showMessageDialog(null, "File selected was not a session file!", "Open Failed",
-							JOptionPane.WARNING_MESSAGE);
-				}
-			}
+				open();
+			} // end action performed for open file menu
 		});
 		menuFile.add(menuItemOpen);
 
@@ -556,81 +678,8 @@ public class MainView
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				// action for when import is selected
-				final JFileChooser importFileChoose = new JFileChooser();
-				FileFilter xmlFilter = new FileNameExtensionFilter("XML File - eXtensible Markup Language (*.xml)",
-						"xml");
-
-				importFileChoose.setFileFilter(xmlFilter);
-				// ** Force disable all files option
-				importFileChoose.setAcceptAllFileFilterUsed(false);
-				importFileChoose.setDialogTitle("Import");
-
-				int importChooseReturnVal;
-				File importF = null;
-
-				importChooseReturnVal = importFileChoose.showOpenDialog(frameTeamFeMetadata);
-				importF = importFileChoose.getSelectedFile();
-				if (importF != null)
-				{
-					doc1 = session1.fileToDOM(importF);
-					NodeList nList = null;
-					Node nNode = null;
-					nList = doc1.getElementsByTagName("metadata");
-					nNode = nList.item(0);
-					rootMNode = session1.importDOMToMetadata(nNode);
-					currentNode = rootMNode;
-					elementLabel.setText(currentNode.getElementName());
-					questionLabel.setText(currentNode.getQuestion());
-
-					// Moved creation of the table of contents to create on
-					// import
-					// instead of on program start
-					tree = new MyTree(rootMNode);
-
-					GridBagConstraints gbc_tree = new GridBagConstraints();
-					gbc_tree.gridwidth = 1;
-					gbc_tree.gridheight = 9;
-					gbc_tree.insets = new Insets(0, 0, 0, 0);
-			/* ***** Grid bag constraints still will not resize horizontally */
-					gbc_tree.weightx = 1.0;
-					gbc_tree.fill = GridBagConstraints.BOTH;
-					gbc_tree.gridx = 1;
-					gbc_tree.gridy = 1;
-					panel.add(tree, gbc_tree);
-
-					// Create the scroll pane and add the tree to it.
-					treeView = new JScrollPane();
-
-					GridBagConstraints gbc_treeView = new GridBagConstraints();
-					gbc_treeView.gridwidth = 1;
-					gbc_treeView.gridheight = 9;
-					gbc_treeView.insets = new Insets(0, 0, 0, 0);
-					gbc_treeView.weightx = 1.0;
-					gbc_treeView.fill = GridBagConstraints.BOTH;
-					gbc_treeView.gridx = 1;
-					gbc_treeView.gridy = 1;
-					panel.add(treeView, gbc_treeView);
-					
-					elementLabel.setVisible(true);
-					questionLabel.setVisible(true);
-					txtrEnterTextHere.setVisible(true);
-					navLabel.setVisible(true);
-					chckbxVerified.setVisible(true);
-					prevButton.setVisible(true);
-					nextButton.setVisible(true);
-					saveButton.setVisible(true);
-					txtrEnterTextHere.setEnabled(true);
-					chckbxVerified.setEnabled(true);
-					openingMsg.setVisible(false);
-				}
-				else
-					System.out.println("No file was selected.");
-
-				if (importChooseReturnVal == JFileChooser.CANCEL_OPTION)
-				{
-					System.out.println("User cancelled file selection.");
-				}
+				importFile();
+				
 			}
 		});
 		menuFile.add(menuItemImport);
@@ -640,7 +689,9 @@ public class MainView
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
+				/* *** This section still needs some work */
 				final JFileChooser exportFileChoose = new JFileChooser();
+				File exportF = null;
 				FileFilter xmlFilter = new FileNameExtensionFilter("XML File - eXtensible Markup Language (*.xml)",
 						"xml");
 
@@ -652,12 +703,13 @@ public class MainView
 				docs [0] = doc1;
 				try {
 				outputList = session1.exportXMLFiles(docs, templates, "12345678");
+				exportF = new File(outputList[0]);
 				}
 				catch (Exception e)
 				{
 					// err message
 				}
-				File exportF = new File(outputList[0]);
+				
 
 				exportChooseReturnVal = exportFileChoose.showSaveDialog(frameTeamFeMetadata);
 				exportF = exportFileChoose.getSelectedFile();
@@ -693,6 +745,8 @@ public class MainView
 			}
 		});
 		menuFile.add(menuItemExport);
+		
+		/* *****************
 
 		JMenuItem menuAdd = new JMenuItem("Add");
 		menuAdd.addActionListener(new ActionListener()
@@ -704,6 +758,7 @@ public class MainView
 			}
 		});
 		menuFile.add(menuAdd);
+		************/
 
 		JMenu menuEdit = new JMenu("Edit");
 		// mnEdit.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -794,7 +849,7 @@ public class MainView
 							String previewStr = "";
 							previewStr = session1.metadataTreeToString(rootMNode);
 							//preview = new MetadataPreview(session1.metadataTreeToString(rootMNode));
-							preview = new MetadataPreview( previewStr );
+							preview = new MetadataPreview( previewStr, "" );
 							preview.setVisible(true);
 							preview.addWindowListener(new WindowAdapter()
 							{
@@ -827,8 +882,8 @@ public class MainView
 			public void actionPerformed(ActionEvent arg0)
 			{
 				JOptionPane.showMessageDialog(null,
-						"Metadata Software tool - version alpha 4.2"
-								+ "\n2018 April 27 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
+						"Metadata Software tool - version alpha 4.5"
+								+ "\n2018 May 08 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
 								+ "Jacob Espinoza, Isaias Gerena, Lucas Herrman\n"
 								+ "(Not for external distribution - Work in Progress)",
 						"About", JOptionPane.INFORMATION_MESSAGE);
