@@ -93,7 +93,6 @@ public class MainView
 	private MyTree tree;
 	JScrollPane treeView;
 	private File file;
-	private String[] templates;
 	private String inputFile = "";
 	private NodeList nList = null;
 	private Node rootDOM = null;
@@ -108,6 +107,8 @@ public class MainView
 	private MetadataPreview preview;
 	private int treeLength = 0;
 	private static final int MAX = 2;
+	
+	private String[] templates = new String[ MAX ];
 	
 	/* ** GUI ELEMENTS, global vars **** */
 	JLabel elementLabel = new JLabel(currentNode.getElementName());
@@ -224,12 +225,13 @@ public class MainView
 								nList = doc1.getElementsByTagName("metadata");
 								nNode = nList.item(0);
 								rootMNode = session1.importDOMToMetadata(nNode);
+								
 								currentNode = rootMNode;
 								elementLabel.setText(currentNode.getElementName());
 								questionLabel.setText(currentNode.getQuestion());
-								// System.out.println("Creating a document object model...");
-								// doc1 = session1.fileToDOM(SharedData.templateFile);									
-								
+								tree = new MyTree(rootMNode);
+								updateTree(tree);								
+								setGUIVisibl();
 							}
 							else
 								System.out.println("NewSession result: file was NOT set");
@@ -313,7 +315,8 @@ public class MainView
 
 		importChooseReturnVal = importFileChoose.showOpenDialog(frameTeamFeMetadata);
 		importF = importFileChoose.getSelectedFile();
-		templates[0] = importF.getAbsolutePath();
+	    templates[0] = importF.getAbsolutePath();
+		
 		if (importF != null)
 		{
 			setUI();
@@ -325,48 +328,16 @@ public class MainView
 			nNode = nList.item(0);
 			rootMNode = session1.importDOMToMetadata(nNode);
 			currentNode = rootMNode;
-			elementLabel.setText(currentNode.getElementName());
-			questionLabel.setText(currentNode.getQuestion());
-
+						
 			// Moved creation of the table of contents to create on import
 			// instead of on program start
-			tree = new MyTree(rootMNode);
-
-			GridBagConstraints gbc_tree = new GridBagConstraints();
-			gbc_tree.gridwidth = 1;
-			gbc_tree.gridheight = 9;
-			gbc_tree.insets = new Insets(0, 0, 0, 0);
-	/* ***** Grid bag constraints still will not resize horizontally */
-			gbc_tree.weightx = 1.0;
-			gbc_tree.fill = GridBagConstraints.BOTH;
-			gbc_tree.gridx = 1;
-			gbc_tree.gridy = 1;
-			panel.add(tree, gbc_tree);
-
-			// Create the scroll pane and add the tree to it.
-			treeView = new JScrollPane();
-
-			GridBagConstraints gbc_treeView = new GridBagConstraints();
-			gbc_treeView.gridwidth = 1;
-			gbc_treeView.gridheight = 9;
-			gbc_treeView.insets = new Insets(0, 0, 0, 0);
-			gbc_treeView.weightx = 1.0;
-			gbc_treeView.fill = GridBagConstraints.BOTH;
-			gbc_treeView.gridx = 1;
-			gbc_treeView.gridy = 1;
-			panel.add(treeView, gbc_treeView);
+			tree = new MyTree(rootMNode);			
+			elementLabel.setText(currentNode.getElementName());
+			questionLabel.setText(currentNode.getQuestion());
+			updateTree(tree);
+			setGUIVisibl();		
 			
-			elementLabel.setVisible(true);
-			questionLabel.setVisible(true);
-			mainTxtBox.setVisible(true);
-			navLabel.setVisible(true);
-			chckbxVerified.setVisible(true);
-			prevButton.setVisible(true);
-			nextButton.setVisible(true);
-			saveButton.setVisible(true);
-			mainTxtBox.setEnabled(true);
-			chckbxVerified.setEnabled(true);
-			openingMsg.setVisible(false);
+			
 		}
 		else
 			System.out.println("No file was selected.");
@@ -376,6 +347,52 @@ public class MainView
 			System.out.println("User cancelled file selection.");
 		}
 	} // end importFile();
+
+	private void setGUIVisibl() 
+	{
+		elementLabel.setVisible(true);
+		questionLabel.setVisible(true);
+		mainTxtBox.setVisible(true);
+		navLabel.setVisible(true);
+		chckbxVerified.setVisible(true);
+		prevButton.setVisible(true);
+		nextButton.setVisible(true);
+		saveButton.setVisible(true);
+		mainTxtBox.setEnabled(true);
+		chckbxVerified.setEnabled(true);
+		openingMsg.setVisible(false);
+		
+	}
+
+	private void updateTree(MyTree tree2) 
+	{
+		GridBagConstraints gbc_tree = new GridBagConstraints();
+		gbc_tree.gridwidth = 1;
+		gbc_tree.gridheight = 9;
+		gbc_tree.insets = new Insets(0, 0, 0, 0);
+		
+		/** Grid bag constraints still will not resize horizontally */
+
+		gbc_tree.weightx = 1.0;
+		gbc_tree.fill = GridBagConstraints.BOTH;
+		gbc_tree.gridx = 1;
+		gbc_tree.gridy = 1;
+		panel.add(tree2, gbc_tree);
+
+		// Create the scroll pane and add the tree to it.
+		treeView = new JScrollPane();
+
+		GridBagConstraints gbc_treeView = new GridBagConstraints();
+		gbc_treeView.gridwidth = 1;
+		gbc_treeView.gridheight = 9;
+		gbc_treeView.insets = new Insets(0, 0, 0, 0);
+		gbc_treeView.weightx = 1.0;
+		gbc_treeView.fill = GridBagConstraints.BOTH;
+		gbc_treeView.gridx = 1;
+		gbc_treeView.gridy = 1;
+		panel.add(treeView, gbc_treeView);
+		
+	}
 
 	/**
 	 * Initialize the contents of the frameTeamFeMetadata.
@@ -525,13 +542,14 @@ public class MainView
 				{
 					currentNode.setVerified(verifyCurrentNode);
 					currentNode.setAnswer(txtrEnterTextHere.getText());
+					
 					System.out.println(currentNode.getAnswer());
 					System.out.println(currentNode.getVerified());
+					//These test the two lines above
 					
-					//These test the two lines above					
 					currentNode = currentNode.getParent();
+					chckbxVerified.setSelected(currentNode.getVerified() );
 					elementLabel.setText(currentNode.getElementName());
-					chckbxVerified.setSelected(currentNode.getVerified());
 					questionLabel.setText(currentNode.getQuestion());
 					txtrEnterTextHere.setText(currentNode.getAnswer());
 				}
@@ -562,6 +580,7 @@ public class MainView
 						currentNode.setAnswer(txtrEnterTextHere.getText());
 						System.out.println(currentNode.getAnswer());
 						System.out.println(currentNode.getVerified());
+						//These test the two lines above
 						session1.saveMetadataToDOM(rootMNode, doc1);
 					}
 			
@@ -580,55 +599,58 @@ public class MainView
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				// TODO Auto-generated method stub
-				MetadataNode tempNode;
-				tempNode = currentNode.getChild();
+				MetadataNode tempNode = currentNode;
+				currentNode.setVerified(verifyCurrentNode);
+				currentNode.setAnswer(txtrEnterTextHere.getText());
+				txtrEnterTextHere.setText("\n");
+				if (currentNode.getChild() != null)
+				{
+					// gets next tree child
+					tempNode = currentNode.getChild();
+				}
+				else if (currentNode.getSibling() != null)
+				{
+					// gets next sibling
+					tempNode = tempNode.getSibling();
+				}
+				else if (currentNode.getParent().getSibling() != null)
+				{
+					// gets next sibling of parent	
+					tempNode = tempNode.getParent().getSibling();
+				}
+				else if (tempNode.getParent() != null)
+				{					
+					while (tempNode.getParent().getSibling() == null && tempNode.getParent() != null )
+						tempNode = tempNode.getParent();
+					tempNode = tempNode.getParent().getSibling();
+				}
+				
 				if (tempNode != null)
 				{
-					currentNode.setVerified(verifyCurrentNode);
-					currentNode.setAnswer(txtrEnterTextHere.getText());
-					txtrEnterTextHere.setText("");
-					
-					System.out.println(currentNode.getAnswer());
-					System.out.println(currentNode.getVerified());
-					//These test the two lines above
+					System.out.println((currentNode.getParent() != null) ? ("Parent: " + currentNode.getParent().getElement() + "\n ^") : "No Parent\n ^");
+					System.out.print((currentNode.getSibling() != null) ? ("Sibling: " + currentNode.getSibling().getElement() + " <- ") : "No Sibling <- ");
+					System.out.print(" Name: " + currentNode.getElement());
+					System.out.print(" -> Answer: " + currentNode.getAnswer());
+					System.out.println(" -> Verified: " + currentNode.getVerified());					
+					System.out.println((currentNode.getChild() != null) ? (" v\nChild: " + currentNode.getChild().getElement()) : "No Child");
 					
 					currentNode = tempNode;
 					elementLabel.setText(currentNode.getElementName());
 					questionLabel.setText(currentNode.getQuestion());
-					chckbxVerified.setSelected(currentNode.getVerified());
-				}
-				else
-				{
-					tempNode = currentNode.getSibling();
-					if (tempNode != null)
-					{
-						currentNode.setVerified(verifyCurrentNode);
-						currentNode.setAnswer(txtrEnterTextHere.getText());
-						//txtrEnterTextHere.setText("");
-						chckbxVerified.setSelected(false);
-						System.out.println(currentNode.getAnswer());
-						System.out.println(currentNode.getVerified());
-						//These test the two lines above
-						
-						currentNode = tempNode;
-						elementLabel.setText(currentNode.getElementName());
-						questionLabel.setText(currentNode.getQuestion());
-						txtrEnterTextHere.setText(currentNode.getAnswer());
-					}
-				}
+					chckbxVerified.setSelected( currentNode.getVerified() );
+				}				
 			}
 
 		});
 		
-		elementLabel.setVisible(false);
-		questionLabel.setVisible(false);
-		txtrEnterTextHere.setVisible(false);
-		navLabel.setVisible(false);
-		chckbxVerified.setVisible(false);
-		prevButton.setVisible(false);
-		nextButton.setVisible(false);
-		saveButton.setVisible(false);
+		elementLabel.setVisible(true);
+		questionLabel.setVisible(true);
+		txtrEnterTextHere.setVisible(true);
+		navLabel.setVisible(true);
+		chckbxVerified.setVisible(true);
+		prevButton.setVisible(true);
+		nextButton.setVisible(true);
+		saveButton.setVisible(true);
 		
 
 		/***** MENU BAR and new menu option *****/
@@ -679,7 +701,6 @@ public class MainView
 			public void actionPerformed(ActionEvent arg0)
 			{
 				importFile();
-				
 			}
 		});
 		menuFile.add(menuItemImport);

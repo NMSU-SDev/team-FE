@@ -347,7 +347,8 @@ public class XmlSessionManager {
 			// then we use that to add a sibling for you.
 			if (sibling != null)
 			{			
-				root.addSibling(importDOMToMetadata(sibling));				
+				root.addSibling(importDOMToMetadata(sibling));
+				// root.getSibling().setParent(root.getParent());
 			} 
 			else
 				root.addSibling(null);
@@ -371,15 +372,19 @@ public class XmlSessionManager {
 			// then, we use that to add a child for you
 			if (child != null)
 			{
-				root.addChild(importDOMToMetadata(child));
+				root.addChild(importDOMToMetadata(child));				
 				root.getChild().setParent(root);
 				connectParent(root.getChild());
 			}
 			else
 				root.addChild(null);			
-			
-		} // end importDOMToMetadataNode				
-				
+			/*if (root.getElement().equals("metadata"))
+			{
+				root.getChild().setParent(root);
+				connectParent(root.getChild());
+			}*/
+		} // end importDOMToMetadataNode		
+		
 		return root;		
 	}
 	/**
@@ -397,7 +402,7 @@ public class XmlSessionManager {
 	 *            is the root to a MetadataNode tree
 	 * @return the root of the MetadataNode tree.
 	 */
-	public boolean MetadataNode<?> addDOMToTree(Node node, MetadataNode<?> root) {
+	public MetadataNode<?> addDOMToTree(Node node, MetadataNode<?> root) {
 		// PSEUDOCODE 
 		// LOOP
 		// COMPARE Does MetdataNode have element equal to Node Element tag
@@ -727,12 +732,13 @@ public class XmlSessionManager {
 	 */
 	private void connectParent(MetadataNode <?> root) 
 	{
-		MetadataNode <?> adopted = root;
+		MetadataNode <?> adopted;
+		
 		if (root.getSibling() != null)
 		{
 			adopted = root.getSibling();		
-			while (adopted != null)
-			{
+			while (adopted != null && root.getParent() != null)
+			{					
 				adopted.setParent(root.getParent());
 				adopted = adopted.getSibling();
 			}
