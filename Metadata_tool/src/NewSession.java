@@ -87,6 +87,7 @@ public class NewSession extends JFrame
 		}
 
 		setBounds(100, 100, 344, 290);
+		setLocationRelativeTo(null);
 		JButton btnNewButton = new JButton("USGS");
 		btnNewButton.setToolTipText("USGS compliant metadata");
 
@@ -99,7 +100,7 @@ public class NewSession extends JFrame
 				// to import from file
 				try
 				{
-					USGSFiles dialog = new USGSFiles(file);
+					USGSFiles dialog = new USGSFiles(file, newFrame);
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
 					dialog.addWindowListener(new WindowAdapter()

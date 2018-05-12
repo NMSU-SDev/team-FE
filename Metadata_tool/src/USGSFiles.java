@@ -39,23 +39,25 @@ public class USGSFiles extends JDialog
 	{
 		try
 		{
-			USGSFiles dialog = new USGSFiles(file);
+			USGSFiles dialog = new USGSFiles(file, null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
+			dialog.setLocationRelativeTo(null);
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
 	}
-
+	
 	/**
 	 * Create the dialog.
 	 */
-	public USGSFiles(File nFile)
+	public USGSFiles(File nFile, Component parent)
 	{
 		setResizable(false);
 		setTitle("USGS Project Attributes");
+		setLocationRelativeTo(parent);
 		file = nFile;
 		setBounds(100, 100, 400, 300);
 		{
@@ -93,6 +95,8 @@ public class USGSFiles extends JDialog
 			JCheckBox checkBox_1 = new JCheckBox("Classified Point Cloud");
 			checkBox_1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					//SharedData.changeTemplateSet(true);
+					//SharedData.setTemplateFile();
 				}
 			});
 

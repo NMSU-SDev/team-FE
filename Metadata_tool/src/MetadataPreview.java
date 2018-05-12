@@ -17,6 +17,7 @@ public class MetadataPreview extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private JFrame framePreview;	
 	private static String preview;
+	private static String cTitle;
 	/**
 	 * Launch the application.
 	 */
@@ -27,7 +28,7 @@ public class MetadataPreview extends JFrame{
 			public void run()
 			{
 			try {
-				MetadataPreview window = new MetadataPreview(preview);
+				MetadataPreview window = new MetadataPreview(preview, cTitle);
 				window.framePreview.setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -39,11 +40,16 @@ public class MetadataPreview extends JFrame{
 	/**
 	 * Create the application.
 	 */
-	public MetadataPreview(String prev) {
+	public MetadataPreview(String text, String title) {
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
 		setResizable(true);
-		setTitle("Metadata Preview");
+		if ( title == null || title.equalsIgnoreCase("") ) {
+			setTitle("Metadata Preview");
+		} else {
+			setTitle( title );
+		}
+		
 		
 		addWindowListener(new WindowAdapter()
 		{
@@ -55,7 +61,7 @@ public class MetadataPreview extends JFrame{
 			}
 		});
 		
-		preview = prev;
+		preview = text;
 		initialize();
 		
 	}
@@ -75,6 +81,7 @@ public class MetadataPreview extends JFrame{
 		}
 	
 		setBounds(100, 100, 500, 600);
+		setLocationRelativeTo(null);
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{480, 0};
@@ -93,6 +100,14 @@ public class MetadataPreview extends JFrame{
 		JTextPane textPane = new JTextPane();
 		textPane.setText(preview);
 		scrollPane.setViewportView(textPane);
+		
+		//start at the beginning of the text output
+		// aka scroll to the top
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+		   public void run() { 
+		       scrollPane.getVerticalScrollBar().setValue(0);
+		   }
+		});
 		
 	}
 
