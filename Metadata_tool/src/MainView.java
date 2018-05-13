@@ -316,22 +316,31 @@ public class MainView
 		{
 			setUI();
 			
-			doc1 = session1.fileToDOM(importF);
-			NodeList nList = null;
-			Node nNode = null;
-			nList = doc1.getElementsByTagName("metadata");
-			nNode = nList.item(0);
-			rootMNode = session1.importDOMToMetadata(nNode);
-			currentNode = rootMNode;
-						
-			// Moved creation of the table of contents to create on import
-			// instead of on program start
-			tree = new MyTree(rootMNode);			
-			elementLabel.setText(currentNode.getElementName());
-			questionLabel.setText(currentNode.getQuestion());
-			updateTree(tree);
+			try {
 			
-			showGUIFields();		
+				doc1 = session1.fileToDOM(importF);
+				NodeList nList = null;
+				Node nNode = null;
+				nList = doc1.getElementsByTagName("metadata");
+				nNode = nList.item(0);
+				rootMNode = session1.importDOMToMetadata(nNode);
+				currentNode = rootMNode;
+						
+				// Moved creation of the table of contents to create on import
+				// instead of on program start
+				tree = new MyTree(rootMNode);			
+				elementLabel.setText(currentNode.getElementName());
+				questionLabel.setText(currentNode.getQuestion());
+				updateTree(tree);
+			
+				showGUIFields();
+			} catch ( NullPointerException  npEx) {
+				System.err.println("A null pointer exeception occurred during import!");
+				npEx.printStackTrace();
+				String msg = "Document Object Model created from XML is corrupt\nTry another file";
+				JOptionPane.showMessageDialog(null, msg, "Import Failed",
+						JOptionPane.ERROR_MESSAGE);
+			}
 		}
 		else
 			System.out.println("No file was selected.");
@@ -708,7 +717,7 @@ public class MainView
 				}
 				catch (Exception e)
 				{
-					// err message
+					e.printStackTrace();
 				}
 				
 

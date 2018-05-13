@@ -11,6 +11,7 @@ import java.io.*;
 import java.lang.Object;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
 import javax.xml.parsers.*;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -290,6 +291,9 @@ public class XmlSessionManager {
 			metaDoc.normalize();
 		} catch (Exception e) {
 			System.out.println(e);
+			JOptionPane.showMessageDialog(null, e, "XML parsing error!",
+					JOptionPane.ERROR_MESSAGE);
+			metaDoc = null;
 		}
 
 		return metaDoc;
