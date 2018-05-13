@@ -10,7 +10,7 @@ import javax.swing.tree.TreeNode;
  *          2. The instance variables child and sibling are references to the
  *          node's first child and next sibling.
  */
-public class MetadataNode<M> extends Object implements MutableTreeNode
+public class MetadataNode<M> extends Object
 {
 
 	private String element;
@@ -465,9 +465,9 @@ public class MetadataNode<M> extends Object implements MutableTreeNode
 		sibling = metadataNode;
 	}
 
-	public void setParent(MetadataNode<M> newParent)
+	public void setParent(MetadataNode<?> parent2)
 	{
-		parent = newParent;
+		parent = parent2;
 
 	}
 
@@ -652,83 +652,6 @@ public class MetadataNode<M> extends Object implements MutableTreeNode
 			sibling.printLeaves(); // call right node second
 		}
 		return;
-	}
-
-	@Override
-	public Enumeration<? extends TreeNode> children()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean getAllowsChildren()
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public TreeNode getChildAt(int arg0)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int getChildCount()
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getIndex(TreeNode arg0)
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void insert(MutableTreeNode arg0, int arg1)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void remove(int arg0)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void remove(MutableTreeNode arg0)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void removeFromParent()
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setParent(MutableTreeNode arg0)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setUserObject(Object arg0)
-	{
-		// TODO Auto-generated method stub
-
 	}
 
 }
