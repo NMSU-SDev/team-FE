@@ -1,0 +1,31 @@
+<!-- Ant Build file for the metadata tool -->
+<project name="teamFEMetadata" default="compile" >
+
+   <!-- standard compile task -->
+   <target name="compile" description="compile the source">
+	  <echo message="Compiling source files for the Team FE Metadata Tool..."/>
+	  <echo message="NOTE: It is recommended you run the JAR file directly"/>
+      <javac srcdir="." includeantruntime="false" debug="false"/>
+   </target>
+
+   
+
+   <!-- launch/run the main GUI window -->
+   <target name="run" depends="compile">
+      <echo message="Launching the main GUI"/>
+      <java classname="MainView" fork="true">
+      </java>
+      
+   </target>
+
+
+   <!-- clean up by removing all generated files; do "ant clean" to start afresh -->
+   <target name="clean">
+      <echo message="Cleaning class files"/>
+	  <delete>
+         <fileset dir="." includes="*.class"/>
+      </delete>
+   </target>
+
+</project>
+
