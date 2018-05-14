@@ -871,8 +871,8 @@ public class MainView
 			public void actionPerformed(ActionEvent arg0)
 			{
 				JOptionPane.showMessageDialog(null,
-						"Metadata Software tool - version alpha 5.2"
-								+ "\n2018 May 13 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
+						"Metadata Software tool - version alpha 5.3"
+								+ "\n2018 May 14 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
 								+ "Jacob Espinoza, Isaias Gerena, Lucas Herrman\n"
 								+ "(Not for production use - In development)",
 						"About", JOptionPane.INFORMATION_MESSAGE);

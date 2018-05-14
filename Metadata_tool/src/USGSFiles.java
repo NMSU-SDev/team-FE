@@ -1,10 +1,17 @@
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
@@ -126,12 +133,57 @@ public class USGSFiles extends JDialog
 					if ( checkBox_1.isSelected() ) {
 						
 						// get the file from classpath resources
+						try {
+						/* Try input stream to work in a JAR */
+						InputStream in = getClass().getResourceAsStream(str);
+						BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+						
+						String directory = "lib";
+						
+						File dir = new File(directory);
+						
+						if ( !dir.exists() ) {
+							System.out.println("Creating directory \'lib2\'");
+							boolean result = dir.mkdir();
+							
+							if ( result == true ) System.out.println("Directory creation successful");
+							else System.out.print("Directory creation failed!!");
+						}
+						
+						String str2 = directory + "/" + str;
+						
+						File newFile = new File(str2);
+						
+						OutputStream out = new FileOutputStream( newFile );
+						
+						int read = 0;
+						byte[] bytes = new byte[1024];
+						
+						while ( (read = in.read(bytes)) != -1 )
+							out.write(bytes, 0, read);
+						
+						out.close();
+						
+						System.out.print("File path = ");
+						System.out.println( newFile.getPath() );
+						
+						SharedData.setTemplateFile(newFile);
+						
+						System.out.println("Set template file");
+						
+						} catch (IOException ioex) {
+							ioex.printStackTrace();
+							JOptionPane.showMessageDialog(null, ioex, "IOException Error!",
+									JOptionPane.ERROR_MESSAGE);
+						}
+						/*
 						ClassLoader cl = getClass().getClassLoader();
 						File resFile = new File( cl.getResource(str).getFile() );
 						
 						try {
 							System.out.print("File absolute path: ");
-							System.out.println( resFile.getAbsolutePath() );
+							System.out.println( resFile.getPath() );
+							
 							
 							SharedData.setTemplateFile(resFile);
 							
@@ -141,6 +193,7 @@ public class USGSFiles extends JDialog
 							System.out.println("ERROR: Resource could not be found");
 							exce.printStackTrace();
 						}
+						*/
 					}
 					else { // check box was unselected
 						boolean result = SharedData.removeTemplateFile(str);
