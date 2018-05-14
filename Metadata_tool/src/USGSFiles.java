@@ -18,6 +18,8 @@ import javax.swing.Box;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 /***
  * When done, this class should return an XML file with the user selected
@@ -32,6 +34,29 @@ public class USGSFiles extends JDialog
 	private FileOps1 getAFile = new FileOps1();
 	private boolean successful = false;
 
+	
+	/* ** Having static/non-static issues, this method isn't useful right now */
+	private void getAndSetFromClPath( String s ) {
+			
+			// get the file from classpath resources
+			ClassLoader cl = getClass().getClassLoader();
+			File resFile = new File( cl.getResource(s).getFile() );
+			
+			try {
+				System.out.print("File absolute path: ");
+				System.out.println( resFile.getAbsolutePath() );
+				
+				SharedData.setTemplateFile(resFile);
+				
+				System.out.println("Set template file.");
+				
+			} catch ( Exception exce ) {
+				System.out.println("ERROR: Resource could not be found");
+				exce.printStackTrace();
+			}
+
+	}
+	
 	/**
 	 * Launch the application.
 	 */
@@ -57,7 +82,7 @@ public class USGSFiles extends JDialog
 	{
 		setResizable(false);
 		setTitle("USGS Project Attributes");
-		setLocationRelativeTo(parent);
+		setLocationRelativeTo(null);
 		file = nFile;
 		setBounds(100, 100, 400, 300);
 		{
@@ -68,9 +93,9 @@ public class USGSFiles extends JDialog
 			{
 				public void actionPerformed(ActionEvent e)
 				{
-					System.out.println("(future) Save user input in an xml file...");
+					System.out.println("User input has been saved...");
 					SharedData.changeTemplateSet(true);
-					SharedData.setTemplateFile(file);
+					//SharedData.setTemplateFile(file);
 					dispose();
 				}
 			});
@@ -87,44 +112,97 @@ public class USGSFiles extends JDialog
 			});
 
 			JCheckBox checkBox_0 = new JCheckBox("Breakline");
+			checkBox_0.setEnabled(false);
 			checkBox_0.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+		
 				}
 			});
 
 			JCheckBox checkBox_1 = new JCheckBox("Classified Point Cloud");
 			checkBox_1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					//SharedData.changeTemplateSet(true);
-					//SharedData.setTemplateFile();
+					String str = "ClassifiedPointCloud1.2_blank_template.xml";
+					if ( checkBox_1.isSelected() ) {
+						
+						// get the file from classpath resources
+						ClassLoader cl = getClass().getClassLoader();
+						File resFile = new File( cl.getResource(str).getFile() );
+						
+						try {
+							System.out.print("File absolute path: ");
+							System.out.println( resFile.getAbsolutePath() );
+							
+							SharedData.setTemplateFile(resFile);
+							
+							System.out.println("Set template file.");
+							
+						} catch ( Exception exce ) {
+							System.out.println("ERROR: Resource could not be found");
+							exce.printStackTrace();
+						}
+					}
+					else { // check box was unselected
+						boolean result = SharedData.removeTemplateFile(str);
+						System.out.printf("Attempt to remove template file successful = %b\n", result);
+					}
+			
 				}
 			});
 
 			JCheckBox checkBox_2 = new JCheckBox("Digital Elevation Model");
 			checkBox_2.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					String str = "DEM_1.2_blank_template.xml";
+					if ( checkBox_2.isSelected() ) {
+						
+						// get the file from classpath resources
+						ClassLoader cl = getClass().getClassLoader();
+						File resFile = new File( cl.getResource(str).getFile() );
+						
+						try {
+							System.out.print("File absolute path: ");
+							System.out.println( resFile.getAbsolutePath() );
+							
+							SharedData.setTemplateFile(resFile);
+							
+							System.out.println("Set template file.");
+							
+						} catch ( Exception exce ) {
+							System.out.println("ERROR: Resource could not be found");
+							exce.printStackTrace();
+						}
+					}
+					else { // check box was unselected
+						boolean result = SharedData.removeTemplateFile(str);
+						System.out.printf("Attempt to remove template file successful = %b\n", result);
+					}
 				}
 			});
 
 			JCheckBox checkBox_3 = new JCheckBox("Digital Surface Model");
+			checkBox_3.setEnabled(false);
 			checkBox_3.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 				}
 			});
 
 			JCheckBox checkBox_4 = new JCheckBox("Digital Terrain Model");
+			checkBox_4.setEnabled(false);
 			checkBox_4.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 				}
 			});
 
 			JCheckBox checkBox_5 = new JCheckBox("Intensity");
+			checkBox_5.setEnabled(false);
 			checkBox_5.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 				}
 			});
 
 			JCheckBox checkBox_6 = new JCheckBox("Swath Point Cloud");
+			checkBox_6.setEnabled(false);
 			checkBox_6.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 				}
@@ -133,12 +211,60 @@ public class USGSFiles extends JDialog
 			JCheckBox checkBox_7 = new JCheckBox("Project Level");
 			checkBox_7.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					String str = "ProjectLevel1.2_blank_template.xml";
+					if ( checkBox_7.isSelected() ) {
+						
+						// get the file from classpath resources
+						ClassLoader cl = getClass().getClassLoader();
+						File resFile = new File( cl.getResource(str).getFile() );
+						
+						try {
+							System.out.print("File absolute path: ");
+							System.out.println( resFile.getAbsolutePath() );
+							
+							SharedData.setTemplateFile(resFile);
+							
+							System.out.println("Set template file.");
+							
+						} catch ( Exception exce ) {
+							System.out.println("ERROR: Resource could not be found");
+							exce.printStackTrace();
+						}
+					}
+					else { // check box was unselected
+						boolean result = SharedData.removeTemplateFile(str);
+						System.out.printf("Attempt to remove template file successful = %b\n", result);
+					}
 				}
 			});
 
 			JCheckBox checkBox_8 = new JCheckBox("Contour");
 			checkBox_8.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					String str = "Contours_blank_template.xml";
+					if ( checkBox_8.isSelected() ) {
+						
+						// get the file from classpath resources
+						ClassLoader cl = getClass().getClassLoader();
+						File resFile = new File( cl.getResource(str).getFile() );
+						
+						try {
+							System.out.print("File absolute path: ");
+							System.out.println( resFile.getAbsolutePath() );
+							
+							SharedData.setTemplateFile(resFile);
+							
+							System.out.println("Set template file.");
+							
+						} catch ( Exception exce ) {
+							System.out.println("ERROR: Resource could not be found");
+							exce.printStackTrace();
+						}
+					}
+					else { // check box was unselected
+						boolean result = SharedData.removeTemplateFile(str);
+						System.out.printf("Attempt to remove template file successful = %b\n", result);
+					}
 				}
 			});
 
@@ -172,9 +298,6 @@ public class USGSFiles extends JDialog
 						SharedData.setTemplateFile(null);
 					}
 					
-					
-					// ** TESTING: deprecated
-					//file = getAFile.openFile(null);
 				}
 			});
 

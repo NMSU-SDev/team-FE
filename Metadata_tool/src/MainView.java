@@ -106,7 +106,7 @@ public class MainView
 	private NewSession newSession;
 	private MetadataPreview preview;
 	private int treeLength = 0;
-	private static final int MAX = 2;
+	private static final int MAX = 10;
 	
 	private String[] templates = new String[ MAX ];
 	
@@ -120,6 +120,7 @@ public class MainView
 	JButton prevButton = new JButton();
 	JButton nextButton = new JButton();
 	JButton saveButton = new JButton();
+	GridBagLayout gbl_panel = new GridBagLayout();
 
 	/* *** TEST VARIABLES  **** */
 	private Document doc1 = null;
@@ -171,7 +172,7 @@ public class MainView
 		displayWelcome();
 	}
 	
-	/* Display a welcome dialog, aka a "splash screen" */
+	/* Display a welcome dialog, or a "splash screen" */
 	private void displayWelcome() {
 		EventQueue.invokeLater(new Runnable()
 		{
@@ -373,7 +374,7 @@ public class MainView
 	private void updateTree(MyTree tree2) 
 	{
 		GridBagConstraints gbc_tree = new GridBagConstraints();
-		gbc_tree.gridwidth = 1;
+		gbc_tree.gridwidth = 3;
 		gbc_tree.gridheight = 9;
 		gbc_tree.insets = new Insets(0, 0, 0, 0);
 		
@@ -389,7 +390,7 @@ public class MainView
 		treeView = new JScrollPane();
 
 		GridBagConstraints gbc_treeView = new GridBagConstraints();
-		gbc_treeView.gridwidth = 1;
+		gbc_treeView.gridwidth = 3;
 		gbc_treeView.gridheight = 9;
 		gbc_treeView.insets = new Insets(0, 0, 0, 0);
 		gbc_treeView.weightx = 1.0;
@@ -425,10 +426,9 @@ public class MainView
 
 		
 		frameTeamFeMetadata.getContentPane().add(panel, "name_1876606686560390");
-		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[] { 10, 130, 40, 80, 0, 62, 0, 90, 25, 0 };
+		gbl_panel.columnWidths = new int[] { 20, 10, 150, 10, 30, 40, 20, 50, 20, 40, 20, 0 };
 		gbl_panel.rowHeights = new int[] { 33, 20, 0, 0, 0, 0, 0, 0, 0, 0, 15, 0 };
-		gbl_panel.columnWeights = new double[] { 0.0, 20.0, 0.0, 1.0, 0.0, 20.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panel.columnWeights = new double[] { 0.0, 1.0, 2.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		gbl_panel.rowWeights = new double[] { 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
 
@@ -439,7 +439,7 @@ public class MainView
 		gbc_navLabel.ipadx = 20;
 		gbc_navLabel.anchor = GridBagConstraints.SOUTH;
 		gbc_navLabel.insets = new Insets(0, 5, 5, 5);
-		gbc_navLabel.gridx = 1;
+		gbc_navLabel.gridx = 2;
 		gbc_navLabel.gridy = 0;
 		panel.add(navLabel, gbc_navLabel);
 		navLabel.setVisible(false);
@@ -452,7 +452,7 @@ public class MainView
 		gbc_elementLabel.gridwidth = 4;
 		gbc_elementLabel.anchor = GridBagConstraints.SOUTHWEST;
 		gbc_elementLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_elementLabel.gridx = 3;
+		gbc_elementLabel.gridx = 5;
 		gbc_elementLabel.gridy = 0;
 		panel.add(elementLabel, gbc_elementLabel);
 		elementLabel.setVisible(false);
@@ -466,7 +466,7 @@ public class MainView
 		gbc_questionLabel.gridwidth = 5;
 		gbc_questionLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_questionLabel.fill = GridBagConstraints.HORIZONTAL;
-		gbc_questionLabel.gridx = 3;
+		gbc_questionLabel.gridx = 5;
 		gbc_questionLabel.gridy = 1;
 		panel.add(questionLabel, gbc_questionLabel);
 		questionLabel.setVisible(false);
@@ -480,7 +480,7 @@ public class MainView
 		gbc_txtInput.gridwidth = 5;
 		gbc_txtInput.insets = new Insets(0, 0, 5, 5);
 		gbc_txtInput.fill = GridBagConstraints.BOTH;
-		gbc_txtInput.gridx = 3;
+		gbc_txtInput.gridx = 5;
 		gbc_txtInput.gridy = 4;
 		panel.add(txtInput, gbc_txtInput);
 		txtInput.setVisible(false);
@@ -489,9 +489,8 @@ public class MainView
 		cBoxVerified.setFocusable(false);
 		cBoxVerified.setEnabled(false);
 		GridBagConstraints gbc_cBoxVerified = new GridBagConstraints();
-		gbc_cBoxVerified.gridwidth = 5;
 		gbc_cBoxVerified.insets = new Insets(0, 0, 5, 5);
-		gbc_cBoxVerified.gridx = 3;
+		gbc_cBoxVerified.gridx = 7;
 		gbc_cBoxVerified.gridy = 8;
 		panel.add(cBoxVerified, gbc_cBoxVerified);
 		cBoxVerified.setVisible(false);
@@ -512,7 +511,7 @@ public class MainView
 		GridBagConstraints gbc_prevButton = new GridBagConstraints();
 		gbc_prevButton.anchor = GridBagConstraints.EAST;
 		gbc_prevButton.insets = new Insets(0, 0, 5, 5);
-		gbc_prevButton.gridx = 4;
+		gbc_prevButton.gridx = 6;
 		gbc_prevButton.gridy = 9;
 		panel.add(prevButton, gbc_prevButton);
 		prevButton.setVisible(false);
@@ -551,7 +550,7 @@ public class MainView
 		saveButton.setFont(new Font("Tahoma", Font.BOLD, 11));
 		GridBagConstraints gbc_saveButton = new GridBagConstraints();
 		gbc_saveButton.insets = new Insets(0, 0, 5, 5);
-		gbc_saveButton.gridx = 5;
+		gbc_saveButton.gridx = 7;
 		gbc_saveButton.gridy = 9;
 		panel.add(saveButton, gbc_saveButton);
 		saveButton.setVisible(false);
@@ -576,7 +575,7 @@ public class MainView
 		GridBagConstraints gbc_nextButton = new GridBagConstraints();
 		gbc_nextButton.anchor = GridBagConstraints.NORTHWEST;
 		gbc_nextButton.insets = new Insets(0, 0, 5, 5);
-		gbc_nextButton.gridx = 6;
+		gbc_nextButton.gridx = 8;
 		gbc_nextButton.gridy = 9;
 		panel.add(nextButton, gbc_nextButton);
 		nextButton.setVisible(false);
@@ -630,17 +629,6 @@ public class MainView
 			}
 
 		});
-		
-		/*
-		elementLabel.setVisible(true);
-		questionLabel.setVisible(true);
-		txtInput.setVisible(true);
-		navLabel.setVisible(true);
-		cBoxVerified.setVisible(true);
-		prevButton.setVisible(true);
-		nextButton.setVisible(true);
-		saveButton.setVisible(true);
-		*/
 
 		/***** MENU BAR and new menu option *****/
 
@@ -736,12 +724,9 @@ public class MainView
 							StreamResult result = new StreamResult(new File(outputList[index])); 
 							trans.transform(source, result);				
 						}
-					} catch (TransformerConfigurationException e) {
-						e.printStackTrace();
 					} catch (TransformerException e) {
 						e.printStackTrace();
-					}
-					// System.out.printf("File to be exported is %s\n", exportF.toString());
+					} 				
 				}
 				else
 					System.out.println("No file was selected.");
@@ -856,7 +841,7 @@ public class MainView
 							{
 							String previewStr = "";
 							previewStr = session1.metadataTreeToString(rootMNode);
-							//preview = new MetadataPreview(session1.metadataTreeToString(rootMNode));
+							
 							preview = new MetadataPreview( previewStr, "" );
 							preview.setVisible(true);
 							preview.addWindowListener(new WindowAdapter()
@@ -868,16 +853,12 @@ public class MainView
 								}
 							}); // end window listener for preview
 							
-							//JOptionPane.showMessageDialog(null, "XML tree preview coming soon...", "Preview",
-							//JOptionPane.INFORMATION_MESSAGE);
-							}
-						catch (Exception e)
-							{
+							} catch (Exception e) {
 								e.printStackTrace();
 							}
-					}
+					} // end run()
 				}); // end new Runnable
-			} // end new actionPerformed
+			} // end actionPerformed
 		}); //end addActionListener
 		menuView.add(menuItemPreview);
 
@@ -890,7 +871,7 @@ public class MainView
 			public void actionPerformed(ActionEvent arg0)
 			{
 				JOptionPane.showMessageDialog(null,
-						"Metadata Software tool - version alpha 4.8"
+						"Metadata Software tool - version alpha 5.2"
 								+ "\n2018 May 13 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
 								+ "Jacob Espinoza, Isaias Gerena, Lucas Herrman\n"
 								+ "(Not for production use - In development)",
