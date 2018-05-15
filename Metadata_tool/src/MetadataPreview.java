@@ -2,11 +2,17 @@ import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.io.InputStream;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import java.awt.GridBagLayout;
+import java.awt.Image;
+
 import javax.swing.JTextPane;
 
 public class MetadataPreview extends JFrame{
@@ -82,6 +88,21 @@ public class MetadataPreview extends JFrame{
 	
 		setBounds(100, 100, 500, 600);
 		setLocationRelativeTo(null);
+		
+		Image icon = null;
+		
+		// Set iconImage using get resource as stream and reading the image
+		InputStream in = getClass().getResourceAsStream("FEIcon1.png");
+		try {
+			icon = ImageIO.read( in );
+			
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			JOptionPane.showMessageDialog(null, e1, "IOException Error!",
+					JOptionPane.ERROR_MESSAGE);
+		}
+		
+		setIconImage(icon);
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{480, 0};

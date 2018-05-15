@@ -1,11 +1,15 @@
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
+import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -85,6 +89,23 @@ public class NewSession extends JFrame
 		{
 			System.out.println("Error setting native LAF: " + e);
 		}
+		
+		Image icon = null;
+		
+		// Set iconImage using get resource as stream and reading the image
+		InputStream in = getClass().getResourceAsStream("FEIcon1.png");
+		try {
+			icon = ImageIO.read( in );
+			
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			JOptionPane.showMessageDialog(null, e1, "IOException Error!",
+					JOptionPane.ERROR_MESSAGE);
+		}
+		
+		this.setIconImage(icon);
+		
+		JFrame thisJFrame = this;
 
 		setBounds(100, 100, 344, 290);
 		setLocationRelativeTo(null);
@@ -137,8 +158,7 @@ public class NewSession extends JFrame
 			{
 				System.out.println("Clicked on non-USGS");
 				// OpenFileChooser
-				file = non_USGS.openFile(newFrame);
-				// TODO: need to send the file back to Demo2.java
+				file = non_USGS.openFile(thisJFrame);
 				if (file == null)
 				{
 					SharedData.changeTemplateSet(false);

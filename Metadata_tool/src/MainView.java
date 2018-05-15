@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import org.w3c.dom.Document;
@@ -121,6 +122,9 @@ public class MainView
 	JButton nextButton = new JButton();
 	JButton saveButton = new JButton();
 	GridBagLayout gbl_panel = new GridBagLayout();
+	
+	ImageIcon mIcon = null;
+	Image ico = null;
 
 	/* *** TEST VARIABLES  **** */
 	private Document doc1 = null;
@@ -178,16 +182,29 @@ public class MainView
 		{
 			public void run()
 			{
+				Icon trueIcon = new ImageIcon( ico );
+				
 				String message = "Would you like to create a new session, open a previous session, or import a template?";
 				Object options[] = { "New", "Open", "Import" };
-		
-				int result = JOptionPane.showOptionDialog(frameTeamFeMetadata, message, "Welcome", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 				
-				System.out.printf("JOptionPane result value is %d\n", result);
+				final JOptionPane welcomePane = new JOptionPane( 
+						message, JOptionPane.DEFAULT_OPTION,
+						JOptionPane.PLAIN_MESSAGE, null, options, options[0] );
 				
-				if (result == 0 ) createNew();
-				else if (result == 1) open();
-				else if (result == 2) importFile();
+				// now a JDialog is used to be able to set a custom iconImage
+				JDialog welcomeDialog = welcomePane.createDialog(frameTeamFeMetadata, "Welcome");
+				welcomeDialog.setIconImage(ico);
+				welcomeDialog.setVisible(true);
+			
+				String resultStr = "null";
+				
+				if(welcomePane.getValue() != null) resultStr = (String) welcomePane.getValue();
+				
+				System.out.printf("Welcome dialog result value is %s\n", resultStr);
+				
+				if (resultStr.equals("New") ) createNew();
+				else if (resultStr.equals("Open")) open();
+				else if (resultStr.equals("Import")) importFile();
 			}
 		});
 		
@@ -311,10 +328,11 @@ public class MainView
 
 		importChooseReturnVal = importFileChoose.showOpenDialog(frameTeamFeMetadata);
 		importF = importFileChoose.getSelectedFile();
-	    templates[0] = importF.getAbsolutePath();
+	   
 		
 		if (importF != null)
 		{
+			templates[0] = importF.getAbsolutePath();
 			setUI();
 			
 			try {
@@ -406,6 +424,7 @@ public class MainView
 	 */
 	private void initialize()
 	{
+		ico = null;
 		try
 		{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -415,8 +434,21 @@ public class MainView
 			System.out.println("Error setting native LAF: " + e);
 		}
 		frameTeamFeMetadata = new JFrame();
-		// **** attempted to set icon, but no change - Jacob Espinoza on 2018 May 07
-		//frameTeamFeMetadata.setIconImage(Toolkit.getDefaultToolkit().getImage(MainView.class.getResource("/resources/XSM2.ico")));
+	
+		// Set iconImage using get resource as stream and reading the image
+		InputStream in = getClass().getResourceAsStream("FEIcon1.png");
+		try {
+			ico = ImageIO.read( in );
+			mIcon = new ImageIcon(ico);
+			
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			JOptionPane.showMessageDialog(null, e1, "IOException Error!",
+					JOptionPane.ERROR_MESSAGE);
+		}
+		
+		frameTeamFeMetadata.setIconImage(ico);
+		
 		
 		frameTeamFeMetadata.setTitle("Team FE Metadata Project [Pre-Release]");
 		frameTeamFeMetadata.setBounds(100, 100, 650, 550);
@@ -667,7 +699,7 @@ public class MainView
 				// call SaveSession() method that creates a String object of this session
 				String session = session1.saveSession(rootMNode, currentNode, templates);				
 				// call FileOps1 save file method
-				fileOperations.saveFile(file, session);
+				fileOperations.saveFile(file, session, frameTeamFeMetadata);
 			}
 		});
 		menuFile.add(menuItemSave);
@@ -870,12 +902,15 @@ public class MainView
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
+				Image newimg = ico.getScaledInstance(120, 120,  java.awt.Image.SCALE_SMOOTH); // scale icon the smooth way  
+				ImageIcon smallmIcon = new ImageIcon(newimg);  // transform it back to an ImageIcon type
+				
 				JOptionPane.showMessageDialog(null,
-						"Metadata Software tool - version alpha 5.2"
-								+ "\n2018 May 13 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
+						"Metadata Software tool - version alpha 6.0"
+								+ "\n2018 May 15 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
 								+ "Jacob Espinoza, Isaias Gerena, Lucas Herrman\n"
 								+ "(Not for production use - In development)",
-						"About", JOptionPane.INFORMATION_MESSAGE);
+						"About", JOptionPane.INFORMATION_MESSAGE, smallmIcon);
 			}
 		});
 		menuHelp.add(menuAbout);
