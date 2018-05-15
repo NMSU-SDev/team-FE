@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,8 +12,12 @@ import java.io.OutputStream;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -21,7 +26,11 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.Component;
+
+import javax.imageio.ImageIO;
 import javax.swing.Box;
+import javax.swing.ButtonGroup;
+
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -34,35 +43,62 @@ import java.beans.PropertyChangeEvent;
  */
 
 @SuppressWarnings({ "unused", "serial" })
-public class USGSFiles extends JDialog
+public class USGSFiles extends JFrame
 {
 
 	private static File file;
 	private FileOps1 getAFile = new FileOps1();
 	private boolean successful = false;
-
 	
-	/* ** Having static/non-static issues, this method isn't useful right now */
-	private void getAndSetFromClPath( String s ) {
+	ButtonGroup group = new ButtonGroup();
+		
+	/* Helper method that gets a file from the classpath and then sets the template file */
+	private void getAndSetFromClPath( String fName, String directory ) {
 			
-			// get the file from classpath resources
-			ClassLoader cl = getClass().getClassLoader();
-			File resFile = new File( cl.getResource(s).getFile() );
+		// get the file from classpath resources
+		try {
+		/* Try input stream to work in a JAR */
+		InputStream in = getClass().getResourceAsStream(fName);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		
+		File dir = new File(directory);
+		
+		if ( !dir.exists() ) {
+			System.out.printf("Creating directory \'%s\'\n", directory);
+			boolean result = dir.mkdir();
 			
-			try {
-				System.out.print("File absolute path: ");
-				System.out.println( resFile.getAbsolutePath() );
-				
-				SharedData.setTemplateFile(resFile);
-				
-				System.out.println("Set template file.");
-				
-			} catch ( Exception exce ) {
-				System.out.println("ERROR: Resource could not be found");
-				exce.printStackTrace();
-			}
+			if ( result == true ) System.out.println("Directory creation successful");
+			else System.out.print("Directory creation failed!!");
+		}
+		
+		String outFilePath = directory + "/" + fName;
+		
+		File newFile = new File(outFilePath);
+		
+		OutputStream out = new FileOutputStream( newFile );
+		
+		int read = 0;
+		byte[] bytes = new byte[1024];
+		
+		while ( (read = in.read(bytes)) != -1 )
+			out.write(bytes, 0, read);
+		
+		out.close();
+		
+		System.out.print("File path = ");
+		System.out.println( newFile.getPath() );
+		
+		SharedData.setTemplateFile(newFile);
+		
+		System.out.println("Set template file");
+		
+		} catch (IOException ioex) {
+			ioex.printStackTrace();
+			JOptionPane.showMessageDialog(null, ioex, "IOException Error!",
+					JOptionPane.ERROR_MESSAGE);
+		}
 
-	}
+	} // end method get and set from class path
 	
 	/**
 	 * Launch the application.
@@ -83,16 +119,39 @@ public class USGSFiles extends JDialog
 	}
 	
 	/**
-	 * Create the dialog.
+	 * Create the frame.
+	 * @throws UnsupportedLookAndFeelException 
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 * @throws ClassNotFoundException 
 	 */
-	public USGSFiles(File nFile, Component parent)
+	public USGSFiles(File nFile, Component parent) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException
 	{
+		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		
+		Image icon = null;
+		
+		// Set iconImage using get resource as stream and reading the image
+		InputStream in = getClass().getResourceAsStream("FEIcon1.png");
+		try {
+			icon = ImageIO.read( in );
+			
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			JOptionPane.showMessageDialog(null, e1, "IOException Error!",
+					JOptionPane.ERROR_MESSAGE);
+		}
+		
+		setIconImage(icon);
+		
 		setResizable(false);
 		setTitle("USGS Project Attributes");
 		setLocationRelativeTo(null);
 		file = nFile;
 		setBounds(100, 100, 400, 300);
-		{
+		
+		JFrame thisJFrame = this;
+		
 			JPanel panel = new JPanel();
 			getContentPane().add(panel, BorderLayout.CENTER);
 			JButton btnOk = new JButton("OK");
@@ -100,9 +159,12 @@ public class USGSFiles extends JDialog
 			{
 				public void actionPerformed(ActionEvent e)
 				{
+					String templateFileName = group.getSelection().getActionCommand();
+					
+					getAndSetFromClPath( templateFileName, "lib");
+					
 					System.out.println("User input has been saved...");
 					SharedData.changeTemplateSet(true);
-					//SharedData.setTemplateFile(file);
 					dispose();
 				}
 			});
@@ -117,209 +179,39 @@ public class USGSFiles extends JDialog
 					dispose();
 				}
 			});
-
-			JCheckBox checkBox_0 = new JCheckBox("Breakline");
-			checkBox_0.setEnabled(false);
-			checkBox_0.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-		
-				}
-			});
-
-			JCheckBox checkBox_1 = new JCheckBox("Classified Point Cloud");
-			checkBox_1.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					String str = "ClassifiedPointCloud1.2_blank_template.xml";
-					if ( checkBox_1.isSelected() ) {
-						
-						// get the file from classpath resources
-						try {
-						/* Try input stream to work in a JAR */
-						InputStream in = getClass().getResourceAsStream(str);
-						BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-						
-						String directory = "lib";
-						
-						File dir = new File(directory);
-						
-						if ( !dir.exists() ) {
-							System.out.println("Creating directory \'lib2\'");
-							boolean result = dir.mkdir();
-							
-							if ( result == true ) System.out.println("Directory creation successful");
-							else System.out.print("Directory creation failed!!");
-						}
-						
-						String str2 = directory + "/" + str;
-						
-						File newFile = new File(str2);
-						
-						OutputStream out = new FileOutputStream( newFile );
-						
-						int read = 0;
-						byte[] bytes = new byte[1024];
-						
-						while ( (read = in.read(bytes)) != -1 )
-							out.write(bytes, 0, read);
-						
-						out.close();
-						
-						System.out.print("File path = ");
-						System.out.println( newFile.getPath() );
-						
-						SharedData.setTemplateFile(newFile);
-						
-						System.out.println("Set template file");
-						
-						} catch (IOException ioex) {
-							ioex.printStackTrace();
-							JOptionPane.showMessageDialog(null, ioex, "IOException Error!",
-									JOptionPane.ERROR_MESSAGE);
-						}
-						/*
-						ClassLoader cl = getClass().getClassLoader();
-						File resFile = new File( cl.getResource(str).getFile() );
-						
-						try {
-							System.out.print("File absolute path: ");
-							System.out.println( resFile.getPath() );
-							
-							
-							SharedData.setTemplateFile(resFile);
-							
-							System.out.println("Set template file.");
-							
-						} catch ( Exception exce ) {
-							System.out.println("ERROR: Resource could not be found");
-							exce.printStackTrace();
-						}
-						*/
-					}
-					else { // check box was unselected
-						boolean result = SharedData.removeTemplateFile(str);
-						System.out.printf("Attempt to remove template file successful = %b\n", result);
-					}
 			
-				}
-			});
-
-			JCheckBox checkBox_2 = new JCheckBox("Digital Elevation Model");
-			checkBox_2.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					String str = "DEM_1.2_blank_template.xml";
-					if ( checkBox_2.isSelected() ) {
-						
-						// get the file from classpath resources
-						ClassLoader cl = getClass().getClassLoader();
-						File resFile = new File( cl.getResource(str).getFile() );
-						
-						try {
-							System.out.print("File absolute path: ");
-							System.out.println( resFile.getAbsolutePath() );
-							
-							SharedData.setTemplateFile(resFile);
-							
-							System.out.println("Set template file.");
-							
-						} catch ( Exception exce ) {
-							System.out.println("ERROR: Resource could not be found");
-							exce.printStackTrace();
-						}
-					}
-					else { // check box was unselected
-						boolean result = SharedData.removeTemplateFile(str);
-						System.out.printf("Attempt to remove template file successful = %b\n", result);
-					}
-				}
-			});
-
-			JCheckBox checkBox_3 = new JCheckBox("Digital Surface Model");
-			checkBox_3.setEnabled(false);
-			checkBox_3.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-				}
-			});
-
-			JCheckBox checkBox_4 = new JCheckBox("Digital Terrain Model");
-			checkBox_4.setEnabled(false);
-			checkBox_4.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-				}
-			});
-
-			JCheckBox checkBox_5 = new JCheckBox("Intensity");
-			checkBox_5.setEnabled(false);
-			checkBox_5.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-				}
-			});
-
-			JCheckBox checkBox_6 = new JCheckBox("Swath Point Cloud");
-			checkBox_6.setEnabled(false);
-			checkBox_6.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-				}
-			});
-
-			JCheckBox checkBox_7 = new JCheckBox("Project Level");
-			checkBox_7.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					String str = "ProjectLevel1.2_blank_template.xml";
-					if ( checkBox_7.isSelected() ) {
-						
-						// get the file from classpath resources
-						ClassLoader cl = getClass().getClassLoader();
-						File resFile = new File( cl.getResource(str).getFile() );
-						
-						try {
-							System.out.print("File absolute path: ");
-							System.out.println( resFile.getAbsolutePath() );
-							
-							SharedData.setTemplateFile(resFile);
-							
-							System.out.println("Set template file.");
-							
-						} catch ( Exception exce ) {
-							System.out.println("ERROR: Resource could not be found");
-							exce.printStackTrace();
-						}
-					}
-					else { // check box was unselected
-						boolean result = SharedData.removeTemplateFile(str);
-						System.out.printf("Attempt to remove template file successful = %b\n", result);
-					}
-				}
-			});
-
-			JCheckBox checkBox_8 = new JCheckBox("Contour");
-			checkBox_8.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					String str = "Contours_blank_template.xml";
-					if ( checkBox_8.isSelected() ) {
-						
-						// get the file from classpath resources
-						ClassLoader cl = getClass().getClassLoader();
-						File resFile = new File( cl.getResource(str).getFile() );
-						
-						try {
-							System.out.print("File absolute path: ");
-							System.out.println( resFile.getAbsolutePath() );
-							
-							SharedData.setTemplateFile(resFile);
-							
-							System.out.println("Set template file.");
-							
-						} catch ( Exception exce ) {
-							System.out.println("ERROR: Resource could not be found");
-							exce.printStackTrace();
-						}
-					}
-					else { // check box was unselected
-						boolean result = SharedData.removeTemplateFile(str);
-						System.out.printf("Attempt to remove template file successful = %b\n", result);
-					}
-				}
-			});
+			JRadioButton rButton1 = new JRadioButton("Classified Point Cloud");
+			rButton1.setActionCommand("ClassifiedPointCloud1.2_blank_template.xml");
+			
+			JRadioButton rButton2 = new JRadioButton("Contours");
+			rButton2.setActionCommand("Contours_blank_template.xml");
+			
+			JRadioButton rButton3 = new JRadioButton("Digital Elevation Model");
+			rButton3.setActionCommand("DEM_1.2_blank_template.xml");
+			
+			JRadioButton rButton4 = new JRadioButton("Digital Surface Model");
+			rButton4.setActionCommand("DSM_1.2_blank_template.xml");
+			
+			JRadioButton rButton5 = new JRadioButton("Digital Terrain Model");
+			rButton5.setActionCommand("DTM_1.2_blank_template.xml");
+			
+			JRadioButton rButton6 = new JRadioButton("Intensity");
+			rButton6.setActionCommand("Intensity_1.2_blank_template.xml");
+			
+			JRadioButton rButton7 = new JRadioButton("Project Level");
+			rButton7.setActionCommand("ProjectLevel1.2_blank_template.xml");
+			
+			JRadioButton rButton8 = new JRadioButton("Swath");
+			rButton8.setActionCommand("Swath_1.2_blank_template.xml");
+			
+			group.add(rButton1);
+			group.add(rButton2);
+			group.add(rButton3);
+			group.add(rButton4);
+			group.add(rButton5);
+			group.add(rButton6);
+			group.add(rButton7);
+			group.add(rButton8);
 
 			JButton btnNew = new JButton("Import New");
 			btnNew.setToolTipText("Import a new USGS compatible template");
@@ -338,7 +230,7 @@ public class USGSFiles extends JDialog
 
 					int newTemplateChooseReturnVal;
 
-					newTemplateChooseReturnVal = newTemplateFileChoose.showOpenDialog(null);
+					newTemplateChooseReturnVal = newTemplateFileChoose.showOpenDialog(thisJFrame);
 					file = newTemplateFileChoose.getSelectedFile();
 					
 					if ( file != null )  {
@@ -360,24 +252,22 @@ public class USGSFiles extends JDialog
 					.addGroup(gl_panel.createSequentialGroup()
 						.addContainerGap(15, Short.MAX_VALUE)
 						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-							.addComponent(checkBox_6)
-							.addComponent(checkBox_7)
-							.addComponent(checkBox_5)
+							.addComponent(rButton2)
+							.addComponent(rButton1)
+							.addComponent(rButton7)
 							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_panel.createSequentialGroup()
-									.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-										.addComponent(checkBox_8)
-										.addComponent(checkBox_0))
-									.addPreferredGap(ComponentPlacement.RELATED, 150, Short.MAX_VALUE)
+								.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+									.addComponent(rButton8)
+									.addPreferredGap(ComponentPlacement.RELATED, 156, Short.MAX_VALUE)
 									.addComponent(btnOk)
 									.addPreferredGap(ComponentPlacement.UNRELATED)
 									.addComponent(btnCancel))
 								.addGroup(gl_panel.createSequentialGroup()
 									.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-										.addComponent(checkBox_1)
-										.addComponent(checkBox_4)
-										.addComponent(checkBox_2)
-										.addComponent(checkBox_3))
+										.addComponent(rButton3)
+										.addComponent(rButton6)
+										.addComponent(rButton4)
+										.addComponent(rButton5))
 									.addGap(70)
 									.addComponent(btnNew, GroupLayout.PREFERRED_SIZE, 126, GroupLayout.PREFERRED_SIZE))))
 						.addGap(44))
@@ -385,34 +275,32 @@ public class USGSFiles extends JDialog
 			gl_panel.setVerticalGroup(
 				gl_panel.createParallelGroup(Alignment.TRAILING)
 					.addGroup(gl_panel.createSequentialGroup()
-						.addComponent(checkBox_7, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+						.addComponent(rButton1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 						.addGap(1)
-						.addComponent(checkBox_6, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+						.addComponent(rButton2, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 						.addGap(1)
 						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 							.addGroup(gl_panel.createSequentialGroup()
-								.addComponent(checkBox_1, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+								.addComponent(rButton3, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 								.addGap(1)
-								.addComponent(checkBox_2, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+								.addComponent(rButton4, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 								.addGap(1)
-								.addComponent(checkBox_3, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+								.addComponent(rButton5, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 								.addGap(1)
-								.addComponent(checkBox_4, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+								.addComponent(rButton6, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
 								.addGap(1)
-								.addComponent(checkBox_5, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addGap(1)
-								.addComponent(checkBox_0, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addGap(1)
-								.addComponent(checkBox_8, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+								.addComponent(rButton7, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addComponent(rButton8, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
 							.addGroup(gl_panel.createSequentialGroup()
 								.addComponent(btnNew, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
 								.addGap(70)
 								.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 									.addComponent(btnCancel)
 									.addComponent(btnOk))))
-						.addGap(55))
+						.addGap(70))
 			);
 			panel.setLayout(gl_panel);
-		}
 	}
+
 }

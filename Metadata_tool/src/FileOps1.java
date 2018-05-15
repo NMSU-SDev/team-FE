@@ -206,7 +206,7 @@ public class FileOps1
 	 * @return a File object of the file that was opened or null if the file
 	 *         could not be opened.
 	 */
-	public void saveFile(File file, String session)
+	public void saveFile(File file, String session, Component parent)
 	{
 
 		JFrame saveFrame = new JFrame();
@@ -221,7 +221,7 @@ public class FileOps1
 		saveFileChoose.setCurrentDirectory(null); 
 		// null points the dialog initially to the user's default directory
 
-		int userSelection = saveFileChoose.showSaveDialog(saveFrame);
+		int userSelection = saveFileChoose.showSaveDialog(parent);
 		if (userSelection == JFileChooser.APPROVE_OPTION)
 		{
 			File testFile = writeFile(file, session);
