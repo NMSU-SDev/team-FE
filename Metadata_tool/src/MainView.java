@@ -699,7 +699,7 @@ public class MainView
 				// call SaveSession() method that creates a String object of this session
 				String session = session1.saveSession(rootMNode, currentNode, templates);				
 				// call FileOps1 save file method
-				fileOperations.saveFile(file, session, frameTeamFeMetadata);
+				fileOperations.saveFile(session, frameTeamFeMetadata);
 			}
 		});
 		menuFile.add(menuItemSave);
@@ -732,6 +732,9 @@ public class MainView
 				int exportChooseReturnVal;
 				docs [0] = doc1;
 				try {
+					// ** MODIFY TEMPLATE STRINGS
+					// Modify them after the JFileChooser instance
+					// then call the exportXMLFiles method
 				outputList = session1.exportXMLFiles(docs, templates, "12345678");
 				exportF = new File(outputList[0]);
 				}

@@ -92,9 +92,18 @@ public class USGSFiles extends JFrame
 		
 		System.out.println("Set template file");
 		
-		} catch (IOException ioex) {
+		} catch (IOException ioex ) {
 			ioex.printStackTrace();
 			JOptionPane.showMessageDialog(null, ioex, "IOException Error!",
+					JOptionPane.ERROR_MESSAGE);
+		}
+		catch (NullPointerException npex ) {
+			npex.printStackTrace();
+			String message = "Your template file library is not in the expected place\n"
+					+ "Please create a 'lib' folder near the source files"
+					+ "See the repo for more information\n\n" + npex.toString();
+			
+			JOptionPane.showMessageDialog(null, message, "Template file was not found!",
 					JOptionPane.ERROR_MESSAGE);
 		}
 

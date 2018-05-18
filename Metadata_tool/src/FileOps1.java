@@ -201,12 +201,8 @@ public class FileOps1
 	 * Saves the Session specified using the proprietary XSM file extension.
 	 * Assumes the program is run on an OS with GUI support.
 	 * 
-	 * @param file
-	 *            A File object that corresponds to the file to be saved. *
-	 * @return a File object of the file that was opened or null if the file
-	 *         could not be opened.
 	 */
-	public void saveFile(File file, String session, Component parent)
+	public void saveFile(String session, Component parent)
 	{
 
 		JFrame saveFrame = new JFrame();
@@ -217,15 +213,20 @@ public class FileOps1
 		FileFilter xsmFilter = new FileNameExtensionFilter("XML Session Metadata file (*.xsm)", ".xsm");
 
 		saveFileChoose.setFileFilter(xsmFilter);
-		saveFileChoose.setSelectedFile(new File("*.xsm"));
+		saveFileChoose.setSelectedFile(new File("Session.xsm"));
 		saveFileChoose.setCurrentDirectory(null); 
 		// null points the dialog initially to the user's default directory
 
 		int userSelection = saveFileChoose.showSaveDialog(parent);
 		if (userSelection == JFileChooser.APPROVE_OPTION)
 		{
-			File testFile = writeFile(file, session);
-			System.out.println("Save as file: " + testFile.getAbsolutePath());
+			File saveFile = saveFileChoose.getSelectedFile();
+			
+			/* !! STILL NEEDS WORK !! */ 
+			
+			/* saveFile = new File( getSelectedFile + ".xsm");
+			 * writeFile(saveFile, session);*/
+			System.out.println("Save as file: " + saveFile );
 			return;
 		}
 
