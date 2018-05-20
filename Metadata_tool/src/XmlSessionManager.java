@@ -541,8 +541,10 @@ public class XmlSessionManager {
 		int tokenIndex = 0;
 		int dotIndex = 0;
 		// Add projectNumber to front of tile name, remove "template" from file name
-		for (int i = 0; i < nameList.length; i++)
-		{
+		int i = 0;
+		// the nameList array may have null entries
+		//  ** check to make sure it is not null before entering the loop
+		while ( (i < nameList.length) && (nameList[i] != null) ) {
 			// find index of last token and file extension
 			tokenIndex = nameList[i].lastIndexOf(token) + 1;
 			dotIndex = nameList[i].lastIndexOf(dot);
@@ -556,6 +558,8 @@ public class XmlSessionManager {
 			tokenIndex = fileName.indexOf("_template");
 			fileName = fileName.substring(0, tokenIndex);
 			outputList[i] = path + fileName + extension;
+			
+			i++;
 		}
 		
 		TransformerFactory transFactory = TransformerFactory.newInstance();
@@ -563,11 +567,15 @@ public class XmlSessionManager {
 			// Create Transformer
 			Transformer trans = transFactory.newTransformer();
 			// Transform each Document to a Result
-			for (int index = 0; index < domList.length; index++) {
+			int index = 0;
+			// check to make sure the document is not null as well
+			//   since the domList array may hold null documents
+			while ( (index < domList.length) && (domList[index] != null) ) {
 				DOMSource source = new DOMSource(domList[index]);
 				// This is where the magic happens
 				StreamResult result = new StreamResult(new File(outputList[index])); 
-				trans.transform(source, result);				
+				trans.transform(source, result);
+				index++;
 			}
 		} catch (TransformerConfigurationException e) {
 			// TODO Auto-generated catch block

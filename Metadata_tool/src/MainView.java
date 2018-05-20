@@ -107,9 +107,9 @@ public class MainView
 	private NewSession newSession;
 	private MetadataPreview preview;
 	private int treeLength = 0;
-	private static final int MAX = 10;
+	private static final int MAX = 5;
 	
-	private String[] templates = new String[ MAX ];
+	public String[] templates = new String[ MAX ];
 	
 	/* ** GUI ELEMENTS, global vars **** */
 	JLabel elementLabel = new JLabel(currentNode.getElementName());
@@ -128,7 +128,7 @@ public class MainView
 
 	/* *** TEST VARIABLES  **** */
 	private Document doc1 = null;
-	private Document [] docs = new Document [MAX];
+	public Document [] docs = new Document [MAX];
 	Scanner scan = new Scanner(System.in);
 	private boolean verifyCurrentNode = false;
 	private JTextField textField;
@@ -231,6 +231,7 @@ public class MainView
 							{
 								System.out.println("NewSession result: template was set");
 								file = SharedData.getTemplateFile();
+								templates[0] = file.getAbsolutePath();
 
 								// call to create a document object model
 								// uses the XmlSessionManager class
@@ -722,6 +723,12 @@ public class MainView
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
+				int exportChooseReturnVal;
+				
+				String projectNumId = "";
+				
+				projectNumId = JOptionPane.showInputDialog(frameTeamFeMetadata, "Enter a project number for export", "Export file", JOptionPane.QUESTION_MESSAGE);
+				
 				/* *** This section still needs some work */
 				final JFileChooser exportFileChoose = new JFileChooser();
 				File exportF = null;
@@ -730,41 +737,44 @@ public class MainView
 
 				exportFileChoose.setFileFilter(xmlFilter);
 				exportFileChoose.setDialogTitle("Select location for export...");
+				exportChooseReturnVal = exportFileChoose.showSaveDialog(frameTeamFeMetadata);
+				exportF = exportFileChoose.getSelectedFile();
 
 				String [] outputList = new String [MAX];
-				int exportChooseReturnVal;
+				if (exportF != null) outputList[0] = exportF.getAbsolutePath();
 				docs [0] = doc1;
+				
 				try {
-					// ** MODIFY TEMPLATE STRINGS
-					// Modify them after the JFileChooser instance
-					// then call the exportXMLFiles method
-				outputList = session1.exportXMLFiles(docs, templates, "12345678");
-				exportF = new File(outputList[0]);
+				// docs and templates must be public or else they will be re-initialized
+					
+				// **** Work in progress!
+				outputList = session1.exportXMLFiles(docs, templates, projectNumId );
+				//session1.exportXMLFiles(docs, outputList, projectNumId);
+				//exportF = new File(outputList[0]);
 				}
 				catch (Exception e)
 				{
 					e.printStackTrace();
 				}
 				
-
-				exportChooseReturnVal = exportFileChoose.showSaveDialog(frameTeamFeMetadata);
-				exportF = exportFileChoose.getSelectedFile();
 				if (exportF != null)
-				{
+				{ /*
 					TransformerFactory transFactory = TransformerFactory.newInstance();
 					try {
 						// Create Transformer
 						Transformer trans = transFactory.newTransformer();
-						// Transform each Document to a Result
-						for (int index = 0; index < docs.length; index++) {
+						// Transform each Document to a Result **IF it is not null
+						int index = 0;
+						while ( (index < docs.length) && (docs[index] != null) ) {
 							DOMSource source = new DOMSource(docs[index]);
 							// This is where the magic happens
 							StreamResult result = new StreamResult(new File(outputList[index])); 
-							trans.transform(source, result);				
-						}
+							trans.transform(source, result);
+							index++;
+							}
 					} catch (TransformerException e) {
 						e.printStackTrace();
-					} 				
+					} 		*/		
 				}
 				else
 					System.out.println("No file was selected.");
@@ -792,7 +802,6 @@ public class MainView
 		************/
 
 		JMenu menuEdit = new JMenu("Edit");
-		// mnEdit.setBorder(new LineBorder(new Color(0, 0, 0)));
 		menuBar.add(menuEdit);
 
 		JMenuItem menuItemCut = new JMenuItem("Cut");
@@ -912,7 +921,7 @@ public class MainView
 				ImageIcon smallmIcon = new ImageIcon(newimg);  // transform it back to an ImageIcon type
 				
 				JOptionPane.showMessageDialog(null,
-						"Metadata Software tool - version alpha 6.5"
+						"Metadata Software tool - version alpha 7.0"
 								+ "\n2018 May 19 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
 								+ "Jacob Espinoza, Isaias Gerena, Lucas Herrman\n"
 								+ "(Not for production use - In development)",
