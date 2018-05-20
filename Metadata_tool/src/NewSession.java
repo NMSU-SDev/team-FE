@@ -134,6 +134,7 @@ public class NewSession extends JFrame
 								JOptionPane.showMessageDialog(newFrame,
 										"Template was set successfully to USGS standard", "Template Set",
 										JOptionPane.INFORMATION_MESSAGE);
+								System.out.println("Template set to a USGS standard");
 								dispose();
 							}
 						}
@@ -156,7 +157,7 @@ public class NewSession extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				System.out.println("Clicked on non-USGS");
+				System.out.println("NewSession: Clicked on non-USGS");
 				// OpenFileChooser
 				file = non_USGS.openFile(thisJFrame);
 				if (file == null)

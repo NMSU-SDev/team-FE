@@ -229,7 +229,7 @@ public class MainView
 						{
 							if (SharedData.isTemplateSet() == true)
 							{
-								System.out.println("NewSession result: file was set");
+								System.out.println("NewSession result: template was set");
 								file = SharedData.getTemplateFile();
 
 								// call to create a document object model
@@ -249,7 +249,7 @@ public class MainView
 								showGUIFields();
 							}
 							else
-								System.out.println("NewSession result: file was NOT set");
+								System.out.println("NewSession result: template was NOT set");
 						}
 					}); // end window listener for dialog
 
@@ -595,9 +595,12 @@ public class MainView
 					{
 						currentNode.setVerified(verifyCurrentNode);
 						currentNode.setAnswer(txtInput.getText());
+						// Debug the test output
+						System.out.println("\n**Saving info, Text entered:");
 						System.out.println(currentNode.getAnswer());
+						System.out.print("Verified = ");
 						System.out.println(currentNode.getVerified());
-						//These test the two lines above
+					
 						session1.saveMetadataToDOM(rootMNode, doc1);
 					}
 			
@@ -909,8 +912,8 @@ public class MainView
 				ImageIcon smallmIcon = new ImageIcon(newimg);  // transform it back to an ImageIcon type
 				
 				JOptionPane.showMessageDialog(null,
-						"Metadata Software tool - version alpha 6.0"
-								+ "\n2018 May 15 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
+						"Metadata Software tool - version alpha 6.5"
+								+ "\n2018 May 19 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
 								+ "Jacob Espinoza, Isaias Gerena, Lucas Herrman\n"
 								+ "(Not for production use - In development)",
 						"About", JOptionPane.INFORMATION_MESSAGE, smallmIcon);

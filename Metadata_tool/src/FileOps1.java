@@ -201,6 +201,12 @@ public class FileOps1
 	 * Saves the Session specified using the proprietary XSM file extension.
 	 * Assumes the program is run on an OS with GUI support.
 	 * 
+	 * @param session
+	 * A string that holds all of the session data
+	 * 
+	 * @param parent
+	 * A Java awt Component from which the save dialog inherits certain properties
+	 * 
 	 */
 	public void saveFile(String session, Component parent)
 	{
@@ -211,21 +217,32 @@ public class FileOps1
 		saveFileChoose.setDialogTitle("Save Session As");
 
 		FileFilter xsmFilter = new FileNameExtensionFilter("XML Session Metadata file (*.xsm)", ".xsm");
-
 		saveFileChoose.setFileFilter(xsmFilter);
+		
+		//pre-populate the dialog with the name Session.xsm
 		saveFileChoose.setSelectedFile(new File("Session.xsm"));
-		saveFileChoose.setCurrentDirectory(null); 
-		// null points the dialog initially to the user's default directory
+		
+		//disable the option for all file types
+		saveFileChoose.setAcceptAllFileFilterUsed(false);
 
+		// show the dialog, it will return an int value
 		int userSelection = saveFileChoose.showSaveDialog(parent);
-		if (userSelection == JFileChooser.APPROVE_OPTION)
-		{
-			File saveFile = saveFileChoose.getSelectedFile();
+		if (userSelection == JFileChooser.APPROVE_OPTION){			
 			
-			/* !! STILL NEEDS WORK !! */ 
+			File returnFile = saveFileChoose.getSelectedFile();
+			File saveFile;
 			
-			/* saveFile = new File( getSelectedFile + ".xsm");
-			 * writeFile(saveFile, session);*/
+			// check to see if .xsm is NOT in the name of the file
+			if ( !returnFile.getPath().contains(".xsm") ) {
+				// append the extension
+				saveFile = new File( returnFile + ".xsm" );
+			} else {
+				// set saveFile to refer to returnFile
+				// extension was not added
+				saveFile = returnFile;
+			}
+			
+			writeFile( saveFile, session );
 			System.out.println("Save as file: " + saveFile );
 			return;
 		}
