@@ -740,15 +740,15 @@ public class MainView
 				exportChooseReturnVal = exportFileChoose.showSaveDialog(frameTeamFeMetadata);
 				exportF = exportFileChoose.getSelectedFile();
 
-				String [] outputList = new String [MAX];
-				if (exportF != null) outputList[0] = exportF.getAbsolutePath();
+				String output = "";
+				if (exportF != null) output = exportF.getAbsolutePath();
 				docs [0] = doc1;
 				
 				try {
 				// docs and templates must be public or else they will be re-initialized
 					
 				// **** Work in progress!
-				outputList = session1.exportXMLFiles(docs, templates, projectNumId );
+				session1.exportXMLFiles(docs, output, projectNumId );
 				//session1.exportXMLFiles(docs, outputList, projectNumId);
 				//exportF = new File(outputList[0]);
 				}
@@ -757,27 +757,8 @@ public class MainView
 					e.printStackTrace();
 				}
 				
-				if (exportF != null)
-				{ /*
-					TransformerFactory transFactory = TransformerFactory.newInstance();
-					try {
-						// Create Transformer
-						Transformer trans = transFactory.newTransformer();
-						// Transform each Document to a Result **IF it is not null
-						int index = 0;
-						while ( (index < docs.length) && (docs[index] != null) ) {
-							DOMSource source = new DOMSource(docs[index]);
-							// This is where the magic happens
-							StreamResult result = new StreamResult(new File(outputList[index])); 
-							trans.transform(source, result);
-							index++;
-							}
-					} catch (TransformerException e) {
-						e.printStackTrace();
-					} 		*/		
-				}
-				else
-					System.out.println("No file was selected.");
+				if (exportF == null) System.out.println("No file was selected.");
+								
 
 				if (exportChooseReturnVal == JFileChooser.CANCEL_OPTION)
 				{
@@ -922,7 +903,7 @@ public class MainView
 				
 				JOptionPane.showMessageDialog(null,
 						"Metadata Software tool - version alpha 7.0"
-								+ "\n2018 May 19 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
+								+ "\n2018 May 28 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
 								+ "Jacob Espinoza, Isaias Gerena, Lucas Herrman\n"
 								+ "(Not for production use - In development)",
 						"About", JOptionPane.INFORMATION_MESSAGE, smallmIcon);
