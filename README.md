@@ -7,7 +7,7 @@ When complete, the tool will produce Federal Geographic Data Committee (FGDC) co
 ---
 Platform: all operating systems
 
-Runs using Java
+**Requires Java JRE or JDK version **9** or greater
 
 ## Installation instructions:
 
@@ -20,4 +20,4 @@ Download the src and lib folders from the repo and then use the ant build.xml fi
 Note that you will need to have ant installed on your machine for this to work.
 You can also compile and run manually from the shell/terminal/command line.
 
-_Last updated: 2018-05-14_
+_Last updated: 2018-05-18_

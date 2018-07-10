@@ -107,9 +107,9 @@ public class MainView
 	private NewSession newSession;
 	private MetadataPreview preview;
 	private int treeLength = 0;
-	private static final int MAX = 10;
+	private static final int MAX = 5;
 	
-	private String[] templates = new String[ MAX ];
+	public String[] templates = new String[ MAX ];
 	
 	/* ** GUI ELEMENTS, global vars **** */
 	JLabel elementLabel = new JLabel(currentNode.getElementName());
@@ -128,7 +128,7 @@ public class MainView
 
 	/* *** TEST VARIABLES  **** */
 	private Document doc1 = null;
-	private Document [] docs = new Document [MAX];
+	public Document [] docs = new Document [MAX];
 	Scanner scan = new Scanner(System.in);
 	private boolean verifyCurrentNode = false;
 	private JTextField textField;
@@ -229,8 +229,9 @@ public class MainView
 						{
 							if (SharedData.isTemplateSet() == true)
 							{
-								System.out.println("NewSession result: file was set");
+								System.out.println("NewSession result: template was set");
 								file = SharedData.getTemplateFile();
+								templates[0] = file.getAbsolutePath();
 
 								// call to create a document object model
 								// uses the XmlSessionManager class
@@ -249,7 +250,7 @@ public class MainView
 								showGUIFields();
 							}
 							else
-								System.out.println("NewSession result: file was NOT set");
+								System.out.println("NewSession result: template was NOT set");
 						}
 					}); // end window listener for dialog
 
@@ -595,9 +596,12 @@ public class MainView
 					{
 						currentNode.setVerified(verifyCurrentNode);
 						currentNode.setAnswer(txtInput.getText());
+						// Debug the test output
+						System.out.println("\n**Saving info, Text entered:");
 						System.out.println(currentNode.getAnswer());
+						System.out.print("Verified = ");
 						System.out.println(currentNode.getVerified());
-						//These test the two lines above
+					
 						session1.saveMetadataToDOM(rootMNode, doc1);
 					}
 			
@@ -699,7 +703,7 @@ public class MainView
 				// call SaveSession() method that creates a String object of this session
 				String session = session1.saveSession(rootMNode, currentNode, templates);				
 				// call FileOps1 save file method
-				fileOperations.saveFile(file, session, frameTeamFeMetadata);
+				fileOperations.saveFile(session, frameTeamFeMetadata);
 			}
 		});
 		menuFile.add(menuItemSave);
@@ -719,6 +723,12 @@ public class MainView
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
+				int exportChooseReturnVal;
+				
+				String projectNumId = "";
+				
+				projectNumId = JOptionPane.showInputDialog(frameTeamFeMetadata, "Enter a project number for export", "Export file", JOptionPane.QUESTION_MESSAGE);
+				
 				/* *** This section still needs some work */
 				final JFileChooser exportFileChoose = new JFileChooser();
 				File exportF = null;
@@ -727,41 +737,28 @@ public class MainView
 
 				exportFileChoose.setFileFilter(xmlFilter);
 				exportFileChoose.setDialogTitle("Select location for export...");
+				exportChooseReturnVal = exportFileChoose.showSaveDialog(frameTeamFeMetadata);
+				exportF = exportFileChoose.getSelectedFile();
 
-				String [] outputList = new String [MAX];
-				int exportChooseReturnVal;
+				String output = "";
+				if (exportF != null) output = exportF.getAbsolutePath();
 				docs [0] = doc1;
+				
 				try {
-				outputList = session1.exportXMLFiles(docs, templates, "12345678");
-				exportF = new File(outputList[0]);
+				// docs and templates must be public or else they will be re-initialized
+					
+				// **** Work in progress!
+				session1.exportXMLFiles(docs, output, projectNumId );
+				//session1.exportXMLFiles(docs, outputList, projectNumId);
+				//exportF = new File(outputList[0]);
 				}
 				catch (Exception e)
 				{
 					e.printStackTrace();
 				}
 				
-
-				exportChooseReturnVal = exportFileChoose.showSaveDialog(frameTeamFeMetadata);
-				exportF = exportFileChoose.getSelectedFile();
-				if (exportF != null)
-				{
-					TransformerFactory transFactory = TransformerFactory.newInstance();
-					try {
-						// Create Transformer
-						Transformer trans = transFactory.newTransformer();
-						// Transform each Document to a Result
-						for (int index = 0; index < docs.length; index++) {
-							DOMSource source = new DOMSource(docs[index]);
-							// This is where the magic happens
-							StreamResult result = new StreamResult(new File(outputList[index])); 
-							trans.transform(source, result);				
-						}
-					} catch (TransformerException e) {
-						e.printStackTrace();
-					} 				
-				}
-				else
-					System.out.println("No file was selected.");
+				if (exportF == null) System.out.println("No file was selected.");
+								
 
 				if (exportChooseReturnVal == JFileChooser.CANCEL_OPTION)
 				{
@@ -786,7 +783,6 @@ public class MainView
 		************/
 
 		JMenu menuEdit = new JMenu("Edit");
-		// mnEdit.setBorder(new LineBorder(new Color(0, 0, 0)));
 		menuBar.add(menuEdit);
 
 		JMenuItem menuItemCut = new JMenuItem("Cut");
@@ -906,8 +902,8 @@ public class MainView
 				ImageIcon smallmIcon = new ImageIcon(newimg);  // transform it back to an ImageIcon type
 				
 				JOptionPane.showMessageDialog(null,
-						"Metadata Software tool - version alpha 6.0"
-								+ "\n2018 May 15 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
+						"Metadata Software tool - version alpha 7.0"
+								+ "\n2018 May 28 Build\nBuilt by Team FE\nAuthors: Sanford Johnston, "
 								+ "Jacob Espinoza, Isaias Gerena, Lucas Herrman\n"
 								+ "(Not for production use - In development)",
 						"About", JOptionPane.INFORMATION_MESSAGE, smallmIcon);

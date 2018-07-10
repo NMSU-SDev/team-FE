@@ -92,9 +92,18 @@ public class USGSFiles extends JFrame
 		
 		System.out.println("Set template file");
 		
-		} catch (IOException ioex) {
+		} catch (IOException ioex ) {
 			ioex.printStackTrace();
 			JOptionPane.showMessageDialog(null, ioex, "IOException Error!",
+					JOptionPane.ERROR_MESSAGE);
+		}
+		catch (NullPointerException npex ) {
+			npex.printStackTrace();
+			String message = "Your template file library is not in the expected place\n"
+					+ "Please create a 'lib' folder near the source files"
+					+ "See the repo for more information\n\n" + npex.toString();
+			
+			JOptionPane.showMessageDialog(null, message, "Template file was not found!",
 					JOptionPane.ERROR_MESSAGE);
 		}
 
@@ -146,7 +155,7 @@ public class USGSFiles extends JFrame
 		
 		setResizable(false);
 		setTitle("USGS Project Attributes");
-		setLocationRelativeTo(null);
+		this.setLocationRelativeTo(null);
 		file = nFile;
 		setBounds(100, 100, 400, 300);
 		
@@ -159,11 +168,18 @@ public class USGSFiles extends JFrame
 			{
 				public void actionPerformed(ActionEvent e)
 				{
+					if (group.getSelection() == null ) {
+						JOptionPane.showMessageDialog(parent,
+								"You must select an option before pressing \"OK\"", "Nothing selected",
+								JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+					
 					String templateFileName = group.getSelection().getActionCommand();
 					
 					getAndSetFromClPath( templateFileName, "lib");
 					
-					System.out.println("User input has been saved...");
+					System.out.println("USGSFiles: User input saved");
 					SharedData.changeTemplateSet(true);
 					dispose();
 				}
@@ -173,7 +189,7 @@ public class USGSFiles extends JFrame
 			{
 				public void actionPerformed(ActionEvent e)
 				{
-					System.out.println("Discard user changes...");
+					System.out.println("USGSFiles: User changes discarded");
 					SharedData.changeTemplateSet(false);
 					SharedData.setTemplateFile(null);
 					dispose();

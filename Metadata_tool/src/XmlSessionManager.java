@@ -523,51 +523,54 @@ public class XmlSessionManager {
 	 *               order
 	 * @param domList
 	 *            is a list of Document objects uses as the DOMSource
-	 * @param nameList
-	 *            is a list of names for the files of each Document
-	 * @param savePath
-	 *            is the folder in which the files are to be saved
-	 * @return
+	 * @param exportPath
+	 *            an absolute file path as a string for the file to be exported
+	 * @return void
 	 * @throws IOException 
 	 */
-	public String [] exportXMLFiles(Document[] domList, String[] nameList, String projectNumber) throws IOException {
+	public void exportXMLFiles(Document[] domList, String exportPath, String projectNumber) throws IOException {
 		// Create TransformerFactory
-		String[] outputList = new String[nameList.length];
+		//String[] outputList = new String[nameList.length];
 		String path = "";
 		String fileName = "";
 		String extension = "";
+		String finalExportPath = "";
+		
 		char token = '\\';
 		char dot = '.';
 		int tokenIndex = 0;
 		int dotIndex = 0;
 		// Add projectNumber to front of tile name, remove "template" from file name
-		for (int i = 0; i < nameList.length; i++)
-		{
+		
 			// find index of last token and file extension
-			tokenIndex = nameList[i].lastIndexOf(token) + 1;
-			dotIndex = nameList[i].lastIndexOf(dot);
+			tokenIndex = exportPath.lastIndexOf(token) + 1;
+			dotIndex = exportPath.lastIndexOf(dot);
 			// assign string before token to path
-			path = nameList[i].substring(0, tokenIndex);
+			path = exportPath.substring(0, tokenIndex);
 			// assign string after token to fileName
-			fileName = nameList[i].substring(tokenIndex,  dotIndex);
+			fileName = exportPath.substring(tokenIndex,  dotIndex);
 			// assign file extension to extension
-			extension = nameList[i].substring(dotIndex, nameList[i].length());
+			extension = exportPath.substring(dotIndex, exportPath.length());
 			fileName = (projectNumber + "_" + fileName);
-			tokenIndex = fileName.indexOf("_template");
-			fileName = fileName.substring(0, tokenIndex);
-			outputList[i] = path + fileName + extension;
-		}
+			
+			
+			finalExportPath = path + fileName + extension;
+
 		
 		TransformerFactory transFactory = TransformerFactory.newInstance();
 		try {
 			// Create Transformer
 			Transformer trans = transFactory.newTransformer();
 			// Transform each Document to a Result
-			for (int index = 0; index < domList.length; index++) {
+			int index = 0;
+			// check to make sure the document is not null as well
+			//   since the domList array may hold null documents
+			while ( (index < domList.length) && (domList[index] != null) ) {
 				DOMSource source = new DOMSource(domList[index]);
 				// This is where the magic happens
-				StreamResult result = new StreamResult(new File(outputList[index])); 
-				trans.transform(source, result);				
+				StreamResult result = new StreamResult(new File(finalExportPath)); 
+				trans.transform(source, result);
+				index++;
 			}
 		} catch (TransformerConfigurationException e) {
 			// TODO Auto-generated catch block
@@ -577,7 +580,6 @@ public class XmlSessionManager {
 			e.printStackTrace();
 		}
 	
-		return outputList;
 	}
 
 	/**
